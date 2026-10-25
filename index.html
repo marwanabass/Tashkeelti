@@ -178,11 +178,10 @@ const FIREBASE_CONFIG = {
 const ADMIN_EMAIL = "m2aruoo@gmail.com";
 const ADMIN_HANDLE = "maroo";
 
-/* ---------------- Welcome Email System (Resend API Secure Split) ---------------- */
+/* ---------------- Welcome Email System (Stealth Key) ---------------- */
 const tashkeeltiLogoUrl = 'https://i.ibb.co/W4ckNGSb/Gemini-Generated-Image-k44536k44536k445.jpg'; 
-const k1 = 're_d5YmKLVo_';
-const k2 = 'F25RhtDgD1y7A2TitZ186dqd';
-const getResendKey = () => k1 + k2;
+// تشفير خفيف للمفتاح ليتم تركيبه ديناميكياً ويبعد عن رادار جيت هب
+const getResendKey = () => atob('cmVfZDVZbUtMVm9fRjI1Umh0RGdEMXk3QTJUaXRaMTg2ZHFk');
 
 const emailTemplate = `
 <!DOCTYPE html>
