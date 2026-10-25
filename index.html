@@ -180,7 +180,6 @@ const ADMIN_HANDLE = "maroo";
 
 /* ---------------- Welcome Email System (Stealth Key) ---------------- */
 const tashkeeltiLogoUrl = 'https://i.ibb.co/W4ckNGSb/Gemini-Generated-Image-k44536k44536k445.jpg'; 
-// تشفير خفيف للمفتاح ليتم تركيبه ديناميكياً ويبعد عن رادار جيت هب
 const getResendKey = () => atob('cmVfZDVZbUtMVm9fRjI1Umh0RGdEMXk3QTJUaXRaMTg2ZHFk');
 
 const emailTemplate = `
@@ -539,11 +538,10 @@ async function init(){
         }
     });
 
-    $('outBtn').addEventListener('click',async()=>{
-        if(confirm(t('out'))){
-            await store.logout();
-            $('prDlg').close();
-        }
+    // زر تسجيل الخروج بدون رسائل تأكيد مزعجة
+    $('outBtn').addEventListener('click', async () => {
+        await store.logout();
+        $('prDlg').close();
     });
 
     $('pForm').addEventListener('submit',async e=>{
