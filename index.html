@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#070a09"><meta property="og:title" content="Tashkeelti | تشكيلتي"><meta property="og:description" content="EA FC tactics library: pick a formation, copy the code, play.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070a09'/%3E%3Cpath d='M8 10h16M16 10v13' stroke='%2334d399' stroke-width='3.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-title" content="Tashkeelti">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Cairo:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -117,12 +118,17 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .pfn{font-size:34px;line-height:1;direction:ltr;display:flex;align-items:center}
 .sk-av{display:block;width:40px;height:40px;border-radius:50%;background:linear-gradient(100deg,#0d1311 30%,#16211c 50%,#0d1311 70%);background-size:200% 100%;animation:sh 1.3s linear infinite}
 .more{grid-column:1/-1;text-align:center;padding:6px 0 10px}
+#installBtn{order:3}
+.rpl{display:grid;gap:10px;max-height:40vh;overflow:auto}
+.rp{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px;font-size:14px}
+.bdg{background:#ff7a93;color:#2a0510;border-radius:999px;padding:0 7px;font-size:12px;margin-inline-start:4px}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
 
 <header class="topbar"><div class="wrap hd">
   <div class="logo d">Tashkeelti</div><span class="sp"></span>
+  <button id="installBtn" class="btn ghost sm hidden"><i class="fa-solid fa-plus"></i> <span data-i="install"></span></button>
   <button id="langBtn" class="btn ghost sm" aria-label="Language"></button>
   <span id="auth"></span>
   <label class="sr"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" class="f" data-ph="search" aria-label="Search"></label>
@@ -133,12 +139,12 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
     <svg class="hp" viewBox="0 0 160 100" aria-hidden="true"><rect x="3" y="3" width="154" height="94"/><line x1="80" y1="3" x2="80" y2="97"/><circle cx="80" cy="50" r="14"/><rect x="3" y="28" width="26" height="44"/><rect x="131" y="28" width="26" height="44"/></svg>
     <h1 class="d"><span data-i="h1"></span><br><em data-i="h2"></em></h1>
     <p class="sub" data-i="sub"></p>
-    <div class="stats"><div class="stat"><b id="sT">0</b><span data-i="sTac"></span></div><div class="stat"><b id="sC">0</b><span data-i="sCre"></span></div><div class="stat"><b id="sF">0</b><span data-i="sFor"></span></div></div>
+    
     <div id="banner" class="banner hidden"></div>
   </section>
   <section id="profile" class="hidden"></section>
   <nav id="rail" class="rail" aria-label="Formations"></nav>
-  <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option></select></label></div>
+  <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option><option value="copied" data-i="sCop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
 </main>
 <button id="fab" class="fab" aria-label="Share tactics"><i class="fa-solid fa-plus"></i></button>
@@ -155,13 +161,13 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 
 <!-- Share tactics -->
 <dialog id="pDlg"><form id="pForm">
-  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-futbol"></i> <span data-i="shareT"></span></h2>
+  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-futbol"></i> <span id="pTitle" data-i="shareT"></span></h2>
   <div><label class="l" for="pF"><i class="fa-solid fa-diagram-project"></i> <span data-i="formation"></span></label><select id="pF" class="f" dir="ltr" required></select></div>
   <div><label class="l" for="pC"><i class="fa-solid fa-key"></i> <span data-i="code"></span></label><input id="pC" class="f" dir="ltr" required maxlength="40" placeholder="e8%&amp;M#k9P" autocomplete="off"></div>
   <div><label class="l" for="pI"><i class="fa-solid fa-image"></i> <span data-i="shot"></span></label><input id="pI" type="file" accept="image/*" class="f"></div>
   <div><label class="l" for="pU"><i class="fa-solid fa-link"></i> <span data-i="orUrl"></span></label><input id="pU" type="url" dir="ltr" class="f" placeholder="https://..."></div>
   <p class="err" id="pE"></p>
-  <div class="flex justify-end gap-2"><button type="button" class="btn ghost" id="pCancel"><i class="fa-solid fa-xmark"></i> <span data-i="cancel"></span></button><button class="btn gold" id="pGo" type="submit"><i class="fa-solid fa-paper-plane"></i> <span data-i="publish"></span></button></div>
+  <div class="flex justify-end gap-2"><button type="button" class="btn ghost" id="pCancel"><i class="fa-solid fa-xmark"></i> <span data-i="cancel"></span></button><button class="btn gold" id="pGo" type="submit"><i class="fa-solid fa-paper-plane"></i> <span id="pBtnT" data-i="publish"></span></button></div>
 </form></dialog>
 
 <!-- Admin panel -->
@@ -171,6 +177,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
   <input id="adH" class="f" dir="ltr" placeholder="@ProPlayer">
   <p class="err" id="adE"></p>
   <div class="flex gap-2"><button id="grant" class="btn neon flex-1"><i class="fa-solid fa-circle-check"></i> <span data-i="grant"></span></button><button id="revoke" class="btn ghost flex-1"><i class="fa-solid fa-ban"></i> <span data-i="revoke"></span></button></div>
+  <h3 class="d text-2xl text-[var(--gold2)]"><i class="fa-solid fa-flag"></i> <span data-i="reports"></span></h3><div id="rpList" class="rpl"></div>
 </div></dialog>
 
 <dialog id="aDlg"><form id="aForm">
@@ -180,6 +187,12 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
   <p class="err" id="aE"></p>
   <button class="btn gold" id="aGo" type="submit"></button>
   <p class="hint hidden" id="aNote" data-i="noRecover"></p>
+</form></dialog>
+<dialog id="rpDlg"><form id="rpForm">
+  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-flag"></i> <span data-i="reportT"></span></h2>
+  <select id="rpR" class="f"><option value="wrong" data-i="rWrong"></option><option value="spam" data-i="rSpam"></option><option value="offensive" data-i="rOff"></option><option value="other" data-i="rOther"></option></select>
+  <p class="err" id="rpE"></p>
+  <div class="flex justify-end gap-2"><button type="button" class="btn ghost" id="rpCancel"><i class="fa-solid fa-xmark"></i> <span data-i="cancel"></span></button><button class="btn gold" type="submit"><i class="fa-solid fa-paper-plane"></i> <span data-i="send"></span></button></div>
 </form></dialog>
 <dialog id="fDlg"><div class="fh"><h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-diagram-project"></i> <span data-i="allF"></span></h2><button class="btn ghost sm" id="fClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><div id="fBody" class="fb"></div></dialog>
 <dialog id="big" style="width:min(1000px,96vw);background:#000"><img alt="" style="width:100%;display:block"></dialog>
@@ -207,19 +220,20 @@ const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
   signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',editT:'Edit your tactics',sCop:'Most copied',reportT:'Report this tactic',rWrong:'Wrong or fake code',rSpam:'Spam',rOff:'Offensive',rOther:'Other',send:'Send',reported:'Thanks, we will review it.',reports:'Reports',noRep:'No reports',delT:'Delete tactic',dismiss:'Dismiss',install:'Install app',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
   failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
   signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',editT:'عدّل تكتيكك',sCop:'الأكثر نسخاً',reportT:'الإبلاغ عن التكتيك',rWrong:'كود غلط أو مزيّف',rSpam:'سبام',rOff:'محتوى مسيء',rOther:'سبب آخر',send:'إرسال',reported:'شكراً، هنراجعه.',reports:'البلاغات',noRep:'مفيش بلاغات',delT:'حذف التكتيك',dismiss:'تجاهل',install:'ثبّت التطبيق',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
   failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 // Every formation in the current game (29), ordered by how often they are used. Add new ones here.
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
+const ORD={new:'at',top:'likeCount',copied:'copyCount'};   // server-side sort fields
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];  // quick chips
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -245,8 +259,8 @@ const ICONS={
  send:'<path d="m22 2-11 11M22 2l-7 20-4-9-9-4z"/>',ban:'<circle cx="12" cy="12" r="10"/><path d="m5 5 14 14"/>',
  sort:'<path d="M3 6h13M3 12h9M3 18h5M18 8v12m0 0-3-3m3 3 3-3"/>',layers:'<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',expand:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
- crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
-const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown'};
+ crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
+const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown',flag:'flag'};
 function swapIcon(el){
   const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
   const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
@@ -260,7 +274,7 @@ hydrate(document);
 
 let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
 const t=k=>T[lang][k]||k;
-let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{};
+let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{},editId=null,rpId=null,reports=[],unRep=()=>{};
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
 // Turn a Firebase sign-in error into a message that says what to fix
@@ -280,8 +294,9 @@ const okImg=u=>/^(data:image\/|https:\/\/)/.test(u||'');
    username@AUTH_DOMAIN, so users never see or type an email. */
 async function firebaseStore(cfg){
   const B='https://www.gstatic.com/firebasejs/10.12.2/';
-  const [{initializeApp},A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
+  const [{initializeApp},A,F,AN]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js'),import(B+'firebase-analytics.js').catch(()=>null)]);
   const app=initializeApp(cfg),auth=A.getAuth(app);
+  if(AN)try{AN.getAnalytics(app)}catch(e){}   // Google Analytics (uses measurementId); optional, never blocks the site
   let fs;try{fs=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})})}catch(e){fs=F.getFirestore(app)} // cached on-device: refresh is instant
   const mapDoc=d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}};
   let cb=()=>{},busy=false;
@@ -304,7 +319,7 @@ async function firebaseStore(cfg){
       await load(auth.currentUser)},
     logout:()=>A.signOut(auth),
     async saveProfile(u,p){await F.setDoc(F.doc(fs,'users',u.uid),{handle:u.handle,displayName:p.displayName,bio:p.bio});await load(auth.currentUser)},
-    subscribe(f,n,err){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy('at','desc'),F.limit(n)),s=>{if(s.empty&&s.metadata.fromCache)return;f(s.docs.map(mapDoc))},err)},
+    subscribe(f,n,err,o){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy(o||'at','desc'),F.limit(n)),s=>{if(s.empty&&s.metadata.fromCache)return;f(s.docs.map(mapDoc))},err)},
     byHandle(h,f,err){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.where('handle','==',h),F.limit(60)),s=>f(s.docs.map(mapDoc).sort((a,b)=>b.at-a.at)),err)},
     async profile(h){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','==',h),F.limit(1)));return s.empty?null:s.docs[0].data()},
     async fullImage(id){const s=await F.getDoc(F.doc(fs,'images',id));return s.exists()?s.data().data:null},
@@ -312,8 +327,15 @@ async function firebaseStore(cfg){
     subscribeVerified(f){F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>f(new Set(s.docs.map(d=>d.id))))},
     async add(p){ // small thumbnail goes in the feed document; the full image is stored apart and loaded only when opened
       const {full,...d}=p,tr=F.doc(F.collection(fs,'tactics')),b=F.writeBatch(fs);
-      b.set(tr,{...d,likeCount:0,at:F.serverTimestamp()});if(full)b.set(F.doc(fs,'images',tr.id),{uid:p.uid,data:full});await b.commit()},
+      b.set(tr,{...d,likeCount:0,copyCount:0,at:F.serverTimestamp()});if(full)b.set(F.doc(fs,'images',tr.id),{uid:p.uid,data:full});await b.commit()},
     async remove(id){await F.deleteDoc(F.doc(fs,'tactics',id));F.deleteDoc(F.doc(fs,'images',id)).catch(()=>{})},
+    async update(id,p){const {full,uid,...d}=p,b=F.writeBatch(fs);b.update(F.doc(fs,'tactics',id),d);
+      if(d.img&&full)b.set(F.doc(fs,'images',id),{uid,data:full});
+      await b.commit();if(d.img&&!full)F.deleteDoc(F.doc(fs,'images',id)).catch(()=>{})},
+    bumpCopy:id=>F.updateDoc(F.doc(fs,'tactics',id),{copyCount:F.increment(1)}),
+    report:(u,post,reason)=>F.setDoc(F.doc(fs,'reports',post.id+'_'+u.uid),{pid:post.id,uid:u.uid,reason,handle:post.handle,formation:post.formation,code:post.code,at:F.serverTimestamp()}),
+    subscribeReports:f=>F.onSnapshot(F.query(F.collection(fs,'reports'),F.orderBy('at','desc'),F.limit(30)),s=>f(s.docs.map(d=>({id:d.id,...d.data()}))),()=>{}),
+    dismissReport:id=>F.deleteDoc(F.doc(fs,'reports',id)),
     async toggleLike(u,p,on){const b=F.writeBatch(fs),lr=F.doc(fs,'likes',p.id+'_'+u.uid),tr=F.doc(fs,'tactics',p.id);
       if(on){b.set(lr,{pid:p.id,uid:u.uid});b.update(tr,{likeCount:F.increment(1)})}else{b.delete(lr);b.update(tr,{likeCount:F.increment(-1)})}await b.commit()},
     subscribeLikes:(uid,f)=>F.onSnapshot(F.query(F.collection(fs,'likes'),F.where('uid','==',uid)),s=>f(new Set(s.docs.map(d=>d.data().pid)))),
@@ -325,10 +347,11 @@ function demoStore(){ // demo only: accounts and passwords live in this browser'
   const seed=[{id:'s1',uid:'x',handle:'proplayer',displayName:'Pro Player',formation:'4-2-3-1',code:'SAMPLE-4231',img:'',likeCount:24,at:Date.now()-36e5},
     {id:'s2',uid:'x',handle:'khaled_fc',displayName:'Khaled',formation:'4-3-3',code:'SAMPLE-433',img:'',likeCount:9,at:Date.now()-9e6},
     {id:'s3',uid:'x',handle:'proplayer',displayName:'Pro Player',formation:'3-5-2',code:'SAMPLE-352',img:'',likeCount:3,at:Date.now()-5e7}];
-  let cb=()=>{},sp=()=>{},sv=()=>{},lk=()=>{},uf=null,uh='',spn=18;
+  let cb=()=>{},sp=()=>{},sv=()=>{},lk=()=>{},uf=null,uh='',spn=18,ord='at',rf=()=>{};
   const accts=()=>get('tk_accts',{}),mine=()=>new Set(get('tk_likes',[])),ver=()=>new Set(get('tk_ver',['proplayer']));
-  const list=()=>[...get('tk_posts',[]),...seed].map(p=>({...p,likeCount:(p.likeCount||0)+(mine().has(p.id)?1:0)})).sort((a,b)=>b.at-a.at);
-  const push=()=>{sp(list().slice(0,spn));uf&&uf(list().filter(p=>p.handle===uh))};
+  const list=()=>[...get('tk_posts',[]),...seed].map(p=>({...p,likeCount:(p.likeCount||0)+(mine().has(p.id)?1:0),copyCount:(p.copyCount||0)+((get('tk_cc',{})[p.id])||0)})).sort((a,b)=>b.at-a.at);
+  const sorted=()=>{const l=list();return ord==='at'?l:l.sort((a,b)=>(b[ord]||0)-(a[ord]||0))};
+  const push=()=>{sp(sorted().slice(0,spn));uf&&uf(list().filter(p=>p.handle===uh))};
   const known=()=>new Set([...list().map(p=>p.handle),...Object.keys(accts())]);
   const mk=h=>{const a=accts()[h]||{};return{uid:'u_'+h,handle:h,displayName:a.displayName||h,bio:a.bio||'',photo:null,isAdmin:h===ADMIN_HANDLE}};
   return{demo:true,
@@ -337,10 +360,15 @@ function demoStore(){ // demo only: accounts and passwords live in this browser'
     async signIn(h,pw){const a=accts()[h];if(!a||a.pw!==pw)throw new Error('cred');set('tk_cur',h);cb(mk(h))},
     async logout(){localStorage.removeItem('tk_cur');cb(null)},
     async saveProfile(u,p){const a=accts();a[u.handle]={...(a[u.handle]||{}),displayName:p.displayName,bio:p.bio};set('tk_accts',a);cb(mk(u.handle))},
-    subscribe(f,n){sp=f;spn=n||18;f(list().slice(0,spn));return()=>{}},
+    subscribe(f,n,err,o){sp=f;spn=n||18;ord=o||'at';f(sorted().slice(0,spn));return()=>{}},
     byHandle(h,f){uf=f;uh=h;f(list().filter(p=>p.handle===h));return()=>{uf=null}},
     async profile(h){const a=accts()[h];if(a)return{displayName:a.displayName,bio:a.bio};const q=seed.find(x=>x.handle===h);return q?{displayName:q.displayName,bio:''}:null},
     async fullImage(){return null},
+    async update(id,p){const {full,uid,...d}=p;set('tk_posts',get('tk_posts',[]).map(x=>x.id===id?{...x,...d}:x));push()},
+    async bumpCopy(id){const c=get('tk_cc',{});c[id]=(c[id]||0)+1;set('tk_cc',c);push()},
+    async report(u,post,reason){const r=get('tk_rep',[]);r.unshift({id:post.id+'_'+u.uid,pid:post.id,uid:u.uid,reason,handle:post.handle,formation:post.formation,code:post.code,at:Date.now()});set('tk_rep',r);rf(r)},
+    subscribeReports(f){rf=f;f(get('tk_rep',[]));return()=>{}},
+    async dismissReport(id){const r=get('tk_rep',[]).filter(x=>x.id!==id);set('tk_rep',r);rf(r)},
     async stats(){const l=list();return{t:l.length,c:new Set(l.map(p=>p.handle)).size}},
     subscribeVerified(f){sv=f;f(ver())},
     async add(p){const {full,...d}=p;set('tk_posts',[{...d,id:'p'+Date.now(),at:Date.now()},...get('tk_posts',[])]);push()},
@@ -361,8 +389,8 @@ function render(){
   const src=view?userPosts:posts,q=$('q').value.trim().toLowerCase();
   let l=(src||[]).filter(p=>view||!fFilter||p.formation===fFilter);
   if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase()].some(s=>s.includes(q)));
-  if($('sort').value==='top')l=[...l].sort((a,b)=>(b.likeCount||0)-(a.likeCount||0));
-  $('sT').textContent=statsN?statsN.t:posts.length;$('sC').textContent=statsN?statsN.c:new Set(posts.map(p=>p.handle)).size;$('sF').textContent=FORMATIONS.length;
+  const so=$('sort').value;if(so!=='new'){const k=so==='top'?'likeCount':'copyCount';l=[...l].sort((a,b)=>(b[k]||0)-(a[k]||0))}
+  
   $('count').textContent=`${l.length} ${t('nTac')}`;
   if(view)renderProfile();
   if(src===null||(!view&&!loaded)){
@@ -374,9 +402,9 @@ function render(){
       <div class="ur"><button class="u" data-user="${esc(p.handle)}"><span class="av">${esc(p.handle[0].toUpperCase())}</span><span class="ui"><span class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
         <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span></div>
       <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
-      <div class="ac"><button class="btn neon cp" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}</button>
+      <div class="ac"><button class="btn neon cp" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}${p.copyCount?` · ${p.copyCount}`:''}</button>
         <button class="btn ghost lk ${myLikes.has(p.id)?'on':''}" data-like="${esc(p.id)}" aria-pressed="${myLikes.has(p.id)}" aria-label="Like"><i class="fa-${myLikes.has(p.id)?'solid':'regular'} fa-heart"></i> ${p.likeCount||0}</button>
-        ${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}</div>
+        ${me&&p.uid===me.uid?`<button class="btn ghost" data-edit="${esc(p.id)}" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>`:''}${me&&p.uid!==me.uid?`<button class="btn ghost" data-report="${esc(p.id)}" aria-label="Report"><i class="fa-solid fa-flag"></i></button>`:''}${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}</div>
     </div></article>`).join('')
   :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t(view&&me&&me.handle===view?'noneMine':'noneSub')}</span></div>`)+more;
   anim=false;
@@ -397,7 +425,7 @@ function setMode(m){authMode=m;$('tIn').classList.toggle('on',m==='in');$('tUp')
 function openAuth(m){setMode(m);$('aDlg').showModal();$('aU').focus()}
 function renderAuth(){
   if(!authReady){$('auth').innerHTML='<span class="sk-av"></span>';return}
-  $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn" title="${t('admin')}"><i class="fa-solid fa-crown"></i><span class="lb">${t('admin')}</span></button>`:''}
+  $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn" title="${t('admin')}"><i class="fa-solid fa-crown"></i><span class="lb">${t('admin')}</span>${reports.length?`<b class="bdg">${reports.length}</b>`:''}</button>`:''}
     <button class="btn gold sm hm" id="newBtn"><i class="fa-solid fa-plus"></i><span class="lb">${t('share')}</span></button>
     <button class="av me" id="meBtn" aria-label="${t('profile')}">${me.photo?`<img src="${esc(me.photo)}" alt="">`:esc((me.handle||me.displayName||'?')[0].toUpperCase())}</button>`
     :`<button class="btn gold sm" id="inBtn"><i class="fa-solid fa-user-pen"></i><span>${t('signinS')}</span></button>`}
@@ -419,8 +447,19 @@ function route(){
     unUser=store.byHandle(h,l=>{userPosts=l;render()},e=>{console.error(e);loadErr=true;render()})||(()=>{});
     store.profile(h).then(i=>{if(view===h){profInfo=i||{};renderProfile()}}).catch(()=>{if(view===h){profInfo={};renderProfile()}})}
   scrollTo(0,0);render()}
-function startFeed(){unFeed();unFeed=store.subscribe(l=>{posts=l;loaded=true;loadErr=false;render()},feedLimit,e=>{console.error(e);loadErr=true;render()})||(()=>{})}
+function startFeed(){unFeed();unFeed=store.subscribe(l=>{posts=l;loaded=true;loadErr=false;render()},feedLimit,e=>{console.error(e);loadErr=true;render()},ORD[$('sort').value]||'at')||(()=>{})}
 async function refreshStats(){try{statsN=await store.stats();render()}catch(e){}}
+function bump(id){ // +1 copy per person per tactic per day (signed-in users only)
+  if(!me||!store.bumpCopy)return;let c={};try{c=JSON.parse(localStorage.getItem('tk_cp')||'{}')}catch(e){}
+  const d=new Date().toDateString();if(c[id]===d)return;c[id]=d;try{localStorage.setItem('tk_cp',JSON.stringify(c))}catch(e){}
+  store.bumpCopy(id).catch(()=>{})}
+function setPTitle(){$('pTitle').dataset.i=editId?'editT':'shareT';$('pTitle').textContent=t(editId?'editT':'shareT');$('pBtnT').dataset.i=editId?'save':'publish';$('pBtnT').textContent=t(editId?'save':'publish')}
+function openEdit(id){const p=byId(id);if(!p)return;editId=id;
+  if(![...$('pF').options].some(o=>o.value===p.formation))$('pF').add(new Option(p.formation,p.formation));
+  $('pF').value=p.formation;$('pC').value=p.code;$('pI').value='';$('pU').value='';setPTitle();$('pDlg').showModal()}
+function openReport(id){if(!me)return openAuth('in');rpId=id;$('rpE').textContent='';$('rpDlg').showModal()}
+function renderReports(){const el=$('rpList');if(!el)return;
+  el.innerHTML=reports.length?reports.map(r=>`<div class="rp"><div><b dir="ltr">@${esc(r.handle)}</b> · ${esc(r.formation)} · <span dir="ltr">${esc(r.code)}</span><br><span class="dn">${esc(r.reason)}</span></div><div class="ac"><button class="btn ghost sm" data-rdel="${esc(r.id)}" data-pid="${esc(r.pid)}"><i class="fa-solid fa-trash"></i> ${t('delT')}</button><button class="btn ghost sm" data-rdis="${esc(r.id)}"><i class="fa-solid fa-xmark"></i> ${t('dismiss')}</button></div></div>`).join(''):`<p class="dn">${t('noRep')}</p>`}
 function applyLang(){ // swap text + flip page direction (RTL for Arabic)
   document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';localStorage.setItem('tk_lang',lang);
   document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
@@ -446,16 +485,20 @@ document.addEventListener('click',async e=>{
   else if(b.id==='meBtn'){me.handle?location.hash='#/u/'+me.handle:openProfile()}
   else if(b.id==='outBtn'||b.dataset.out!==undefined){$('prDlg').close();location.hash='';store.logout()}   // sign out immediately, no confirmation
   else if(b.id==='newBtn'||b.id==='fab'){if(!me)return openAuth('up');if(me.handle)$('pDlg').showModal()}
-  else if(b.id==='adBtn'){$('adE').textContent='';$('adDlg').showModal()}
+  else if(b.id==='adBtn'){$('adE').textContent='';renderReports();$('adDlg').showModal()}
   else if(b.closest('#rail')){fFilter=b.dataset.f;anim=true;renderRail();render()}
   else if(b.dataset.user)location.hash='#/u/'+b.dataset.user;
-  else if(b.dataset.copy){const p=byId(b.dataset.copy),ok=await copy(p.code),old=b.innerHTML;b.textContent=ok?t('copied'):t('failed');setTimeout(()=>b.innerHTML=old,1500);if(ok){navigator.vibrate&&navigator.vibrate(18);toast(t('copyDone'))}}
+  else if(b.dataset.copy){const p=byId(b.dataset.copy),ok=await copy(p.code),old=b.innerHTML;b.textContent=ok?t('copied'):t('failed');setTimeout(()=>b.innerHTML=old,1500);if(ok){navigator.vibrate&&navigator.vibrate(18);toast(t('copyDone'));bump(p.id)}}
   else if(b.dataset.like){if(!me)return toast(t('loginLike'));const p=byId(b.dataset.like);try{await store.toggleLike(me,p,!myLikes.has(p.id))}catch(x){toast(t('failed'))}}
+  else if(b.dataset.edit)openEdit(b.dataset.edit);
+  else if(b.dataset.report)openReport(b.dataset.report);
+  else if(b.dataset.rdel){store.remove(b.dataset.pid).then(()=>store.dismissReport(b.dataset.rdel)).catch(()=>toast(t('failed')))}
+  else if(b.dataset.rdis)store.dismissReport(b.dataset.rdis);
   else if(b.dataset.del){if(confirm(t('del')))store.remove(b.dataset.del)}
   else if(b.dataset.img){const p=byId(b.dataset.img);if(p&&okImg(p.img)){const im=$('big').querySelector('img');im.src=p.img;$('big').showModal();
     store.fullImage(p.id).then(d=>{if(d&&okImg(d)&&$('big').open)im.src=d}).catch(()=>{})}}  // thumbnail first, sharp version loads on demand
 });
-$('big').onclick=()=>$('big').close();$('fDlg').addEventListener('click',e=>{if(e.target===$('fDlg'))$('fDlg').close()});$('q').oninput=render;$('sort').onchange=render;$('aForm').onsubmit=async e=>{e.preventDefault();$('aE').textContent='';
+$('big').onclick=()=>$('big').close();$('fDlg').addEventListener('click',e=>{if(e.target===$('fDlg'))$('fDlg').close()});$('q').oninput=render;$('sort').onchange=()=>{view?render():startFeed()};$('aForm').onsubmit=async e=>{e.preventDefault();$('aE').textContent='';
   const h=$('aU').value.trim().replace(/^@/,'').toLowerCase(),pw=$('aP').value;
   if(!/^[a-z0-9_]{3,16}$/.test(h)){$('aE').textContent=t('bad');return}
   if(pw.length<6){$('aE').textContent=t('ePw');return}
@@ -463,6 +506,10 @@ $('big').onclick=()=>$('big').close();$('fDlg').addEventListener('click',e=>{if(
   try{await(authMode==='up'?store.signUp(h,pw):store.signIn(h,pw));$('aDlg').close();$('aForm').reset()}
   catch(x){console.error(x);$('aE').textContent=authMsg(x)}
   g.disabled=false};
+$('pDlg').addEventListener('close',()=>{editId=null;$('pForm').reset();setPTitle()});
+$('rpCancel').onclick=()=>$('rpDlg').close();
+$('rpForm').onsubmit=async e=>{e.preventDefault();const p=byId(rpId);if(!p||!me)return;
+  try{await store.report(me,p,$('rpR').value);$('rpDlg').close();toast(t('reported'))}catch(x){console.error(x);$('rpE').textContent=t('failed')}};
 $('pCancel').onclick=()=>$('pDlg').close();
 $('prForm').onsubmit=async e=>{e.preventDefault();$('prE').textContent='';
   const h=$('prH').value.replace(/^@/,'');if(!me.handle&&!/^[A-Za-z0-9_]{3,16}$/.test(h)){$('prE').textContent=t('bad');return}
@@ -471,13 +518,16 @@ $('prForm').onsubmit=async e=>{e.preventDefault();$('prE').textContent='';
 // Compress uploads to a small JPEG data URL (stored directly in Firestore — no Storage plan needed)
 const shrink=(f,w=900,q=.72)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,w/im.width),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)});
 $('pForm').onsubmit=async e=>{e.preventDefault();const g=$('pGo');g.disabled=true;$('pE').textContent='';
-  try{if(Date.now()-(+localStorage.getItem('tk_last')||0)<30000)throw new Error('wait');
-    const f=$('pI').files[0],u=$('pU').value.trim();let img,full;
+  try{const f=$('pI').files[0],u=$('pU').value.trim();let img,full;
+    if(!editId&&Date.now()-(+localStorage.getItem('tk_last')||0)<30000)throw new Error('wait');
     if(f){[img,full]=await Promise.all([shrink(f,520,.62),shrink(f,1000,.72)])}else img=u;
-    if(!/^(data:image\/|https:\/\/)/.test(img))throw new Error('needImg');if(img.length>150000||(full&&full.length>800000))throw new Error('big');
-    await store.add({uid:me.uid,handle:me.handle,displayName:me.displayName,formation:$('pF').value.trim(),code:$('pC').value.trim(),img,full});
-    try{localStorage.setItem('tk_last',Date.now())}catch(_){}
-    $('pForm').reset();$('pDlg').close();toast(t('done'));refreshStats()}
+    if(img&&!/^(data:image\/|https:\/\/)/.test(img))throw new Error('needImg');
+    if(!img&&!editId)throw new Error('needImg');
+    if((img||'').length>150000||(full&&full.length>800000))throw new Error('big');
+    const base={formation:$('pF').value.trim(),code:$('pC').value.trim()};
+    if(editId)await store.update(editId,{...base,...(img?{img,full}:{}),uid:me.uid});
+    else{await store.add({uid:me.uid,handle:me.handle,displayName:me.displayName,...base,img,full});try{localStorage.setItem('tk_last',Date.now())}catch(_){}}
+    $('pDlg').close();toast(t('done'))}
   catch(x){$('pE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}g.disabled=false};
 for(const [id,v] of [['grant',true],['revoke',false]])$(id).onclick=async()=>{$('adE').textContent='';
   try{await store.setVerified($('adH').value.trim().replace(/^@/,''),v);toast(t('done'))}catch(x){$('adE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}};
@@ -488,14 +538,19 @@ const live=!FIREBASE_CONFIG.apiKey.startsWith('YOUR');
 const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
 addEventListener('hashchange',route);
 addEventListener('offline',()=>toast(t('offline'),4000));addEventListener('online',()=>toast(t('online')));
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+let installEv;addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEv=e;$('installBtn').classList.remove('hidden')});
+$('installBtn').onclick=async()=>{if(!installEv)return;installEv.prompt();await installEv.userChoice;installEv=null;$('installBtn').classList.add('hidden')};
 route();applyLang();   // paint the page immediately — never wait for the network
 (async()=>{
   try{store=await withTimeout(live?firebaseStore(FIREBASE_CONFIG):Promise.resolve(demoStore()),12000)}
   catch(err){console.error(err);store=null;loadErr=true;authReady=true;renderAuth();render();return}  // Firebase unreachable: show a retry state instead of a frozen page
   if(store.demo)$('banner').classList.remove('hidden');
   applyLang();
-  store.onAuth(u=>{authReady=true;me=u;unLikes();myLikes=new Set();unLikes=u?(store.subscribeLikes(u.uid,s=>{myLikes=s;render()})||(()=>{})):()=>{};renderAuth();render()});
-  startFeed();store.subscribeVerified(s=>{verified=s;render()});refreshStats();route();
+  store.onAuth(u=>{authReady=true;me=u;unLikes();myLikes=new Set();unLikes=u?(store.subscribeLikes(u.uid,s=>{myLikes=s;render()})||(()=>{})):()=>{};
+    unRep();reports=[];unRep=u&&u.isAdmin&&store.subscribeReports?(store.subscribeReports(l=>{reports=l;renderAuth();renderReports()})||(()=>{})):()=>{};
+    renderAuth();render()});
+  startFeed();store.subscribeVerified(s=>{verified=s;render()});route();
   setTimeout(()=>{if(!loaded){loadErr=true;render()}},12000);
 })();
 </script>
