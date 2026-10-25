@@ -103,10 +103,6 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 @media(max-width:759px){.hm{display:none}}
 @media(min-width:760px){.sr{order:1;flex:1 1 360px;max-width:520px;margin-inline:auto}.sp{display:none}.fab{display:none}}
 @media(prefers-reduced-motion:reduce){.card.up,.sk{animation:none}}
-.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
-.tab{border:0;background:none;color:var(--mute);padding:.65rem;border-radius:10px;font:700 1rem Cairo,sans-serif;cursor:pointer;transition:all .15s}
-.tab.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f}
-.hint{font-size:.8rem;color:var(--mute)}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
@@ -162,21 +158,13 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
   <div class="flex gap-2"><button id="grant" class="btn neon flex-1"><i class="fa-solid fa-circle-check"></i> <span data-i="grant"></span></button><button id="revoke" class="btn ghost flex-1"><i class="fa-solid fa-ban"></i> <span data-i="revoke"></span></button></div>
 </div></dialog>
 
-<dialog id="aDlg"><form id="aForm">
-  <div class="tabs"><button type="button" class="tab on" id="tIn" data-mode="in" data-i="signinS"></button><button type="button" class="tab" id="tUp" data-mode="up" data-i="signup"></button></div>
-  <div><label class="l" for="aU"><i class="fa-solid fa-at"></i> <span data-i="userLbl"></span></label><input id="aU" class="f" dir="ltr" maxlength="16" required autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="username"></div>
-  <div><label class="l" for="aP"><i class="fa-solid fa-key"></i> <span data-i="passLbl"></span></label><input id="aP" type="password" class="f" dir="ltr" required minlength="6" autocomplete="current-password"></div>
-  <p class="err" id="aE"></p>
-  <button class="btn gold" id="aGo" type="submit"></button>
-  <p class="hint hidden" id="aNote" data-i="noRecover"></p>
-</form></dialog>
 <dialog id="fDlg"><div class="fh"><h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-diagram-project"></i> <span data-i="allF"></span></h2><button class="btn ghost sm" id="fClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><div id="fBody" class="fb"></div></dialog>
 <dialog id="big" style="width:min(1000px,96vw);background:#000"><img alt="" style="width:100%;display:block"></dialog>
 <div id="toast" role="status"></div>
 
 <script type="module">
 /* =====================================================================
-   1) CONFIG — Firebase web config + Admin Email Integration
+   1) CONFIG — Injected with your actual Firebase config & Admin Email.
    ===================================================================== */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCHvO61P8KXIltGfgl-9oGgATON6B1TyVI",
@@ -187,25 +175,25 @@ const FIREBASE_CONFIG = {
   appId: "1:557159294253:web:f2f57117485a8ff9ab9fa4",
   measurementId: "G-J8JHXBT74B"
 };
-const ADMIN_HANDLE = "maroo";         
-const AUTH_DOMAIN  = "tashkeelti.app"; 
+const ADMIN_EMAIL = "m2aruoo@gmail.com";   //
+const ADMIN_HANDLE = "maroo";               // reserved: only the admin can claim @maroo
 
 /* ---------------- Translations ---------------- */
 const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
-  signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
+  signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Unique @username (cannot be changed later)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Google sign-in is not enabled: Firebase → Authentication → Sign-in method.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
-  failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
+  failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign in as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
   signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Google مش مفعّل: Firebase ← Authentication ← Sign-in method.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
-  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
+  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب الدخول باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];
@@ -234,7 +222,6 @@ const ICONS={
  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',expand:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
  crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
 const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown'};
-
 function swapIcon(el){
   const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
   const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
@@ -251,343 +238,155 @@ const t=k=>T[lang][k]||k;
 let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true;
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
-
-const authMsg=x=>{const c=(x&&x.code)||'',m=(x&&x.message)||'';
-  return m==='taken'||c==='auth/email-already-in-use'?t('taken')
-   :m==='cred'||/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)?t('eCred')
-   :c==='auth/weak-password'?t('ePw'):c==='auth/too-many-requests'?t('eMany')
-   :c==='auth/operation-not-allowed'?t('eOff'):/api-key/.test(c)?t('eKey')
+const authMsg=x=>{const c=(x&&x.code)||'';
+  return c==='auth/unauthorized-domain'?t('eDomain'):c==='auth/operation-not-allowed'?t('eOff'):/api-key/.test(c)?t('eKey')
    :['auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(c)?t('eEnv')
-   :t('failed')+(c?' ('+c+')':'')};
+   :['auth/popup-closed-by-user','auth/cancelled-popup-request'].includes(c)?t('eClosed'):t('failed')+(c?' ('+c+')':'')};
 const ago=ts=>{const s=(Date.now()-ts)/1e3;return s<60?'•':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d'};
 async function copy(x){try{await navigator.clipboard.writeText(x);return true}catch(e){const a=document.createElement('textarea');a.value=x;document.body.append(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}}
 const okImg=u=>/^(data:image\/|https:\/\/)/.test(u||'');
 
-/* ---------------- Data layer: Firebase Engine ---------------- */
+/* ---------------- Data layer: Firebase ---------------- */
 async function firebaseStore(cfg){
   const B='https://www.gstatic.com/firebasejs/10.12.2/';
   const [{initializeApp},A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
-  const app=initializeApp(cfg),auth=A.getAuth(app);
-  let fs;try{fs=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})})}catch(e){fs=F.getFirestore(app)}
-  const mapDoc=d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}};
-  let cb=(),busy=false;
-  const mail=h=>h+'@'+AUTH_DOMAIN;
+  const app=initializeApp(cfg),auth=A.getAuth(app),fs=F.getFirestore(app);
+  let cb=()=>{};
   async function load(u){
-    if(busy)return;
     if(!u)return cb(null);
     let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){console.error(e);toast(t('ePerm'),7000)}
-    cb({uid:u.uid,photo:null,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',isAdmin:u.email===mail(ADMIN_HANDLE)});
+    cb({uid:u.uid,photo:u.photoURL,handle:d.handle||null,displayName:d.displayName||u.displayName||'',bio:d.bio||'',
+        isAdmin:u.email===ADMIN_EMAIL});
   }
   return{demo:false,
     onAuth(f){cb=f;A.onAuthStateChanged(auth,load)},
-    async signIn(h,pw){await A.signInWithEmailAndPassword(auth,mail(h),pw)},
-    async signUp(h,pw){
-      busy=true;
-      try{const u=(await A.createUserWithEmailAndPassword(auth,mail(h),pw)).user;
-        try{const b=F.writeBatch(fs);b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:h,bio:''});await b.commit()}
-        catch(e){console.error(e);await A.deleteUser(u).catch(()=>{});throw new Error('taken')}}
-      finally{busy=false}
-      await load(auth.currentUser)},
-    async logout(){await A.signOut(auth)},
-    async saveProfile(u,h,dn,bio){
-      const b=F.writeBatch(fs);
-      if(!u.handle){
-        const hs=await F.getDoc(F.doc(fs,'handles',h));if(hs.exists())throw new Error('taken');
-        b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});
-      }
-      b.set(F.doc(fs,'users',u.uid),{handle:h||u.handle,displayName:dn||h||u.handle,bio:bio||''},{merge:true});
-      await b.commit();await load(auth.currentUser);
-    },
-    async setBadge(h,val){
-      const hs=await F.getDoc(F.doc(fs,'handles',h));if(!hs.exists())throw new Error('nouser');
-      await F.updateDoc(F.doc(fs,'handles',h),{isVerified:val});
-    },
-    subVerified(f){return F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>{const set=new Set();s.forEach(d=>set.add(d.id));f(set)})},
-    subLikes(uid,f){if(!uid)return f(new Set()),()=>{};return F.onSnapshot(F.collection(fs,'users',uid,'likes'),s=>{const set=new Set();s.forEach(d=>set.add(d.id));f(set)})},
-    subFeed(lim,f,errF){
-      return F.onSnapshot(F.query(F.collection(fs,'posts'),F.orderBy('at','desc'),F.limit(lim)),s=>f(s.docs.map(mapDoc)),errF);
-    },
-    async publish(p){
-      await F.addDoc(F.collection(fs,'posts'),{...p,likes:0,at:F.serverTimestamp()});
-    },
-    async delPost(id){await F.deleteDoc(F.doc(fs,'posts',id))},
-    async toggleLike(id,uid,inc){
-      const b=F.writeBatch(fs),lRef=F.doc(fs,'users',uid,'likes',id),pRef=F.doc(fs,'posts',id);
-      if(inc){b.set(lRef,{at:F.serverTimestamp()});b.update(pRef,{likes:F.increment(1)})}
-      else{b.delete(lRef);b.update(pRef,{likes:F.increment(-1)})}
-      await b.commit();
-    },
-    subStats(f){return F.onSnapshot(F.doc(fs,'stats','global'),s=>f(s.exists()?s.data():null))}
-  };
+    async login(){const g=new A.GoogleAuthProvider();
+      try{await A.signInWithPopup(auth,g)}catch(e){if(e.code==='auth/popup-blocked')return A.signInWithRedirect(auth,g);throw e}},
+    logout:()=>A.signOut(auth),
+    async saveProfile(u,p){
+      const b=F.writeBatch(fs);let h=u.handle;
+      if(!h){h=p.handle.toLowerCase();if(h===ADMIN_HANDLE&&!u.isAdmin)throw new Error('taken');const r=F.doc(fs,'handles',h);
+        if((await F.getDoc(r)).exists())throw new Error('taken');
+        b.set(r,{uid:u.uid,isVerified:false});}
+      b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:p.displayName,bio:p.bio});
+      await b.commit();await load(auth.currentUser)},
+    subscribe(f){F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy('at','desc'),F.limit(80)),
+      s=>f(s.docs.map(d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}})))},
+    subscribeVerified(f){F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>f(new Set(s.docs.map(d=>d.id))))},
+    add:p=>F.addDoc(F.collection(fs,'tactics'),{...p,likeCount:0,at:F.serverTimestamp()}),
+    async toggleLike(u,p,on){const b=F.writeBatch(fs),lr=F.doc(fs,'likes',p.id+'_'+u.uid),tr=F.doc(fs,'tactics',p.id);
+      if(on){b.set(lr,{pid:p.id,uid:u.uid});b.update(tr,{likeCount:F.increment(1)})}else{b.delete(lr);b.update(tr,{likeCount:F.increment(-1)})}await b.commit()},
+    subscribeLikes:(uid,f)=>F.onSnapshot(F.query(F.collection(fs,'likes'),F.where('uid','==',uid)),s=>f(new Set(s.docs.map(d=>d.data().pid)))),
+    remove:id=>F.deleteDoc(F.doc(fs,'tactics',id)),
+    async setVerified(h,v){const r=F.doc(fs,'handles',h.toLowerCase());
+      if(!(await F.getDoc(r)).exists())throw new Error('nouser');await F.updateDoc(r,{isVerified:v})}};
 }
 
-async function init(){
-  try {
-    store = await firebaseStore(FIREBASE_CONFIG);
-  } catch(e) {
-    console.error("Firebase init failed", e);
-  }
-
-  store.subVerified(v=>{verified=v;render()});
-  store.onAuth(u=>{
-    me=u;
-    unLikes();unLikes=store.subLikes(me?me.uid:null,l=>{myLikes=l;render()});
-    if(me&&!me.handle)openProfile(true);
-    renderAuth();render();
-  });
-  
-  if(store.subStats) store.subStats(s=>{renderStats()});
-
-  buildRail();buildFormationsModal();applyLang();
-  $('sort').onchange=()=>render();
-  $('q').oninput=()=>render();
-  
-  $('langBtn').onclick=toggleLang;
-  $('fab').onclick=()=>me?(me.handle?openPost():openProfile(true)):openAuth('in');
-  $('pForm').onsubmit=handlePublish;
-  $('pCancel').onclick=()=>$('pDlg').close();
-  $('prForm').onsubmit=handleProfile;
-  $('outBtn').onclick=()=>{if(confirm(t('out'))){store.logout();$('prDlg').close()}};
-  $('aForm').onsubmit=handleAuth;
-  $('tIn').onclick=()=>setAuthMode('in');
-  $('tUp').onclick=()=>setAuthMode('up');
-  $('grant').onclick=()=>handleAdmin(true);
-  $('revoke').onclick=()=>handleAdmin(false);
-  $('fClose').onclick=()=>$('fDlg').close();
-  $('big').onclick=()=>$('big').close();
-
-  listenFeed();
-}
-
-function listenFeed(){
-  store.subFeed(18,ps=>{
-    posts=ps;loaded=true;render();
-  },e=>{
-    console.error(e);loaded=true;render();
-  });
-}
-
-function renderAuth(){
-  const a=$('auth');
-  if(!me){
-    a.innerHTML=`<button class="btn gold sm" onclick="openAuth('in')"><i class="fa-solid fa-at"></i> ${t('signinS')}</button>`;
-  } else {
-    a.innerHTML=`<button class="av me" id="meBtn">${esc((me.displayName||me.handle||'U')[0].toUpperCase())}</button>`;
-    $('meBtn').onclick=()=>openProfile(false);
-  }
-}
-
-function setAuthMode(m){
-  $('tIn').classList.toggle('on',m==='in');
-  $('tUp').classList.toggle('on',m==='up');
-  $('aGo').textContent=m==='in'?t('signinS'):t('signup');
-  $('aNote').classList.toggle('hidden',m==='in');
-  $('aE').textContent='';
-}
-
-function openAuth(m='in'){setAuthMode(m);$('aForm').reset();$('aDlg').showModal()}
-
-async function handleAuth(e){
-  e.preventDefault();
-  const u=$('aU').value.trim(),p=$('aP').value,isUp=$('tUp').classList.contains('on');
-  $('aE').textContent='';
-  try{
-    if(isUp) await store.signUp(u,p);
-    else await store.signIn(u,p);
-    $('aDlg').close();
-  }catch(err){
-    $('aE').textContent=authMsg(err);
-  }
-}
-
-function openProfile(first=false){
-  $('prE').textContent='';
-  $('prH').value=me?.handle||'';
-  $('prH').disabled=!!me?.handle;
-  $('prN').value=me?.displayName||'';
-  $('prB').value=me?.bio||'';
-  $('outBtn').classList.toggle('hidden',first);
-  $('prDlg').showModal();
-}
-
-async function handleProfile(e){
-  e.preventDefault();
-  const h=$('prH').value.trim(),dn=$('prN').value.trim(),b=$('prB').value.trim();
-  $('prE').textContent='';
-  if(!/^[A-Za-z0-9_]{3,16}$/.test(h)){$('prE').textContent=t('bad');return}
-  try{
-    await store.saveProfile(me,h,dn,b);
-    $('prDlg').close();
-    toast(t('done'));
-  }catch(err){
-    $('prE').textContent=authMsg(err);
-  }
-}
-
-function openPost(){
-  $('pForm').reset();
-  $('pE').textContent='';
-  const sel=$('pF');sel.innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
-  $('pDlg').showModal();
-}
-
-async function handlePublish(e){
-  e.preventDefault();
-  const f=$('pF').value,c=$('pC').value.trim(),file=$('pI').files[0],uUrl=$('pU').value.trim();
-  $('pE').textContent='';
-  let img=uUrl;
-  if(file){
-    if(file.size>1.5*1024*1024){$('pE').textContent=t('big');return}
-    img=await new Promise(r=>{const rd=new FileReader();rd.onload=()=>r(rd.result);rd.readAsDataURL(file)});
-  }
-  if(!img){$('pE').textContent=t('needImg');return}
-  try{
-    $('pGo').disabled=true;
-    await store.publish({
-      formation:f,code:c,img,handle:me.handle,
-      displayName:me.displayName||me.handle,
-      userUid:me.uid
-    });
-    $('pDlg').close();
-    toast(t('copyDone'));
-  }catch(err){
-    $('pE').textContent=t('failed');
-  }finally{$('pGo').disabled=false}
-}
-
-function toggleLang(){
-  lang=lang==='ar'?'en':'ar';
-  localStorage.setItem('tk_lang',lang);
-  applyLang();buildRail();buildFormationsModal();render();
-}
-
-function applyLang(){
-  document.documentElement.lang=lang;
-  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-  document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));
-  document.querySelectorAll('[data-ph]').forEach(el=>el.placeholder=t(el.dataset.ph));
-  $('langBtn').textContent=lang==='ar'?'English':'عربي';
-}
-
-function buildRail(){
-  const r=$('rail');
-  let h=`<button class="chip ${fFilter===''?'on':''}" onclick="setFilter('')">${t('all')}</button>`;
-  POP.forEach(f=>{
-    h+=`<button class="chip ${fFilter===f?'on':''}" onclick="setFilter('${f}')">${f}</button>`;
-  });
-  h+=`<button class="chip more" onclick="$('fDlg').showModal()"><i class="fa-solid fa-layer-group"></i> ${t('allF')}</button>`;
-  r.innerHTML=h;
-}
-
-function buildFormationsModal(){
-  const b=$('fBody');
-  b.innerHTML=`<div class="fg">${FORMATIONS.map(f=>`
-    <button class="ft ${fFilter===f?'on':''}" onclick="setFilter('${f}');$('fDlg').close()">
-      <div class="d text-lg">${f}</div>
-    </button>
-  `).join('')}</div>`;
-}
-
-window.setFilter=f=>{fFilter=f;buildRail();buildFormationsModal();render()};
+/* ---------------- Rendering ---------------- */
+function pitch(f){
+  const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],w=/Narrow/.test(f)?.7:1,rows=[1,...base.split('-').map(Number)],d=[];
+  rows.forEach((n,i)=>{const x=14+i*(132/(rows.length-1));for(let k=0;k<n;k++)d.push(`<circle cx="${x.toFixed(1)}" cy="${(50+((k+1)*100/(n+1)-50)*w).toFixed(1)}" r="4.5" fill="#34d399"/>`)});
+  return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="100" fill="#0b1f14"/><g fill="none" stroke="#1fb27a" stroke-opacity=".4"><rect x="4" y="4" width="152" height="92"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="14"/></g>${d.join('')}</svg>`}
 
 function renderStats(){
-  const totalP=posts.length;
-  const totalC=new Set(posts.map(p=>p.handle)).size;
-  $('sT').textContent=totalP;
-  $('sC').textContent=totalC;
-  $('sF').textContent=FORMATIONS.length;
-}
+  $('sT').textContent=posts.length;
+  $('sC').textContent=new Set(posts.map(p=>p.handle)).size;
+  $('sF').textContent=new Set(posts.map(p=>p.formation)).size}
 
 function render(){
-  renderAuth();
+  const q=$('q').value.trim().toLowerCase();
+  let l=posts.filter(p=>!fFilter||p.formation===fFilter);
+  if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase()].some(s=>s.includes(q)));
+  if($('sort').value==='top')l=[...l].sort((a,b)=>(b.likeCount||0)-(a.likeCount||0));
+  
+  $('count').textContent=l.length+' '+t('nTac');
+  renderStats();
+
   if(!loaded){
     $('grid').innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
     return;
   }
 
-  let list=[...posts];
-  const q=$('q').value.trim().toLowerCase();
-  
-  if(fFilter) list=list.filter(p=>p.formation===fFilter);
-  if(q){
-    list=list.filter(p=>
-      p.formation.toLowerCase().includes(q) ||
-      p.handle.toLowerCase().includes(q) ||
-      (p.displayName&&p.displayName.toLowerCase().includes(q)) ||
-      p.code.toLowerCase().includes(q)
-    );
-  }
-
-  const s=$('sort').value;
-  if(s==='top') list.sort((a,b)=>(b.likes||0)-(a.likes||0));
-  else list.sort((a,b)=>b.at-a.at);
-
-  $('count').textContent=`${list.length} ${t('nTac')}`;
-  renderStats();
-
-  if(!list.length){
-    $('grid').innerHTML=`<div class="empty"><i class="fa-solid fa-futbol"></i><b>${t('none')}</b><span>${t('noneSub')}</span></div>`;
-    return;
-  }
-
-  $('grid').innerHTML=list.map(p=>{
-    const isV=verified.has(p.handle);
-    const isLiked=myLikes.has(p.id);
-    const isMine=me?.uid===p.userUid;
-    return `
-    <article class="card ${anim?'up':''}">
-      <button class="shot" onclick="zoom('${esc(p.img)}')">
-        <span class="fm d">${p.formation}</span>
-        <span class="zoom"><i class="fa-solid fa-expand"></i></span>
-        <img src="${esc(p.img)}" alt="${p.formation}" loading="lazy">
-      </button>
-      <div class="cb">
-        <div class="ur">
-          <button class="u" onclick="viewUser('${p.handle}')">
-            <span class="av">${esc((p.displayName||p.handle)[0].toUpperCase())}</span>
-            <span class="ui">
-              <span class="un">@${esc(p.handle)} ${isV?'<i class="fa-solid fa-circle-check vb" title="'+t('verified')+'"></i>':''}</span>
-              <span class="dn">${esc(p.displayName||'')}</span>
-            </span>
-          </button>
-          <span class="ag">${ago(p.at)}</span>
-        </div>
-        <div class="tk">
-          <i class="fa-solid fa-key"></i>
-          <span>${esc(p.code)}</span>
-        </div>
-        <div class="ac">
-          <button class="btn gold cp" onclick="doCopy('${esc(p.code)}')"><i class="fa-solid fa-copy"></i> ${t('copy')}</button>
-          <button class="btn ghost lk ${isLiked?'on':''}" onclick="doLike('${p.id}')">
-            <i class="fa-${isLiked?'solid':'regular'} fa-heart"></i> ${p.likes||0}
-          </button>
-          ${isMine||me?.isAdmin?`<button class="btn ghost" onclick="doDel('${p.id}')"><i class="fa-solid fa-trash"></i></button>`:''}
-        </div>
+  $('grid').innerHTML=l.length?l.map((p,i)=>`<article class="card ${anim?'up':''}" style="animation-delay:${Math.min(i*.05,.4)}s"><div class="in">
+    <button class="shot" data-img="${esc(p.id)}">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
+    <div class="cb">
+      <div class="ur">
+        <button class="u" data-user="${esc(p.handle)}"><span class="av me">${esc(p.handle[0].toUpperCase())}</span>
+          <span class="ui"><span dir="ltr" class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
+        <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span>
       </div>
-    </article>`;
-  }).join('');
+      <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
+      <div class="ac">
+        <button class="btn neon cp sm" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}</button>
+        <button class="btn ghost lk sm ${myLikes.has(p.id)?'on':''}" data-like="${esc(p.id)}" aria-pressed="${myLikes.has(p.id)}" aria-label="Like"><i class="fa-${myLikes.has(p.id)?'solid':'regular'} fa-heart"></i> ${p.likeCount||0}</button>
+        ${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost sm" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}
+      </div>
+    </div></div></article>`).join('')
+  :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t('noneSub')}</span></div>`;
   anim=false;
 }
 
-window.zoom=src=>{$('big').querySelector('img').src=src;$('big').showModal()};
-window.doCopy=async code=>{if(await copy(code)) toast(t('copyDone'))};
-window.doLike=async id=>{
-  if(!me) return openAuth('in');
-  const inc=!myLikes.has(id);
-  await store.toggleLike(id,me.uid,inc);
-};
-window.doDel=async id=>{
-  if(confirm(t('del'))){
-    await store.delPost(id);
-    toast(t('done'));
-  }
-};
-window.viewUser=async h=>{
-  $('q').value='@'+h;
-  render();
-};
+const renderRail=()=>{$('rail').innerHTML=['',...POP,'more'].map(f=>f==='more'?`<button class="chip d more" id="moreF"><i class="fa-solid fa-diagram-project"></i> ${t('allF')}</button>`:`<button class="chip d ${f===fFilter?'on':''}" data-f="${f}">${f||`<i class="fa-solid fa-layer-group"></i> ${t('all')}`}</button>`).join('')};
 
-init();
+function renderAuth(){
+  $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn" title="${t('admin')}"><i class="fa-solid fa-crown"></i> <span class="lb">${t('admin')}</span></button>`:''}
+    <button class="btn gold sm" id="newBtn"><i class="fa-solid fa-plus"></i> <span class="lb">${t('share')}</span></button>
+    <button class="av me" id="meBtn" aria-label="${t('profile')}">${me.photo?`<img src="${esc(me.photo)}" alt="">`:esc((me.handle||me.displayName||'?')[0].toUpperCase())}</button>`
+    :`<button class="btn gold sm" id="inBtn"><i class="fa-brands fa-google"></i> <span class="lb">${t('signin')}</span></button>`}
+
+function applyLang(){
+  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';localStorage.setItem('tk_lang',lang);
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+  document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
+  $('langBtn').innerHTML='<i class="fa-solid fa-globe"></i> '+(lang==='ar'?'EN':'عربي');
+  renderAuth();renderRail();render()}
+
+function renderFDlg(){
+  const grouped={};FORMATIONS.forEach(f=>{const d=f.slice(0,1);(grouped[d]=grouped[d]||[]).push(f)});
+  $('fBody').innerHTML=Object.keys(grouped).sort().map(d=>`<div class="gh d">${d} ${t('defs')}</div><div class="fg">${grouped[d].map(f=>`<button class="ft ${f===fFilter?'on':''}" data-f="${f}">${pitch(f)}<span>${f}</span></button>`).join('')}</div>`).join('');
+}
+
+/* ---------------- Events ---------------- */
+const openProfile=()=>{$('prH').value=me.handle||'';$('prH').disabled=!!me.handle;$('prH').required=!me.handle;$('prN').value=me.displayName;$('prB').value=me.bio;$('prE').textContent='';$('prDlg').showModal()};
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='langBtn'){lang=lang==='ar'?'en':'ar';applyLang()}
+  else if(b.id==='inBtn'){try{await store.login()}catch(x){toast(authMsg(x),5000)}}
+  else if(b.id==='meBtn')openProfile();
+  else if(b.id==='outBtn'){if(confirm(t('out'))){$('prDlg').close();store.logout()}}
+  else if(b.id==='newBtn'||b.id==='fab')me?me.handle?$('pDlg').showModal():openProfile():toast(t('signinS'));
+  else if(b.id==='adBtn'){$('adE').textContent='';$('adDlg').showModal()}
+  else if(b.id==='moreF'){renderFDlg();$('fDlg').showModal()}
+  else if(b.id==='fClose'){$('fDlg').close()}
+  else if(b.closest('#fDlg')&&b.dataset.f){fFilter=b.dataset.f;$('fDlg').close();renderRail();render()}
+  else if(b.closest('#rail')&&b.dataset.f!==undefined){fFilter=b.dataset.f;renderRail();render()}
+  else if(b.dataset.user){$('q').value='@'+b.dataset.user;render();scrollTo({top:0,behavior:'smooth'})}
+  else if(b.dataset.copy){const p=posts.find(x=>x.id===b.dataset.copy),ok=await copy(p.code),old=b.innerHTML;b.textContent=ok?t('copied'):t('failed');setTimeout(()=>b.innerHTML=old,1500);if(ok)toast(t('copyDone'))}
+  else if(b.dataset.like){if(!me)return toast(t('loginLike'));const p=posts.find(x=>x.id===b.dataset.like);try{await store.toggleLike(me,p,!myLikes.has(p.id))}catch(x){toast(t('failed'))}}
+  else if(b.dataset.del){if(confirm(t('del')))store.remove(b.dataset.del)}
+  else if(b.dataset.img){const p=posts.find(x=>x.id===b.dataset.img);if(p&&okImg(p.img)){$('big').querySelector('img').src=p.img;$('big').showModal()}}
+});
+$('big').onclick=()=>$('big').close();$('q').oninput=render;$('sort').onchange=render;$('pCancel').onclick=()=>$('pDlg').close();
+$('prForm').onsubmit=async e=>{e.preventDefault();$('prE').textContent='';
+  const h=$('prH').value.replace(/^@/,'');if(!me.handle&&!/^[A-Za-z0-9_]{3,16}$/.test(h)){$('prE').textContent=t('bad');return}
+  try{const had=!!me.handle;await store.saveProfile(me,{handle:h,displayName:$('prN').value.trim(),bio:$('prB').value.trim()});$('prDlg').close();if(!had)$('pDlg').showModal()}
+  catch(x){$('prE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}};
+const shrink=f=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/im.width),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.72))};im.onerror=no;im.src=URL.createObjectURL(f)});
+$('pForm').onsubmit=async e=>{e.preventDefault();const g=$('pGo');g.disabled=true;$('pE').textContent='';
+  try{const f=$('pI').files[0],u=$('pU').value.trim();let img=f?await shrink(f):u;
+    if(!/^(data:image\/|https:\/\/)/.test(img))throw new Error('needImg');if(img.length>850000)throw new Error('big');
+    await store.add({uid:me.uid,handle:me.handle,displayName:me.displayName,formation:$('pF').value.trim(),code:$('pC').value.trim(),img});
+    $('pForm').reset();$('pDlg').close();toast(t('done'))}
+  catch(x){$('pE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}g.disabled=false};
+for(const [id,v] of [['grant',true],['revoke',false]])$(id).onclick=async()=>{$('adE').textContent='';
+  try{await store.setVerified($('adH').value.trim().replace(/^@/,''),v);toast(t('done'))}catch(x){$('adE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}};
+
+/* ---------------- Boot ---------------- */
+$('pF').innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
+try{store=await firebaseStore(FIREBASE_CONFIG)}catch(err){console.error(err)}
+applyLang();
+store.onAuth(u=>{me=u;unLikes();myLikes=new Set();unLikes=u?(store.subscribeLikes(u.uid,s=>{myLikes=s;render()})||(()=>{})):()=>{};renderAuth();render();if(u&&!u.handle&&!$('prDlg').open)openProfile()});
+store.subscribe(l=>{posts=l;loaded=true;render()});store.subscribeVerified(s=>{verified=s;render()});
 </script>
 </body>
 </html>
