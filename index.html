@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tashkeelti | تشكيلتي</title>
+<meta name="description" content="Tashkeelti — copy EA FC tactic codes shared by real players. تشكيلتي: أكواد تكتيكات EA FC من لاعبين حقيقيين.">
+<meta name="theme-color" content="#070a09"><meta property="og:title" content="Tashkeelti | تشكيلتي"><meta property="og:description" content="EA FC tactics library: pick a formation, copy the code, play.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070a09'/%3E%3Cpath d='M8 10h16M16 10v13' stroke='%2334d399' stroke-width='3.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Cairo:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -103,6 +107,16 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 @media(max-width:759px){.hm{display:none}}
 @media(min-width:760px){.sr{order:1;flex:1 1 360px;max-width:520px;margin-inline:auto}.sp{display:none}.fab{display:none}}
 @media(prefers-reduced-motion:reduce){.card.up,.sk{animation:none}}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
+.tab{border:0;background:none;color:var(--mute);padding:.65rem;border-radius:10px;font:700 1rem Cairo,sans-serif;cursor:pointer;transition:all .15s}
+.tab.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f}
+.hint{font-size:.8rem;color:var(--mute)}
+.pf{display:flex;flex-direction:column;gap:14px;padding:20px 0 10px;align-items:flex-start}
+.pfh{display:flex;align-items:center;gap:16px}
+.av.big{width:78px;height:78px;font-size:32px;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--neon)}
+.pfn{font-size:34px;line-height:1;direction:ltr;display:flex;align-items:center}
+.sk-av{display:block;width:40px;height:40px;border-radius:50%;background:linear-gradient(100deg,#0d1311 30%,#16211c 50%,#0d1311 70%);background-size:200% 100%;animation:sh 1.3s linear infinite}
+.more{grid-column:1/-1;text-align:center;padding:6px 0 10px}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
@@ -115,13 +129,14 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 </div></header>
 
 <main class="wrap">
-  <section class="hero">
+  <section class="hero" id="hero">
     <svg class="hp" viewBox="0 0 160 100" aria-hidden="true"><rect x="3" y="3" width="154" height="94"/><line x1="80" y1="3" x2="80" y2="97"/><circle cx="80" cy="50" r="14"/><rect x="3" y="28" width="26" height="44"/><rect x="131" y="28" width="26" height="44"/></svg>
     <h1 class="d"><span data-i="h1"></span><br><em data-i="h2"></em></h1>
     <p class="sub" data-i="sub"></p>
     <div class="stats"><div class="stat"><b id="sT">0</b><span data-i="sTac"></span></div><div class="stat"><b id="sC">0</b><span data-i="sCre"></span></div><div class="stat"><b id="sF">0</b><span data-i="sFor"></span></div></div>
     <div id="banner" class="banner hidden"></div>
   </section>
+  <section id="profile" class="hidden"></section>
   <nav id="rail" class="rail" aria-label="Formations"></nav>
   <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
@@ -158,13 +173,21 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
   <div class="flex gap-2"><button id="grant" class="btn neon flex-1"><i class="fa-solid fa-circle-check"></i> <span data-i="grant"></span></button><button id="revoke" class="btn ghost flex-1"><i class="fa-solid fa-ban"></i> <span data-i="revoke"></span></button></div>
 </div></dialog>
 
+<dialog id="aDlg"><form id="aForm">
+  <div class="tabs"><button type="button" class="tab on" id="tIn" data-mode="in" data-i="signinS"></button><button type="button" class="tab" id="tUp" data-mode="up" data-i="signup"></button></div>
+  <div><label class="l" for="aU"><i class="fa-solid fa-at"></i> <span data-i="userLbl"></span></label><input id="aU" class="f" dir="ltr" maxlength="16" required autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="username"></div>
+  <div><label class="l" for="aP"><i class="fa-solid fa-key"></i> <span data-i="passLbl"></span></label><input id="aP" type="password" class="f" dir="ltr" required minlength="6" autocomplete="current-password"></div>
+  <p class="err" id="aE"></p>
+  <button class="btn gold" id="aGo" type="submit"></button>
+  <p class="hint hidden" id="aNote" data-i="noRecover"></p>
+</form></dialog>
 <dialog id="fDlg"><div class="fh"><h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-diagram-project"></i> <span data-i="allF"></span></h2><button class="btn ghost sm" id="fClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><div id="fBody" class="fb"></div></dialog>
 <dialog id="big" style="width:min(1000px,96vw);background:#000"><img alt="" style="width:100%;display:block"></dialog>
 <div id="toast" role="status"></div>
 
 <script type="module">
 /* =====================================================================
-   1) CONFIG — Injected with your actual Firebase config & Admin Email.
+   1) CONFIG — Firebase config & Admin details.
    ===================================================================== */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCHvO61P8KXIltGfgl-9oGgATON6B1TyVI",
@@ -177,83 +200,24 @@ const FIREBASE_CONFIG = {
 };
 const ADMIN_EMAIL = "m2aruoo@gmail.com";
 const ADMIN_HANDLE = "maroo";
-
-/* ---------------- Welcome Email System (Stealth Key) ---------------- */
-const tashkeeltiLogoUrl = 'https://i.ibb.co/W4ckNGSb/Gemini-Generated-Image-k44536k44536k445.jpg'; 
-const getResendKey = () => atob('cmVfZDVZbUtMVm9fRjI1Umh0RGdEMXk3QTJUaXRaMTg2ZHFk');
-
-const emailTemplate = `
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #070a09; color: #eef1f6; margin: 0; padding: 20px; }
-        .card { max-width: 500px; margin: 0 auto; background: linear-gradient(180deg, #101a16, #0a100e); border: 1px solid #1f2d27; border-radius: 16px; padding: 30px; text-align: center; }
-        .logo-box { width: 100px; height: 100px; margin: 0 auto 20px auto; border-radius: 12px; overflow: hidden; }
-        .logo-box img { width: 100%; height: 100%; object-fit: cover; }
-        h1 { color: #b9f3d9; font-size: 24px; margin-bottom: 15px; }
-        p { color: #84978d; font-size: 15px; line-height: 1.6; margin-bottom: 20px; }
-        .btn { display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, #b9f3d9, #1fb27a); color: #04170f; font-weight: bold; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 10px rgba(31, 178, 122, 0.3); }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <div class="logo-box">
-            <img src="${tashkeeltiLogoUrl}" alt="Tashkeelti Logo">
-        </div>
-        <h1>أهلاً بك في تشكيلتي! 🔥</h1>
-        <p>منصتك الأولى لتبادل ومشاركة أفضل تكتيكات وأكواد خطط EA Sports FC. شارك تكتيكاتك المفضلّة واستكشف خطط المحترفين لتكسب كل ماتشاتك!</p>
-        <a href="https://marwanabass.github.io/Tashkeelti/" class="btn">دخول المنصة الآن 🚀</a>
-    </div>
-</body>
-</html>
-`;
-
-async function sendWelcomeEmail(userEmail) {
-    if (!userEmail) return;
-    try {
-        const response = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getResendKey()}`,
-            },
-            body: JSON.stringify({
-                from: 'Tashkeelti <tashkeelti@gmail.com>',
-                to: [userEmail],
-                subject: 'أهلاً بك في منصة تشكيلتي! ⚽🔥',
-                html: emailTemplate,
-            }),
-        });
-
-        if (response.ok) {
-            console.log('✅ تم إرسال إيميل الترحيب بنجاح إلى:', userEmail);
-        } else {
-            const errorData = await response.json();
-            console.error('❌ فشل إرسال الإيميل:', errorData);
-        }
-    } catch (error) {
-        console.error('❌ حدث خطأ في الشبكة أثناء إرسال الإيميل:', error);
-    }
-}
+const AUTH_DOMAIN  = "tashkeelti.app";
 
 /* ---------------- Translations ---------------- */
 const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
-  signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Unique @username (cannot be changed later)',nameLbl:'Display name',bioLbl:'Short bio',
+  signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Google sign-in is not enabled: Firebase → Authentication → Sign-in method.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
-  failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign in as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
+  failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
   signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Google مش مفعّل: Firebase ← Authentication ← Sign-in method.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
-  taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
-  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب الدخول باسم maroo للوحة الأدمن.',verified:'صانع الخطة موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
+  taken:'اسم المستخدم محجوز',nouser:'mفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
+  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];
@@ -283,140 +247,139 @@ const ICONS={
  crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
 const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown'};
 function swapIcon(el){
-  const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
-  const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
-  v.setAttribute('viewBox','0 0 24 24');v.setAttribute('aria-hidden',ti?'false':'true');
-  v.setAttribute('class',['ic','ic-'+key,key==='heart'&&c.includes('fa-solid')?'solid':'',...c.filter(x=>!x.startsWith('fa-'))].join(' '));
-  if(el.getAttribute('style'))v.setAttribute('style',el.getAttribute('style'));
-  v.innerHTML=(ti?'<title>'+esc(ti)+'</title>':'')+ICONS[key];el.replaceWith(v)}
+ const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
+ const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
+ v.setAttribute('viewBox','0 0 24 24');v.setAttribute('aria-hidden',ti?'false':'true');
+ v.setAttribute('class',['ic','ic-'+key,key==='heart'&&c.includes('fa-solid')?'solid':'',...c.filter(x=>!x.startsWith('fa-'))].join(' '));
+ if(el.getAttribute('style'))v.setAttribute('style',el.getAttribute('style'));
+ v.innerHTML=(ti?'<title>'+esc(ti)+'</title>':'')+ICONS[key];el.replaceWith(v)}
 const hydrate=r=>r.querySelectorAll('i[class*="fa-"]').forEach(swapIcon);
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1){n.matches('i[class*="fa-"]')?swapIcon(n):hydrate(n)}}))).observe(document.body,{childList:true,subtree:true});
 hydrate(document);
 
 let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
 const t=k=>T[lang][k]||k;
-let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true;
+let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{};
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
-const authMsg=x=>{const c=(x&&x.code)||'';
-  return c==='auth/unauthorized-domain'?t('eDomain'):c==='auth/operation-not-allowed'?t('eOff'):/api-key/.test(c)?t('eKey')
-   :['auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(c)?t('eEnv')
-   :['auth/popup-closed-by-user','auth/cancelled-popup-request'].includes(c)?t('eClosed'):t('failed')+(c?' ('+c+')':'')};
+const authMsg=x=>{const c=(x&&x.code)||'',m=(x&&x.message)||'';
+ return m==='taken'||c==='auth/email-already-in-use'?t('taken')
+  :m==='cred'||/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)?t('eCred')
+  :c==='auth/weak-password'?t('ePw'):c==='auth/too-many-requests'?t('eMany')
+  :c==='auth/operation-not-allowed'?t('eOff'):/api-key/.test(c)?t('eKey')
+  :['auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(c)?t('eEnv')
+  :t('failed')+(c?' ('+c+')':'')};
 const ago=ts=>{const s=(Date.now()-ts)/1e3;return s<60?'•':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d'};
 async function copy(x){try{await navigator.clipboard.writeText(x);return true}catch(e){const a=document.createElement('textarea');a.value=x;document.body.append(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}}
 const okImg=u=>/^(data:image\/|https:\/\/)/.test(u||'');
 
-/* ---------------- Data layer: Firebase ---------------- */
 async function firebaseStore(cfg){
-  const B='https://www.gstatic.com/firebasejs/10.12.2/';
-  const [{initializeApp},A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
-  const app=initializeApp(cfg),auth=A.getAuth(app),fs=F.getFirestore(app);
-  let cb=()=>{};
-  async function load(u){
-    if(!u)return cb(null);
-    let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){console.error(e);toast(t('ePerm'),7000)}
-    cb({uid:u.uid,photo:u.photoURL,handle:d.handle||null,displayName:d.displayName||u.displayName||'',bio:d.bio||'',
-        isAdmin:u.email===ADMIN_EMAIL});
-  }
-  return{demo:false,
-    onAuth(f){cb=f;A.onAuthStateChanged(auth,load)},
-    async login(){const g=new A.GoogleAuthProvider();
-      try{
-            const res = await A.signInWithPopup(auth, g);
-            if (res && res.user && res.user.email) {
-                sendWelcomeEmail(res.user.email);
-            }
-        }catch(e){
-            if(e.code==='auth/popup-blocked') return A.signInWithRedirect(auth,g);
-            throw e;
-        }
-    },
-    logout:()=>A.signOut(auth),
-    async saveProfile(u,p){
-      const b=F.writeBatch(fs);let h=u.handle;
-      if(!h){h=p.handle.toLowerCase();if(h===ADMIN_HANDLE&&!u.isAdmin)throw new Error('taken');const r=F.doc(fs,'handles',h);
-        if((await F.getDoc(r)).exists())throw new Error('taken');
-        b.set(r,{uid:u.uid,isVerified:false});}
-      b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:p.displayName,bio:p.bio});
-      await b.commit();await load(auth.currentUser)},
-    subscribe(f){F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy('at','desc'),F.limit(80)),
-      s=>f(s.docs.map(d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}})))},
-    subscribeVerified(f){F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>f(new Set(s.docs.map(d=>d.id))))},
-    add:p=>F.addDoc(F.collection(fs,'tactics'),{...p,likeCount:0,at:F.serverTimestamp()}),
-    async toggleLike(u,p,on){const b=F.writeBatch(fs),lr=F.doc(fs,'likes',p.id+'_'+u.uid),tr=F.doc(fs,'tactics',p.id);
-      if(on){b.set(lr,{pid:p.id,uid:u.uid});b.update(tr,{likeCount:F.increment(1)})}else{b.delete(lr);b.update(tr,{likeCount:F.increment(-1)})}await b.commit()},
-    subscribeLikes:(uid,f)=>F.onSnapshot(F.query(F.collection(fs,'likes'),F.where('uid','==',uid)),s=>f(new Set(s.docs.map(d=>d.data().pid)))),
-    remove:id=>F.deleteDoc(F.doc(fs,'tactics',id)),
-    async setVerified(h,v){const r=F.doc(fs,'handles',h.toLowerCase());
-      if(!(await F.getDoc(r)).exists())throw new Error('nouser');await F.updateDoc(r,{isVerified:v})}};
+ const B='https://www.gstatic.com/firebasejs/10.12.2/';
+ const [{initializeApp},A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
+ const app=initializeApp(cfg),auth=A.getAuth(app);
+ let fs;try{fs=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})})}catch(e){fs=F.getFirestore(app)}
+ const mapDoc=d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}};
+ let cb=(),busy=false;
+ const mail=h=>h+'@'+AUTH_DOMAIN;
+ async function load(u){
+  if(busy)return;
+  if(!u)return cb(null);
+  let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){console.error(e);toast(t('ePerm'),7000)}
+  cb({uid:u.uid,photo:null,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',isAdmin:u.email===mail(ADMIN_HANDLE)});
+ }
+ return{demo:false,
+  onAuth(f){cb=f;A.onAuthStateChanged(auth,load)},
+  async signIn(h,pw){await A.signInWithEmailAndPassword(auth,mail(h),pw)},
+  async signUp(h,pw){
+   busy=true;
+   try{const u=(await A.createUserWithEmailAndPassword(auth,mail(h),pw)).user;
+    try{const b=F.writeBatch(fs);b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:h,bio:''});await b.commit()}
+    catch(e){console.error(e);await A.deleteUser(u).catch(()=>{});throw new Error('taken')}}
+   finally{busy=false}
+   await load(auth.currentUser)},
+  logout:()=>A.signOut(auth),
+  async saveProfile(u,p){
+   const b=F.writeBatch(fs);
+   b.set(F.doc(fs,'users',u.uid),{handle:u.handle,displayName:p.displayName,bio:p.bio},{merge:true});
+   await b.commit();await load(auth.currentUser)},
+  subscribe(f){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy('at','desc'),F.limit(80)),
+   s=>f(s.docs.map(mapDoc)),()=>f([]))},
+  subscribeVerified(f){return F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>f(new Set(s.docs.map(d=>d.id))),()=>f(new Set()))},
+  add:p=>F.addDoc(F.collection(fs,'tactics'),{...p,likeCount:0,at:F.serverTimestamp()}),
+  async toggleLike(u,p,on){const b=F.writeBatch(fs),lr=F.doc(fs,'likes',p.id+'_'+u.uid),tr=F.doc(fs,'tactics',p.id);
+   if(on){b.set(lr,{pid:p.id,uid:u.uid});b.update(tr,{likeCount:F.increment(1)})}else{b.delete(lr);b.update(tr,{likeCount:F.increment(-1)})}await b.commit()},
+  subscribeLikes:(uid,f)=>F.onSnapshot(F.query(F.collection(fs,'likes'),F.where('uid','==',uid)),s=>f(new Set(s.docs.map(d=>d.data().pid))),()=>f(new Set())),
+  remove:id=>F.deleteDoc(F.doc(fs,'tactics',id)),
+  async setVerified(h,v){const r=F.doc(fs,'handles',h.toLowerCase());
+   if(!(await F.getDoc(r)).exists())throw new Error('nouser');await F.updateDoc(r,{isVerified:v})}
+ };
 }
 
-/* ---------------- Rendering ---------------- */
 function pitch(f){
-  const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],w=/Narrow/.test(f)?.7:1,rows=[1,...base.split('-').map(Number)],d=[];
-  rows.forEach((n,i)=>{const x=14+i*(132/(rows.length-1));for(let k=0;k<n;k++)d.push(`<circle cx="${x.toFixed(1)}" cy="${(50+((k+1)*100/(n+1)-50)*w).toFixed(1)}" r="4.5" fill="#34d399"/>`)});
-  return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="100" fill="#0b1f14"/><g fill="none" stroke="#1fb27a" stroke-opacity=".4"><rect x="4" y="4" width="152" height="92"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="14"/></g>${d.join('')}</svg>`}
+ const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],w=/Narrow/.test(f)?.7:1,rows=[1,...base.split('-').map(Number)],d=[];
+ rows.forEach((n,i)=>{const x=14+i*(132/(rows.length-1));for(let k=0;k<n;k++)d.push(`<circle cx="${x.toFixed(1)}" cy="${(50+((k+1)*100/(n+1)-50)*w).toFixed(1)}" r="4.5" fill="#34d399"/>`)});
+ return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="100" fill="#0b1f14"/><g fill="none" stroke="#1fb27a" stroke-opacity=".4"><rect x="4" y="4" width="152" height="92"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="14"/></g>${d.join('')}</svg>`}
 
 function renderStats(){
-  $('sT').textContent=posts.length;
-  $('sC').textContent=new Set(posts.map(p=>p.handle)).size;
-  $('sF').textContent=new Set(posts.map(p=>p.formation)).size}
+ $('sT').textContent=posts.length;
+ $('sC').textContent=new Set(posts.map(p=>p.handle)).size;
+ $('sF').textContent=new Set(posts.map(p=>p.formation)).size}
 
 function render(){
-  const q=$('q').value.trim().toLowerCase();
-  let l=posts.filter(p=>!fFilter||p.formation===fFilter);
-  if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase()].some(s=>s.includes(q)));
-  if($('sort').value==='top')l=[...l].sort((a,b)=>(b.likeCount||0)-(a.likeCount||0));
-  
-  $('count').textContent=l.length+' '+t('nTac');
-  renderStats();
+ const q=$('q').value.trim().toLowerCase();
+ let l=posts.filter(p=>!fFilter||p.formation===fFilter);
+ if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase()].some(s=>s.includes(q)));
+ if($('sort').value==='top')l=[...l].sort((a,b)=>(b.likeCount||0)-(a.likeCount||0));
+ 
+ $('count').textContent=l.length+' '+t('nTac');
+ renderStats();
 
-  if(!loaded){
-    $('grid').innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
-    return;
-  }
+ if(!loaded){
+  $('grid').innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
+  return;
+ }
 
-  $('grid').innerHTML=l.length?l.map((p,i)=>`<article class="card ${anim?'up':''}" style="animation-delay:${Math.min(i*.05,.4)}s"><div class="in">
-    <button class="shot" data-img="${esc(p.id)}">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
-    <div class="cb">
-      <div class="ur">
-        <button class="u" data-user="${esc(p.handle)}"><span class="av me">${esc(p.handle[0].toUpperCase())}</span>
-          <span class="ui"><span dir="ltr" class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
-        <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span>
-      </div>
-      <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
-      <div class="ac">
-        <button class="btn neon cp sm" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}</button>
-        <button class="btn ghost lk sm ${myLikes.has(p.id)?'on':''}" data-like="${esc(p.id)}" aria-pressed="${myLikes.has(p.id)}" aria-label="Like"><i class="fa-${myLikes.has(p.id)?'solid':'regular'} fa-heart"></i> ${p.likeCount||0}</button>
-        ${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost sm" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}
-      </div>
-    </div></div></article>`).join('')
-  :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t('noneSub')}</span></div>`;
-  anim=false;
+ $('grid').innerHTML=l.length?l.map((p,i)=>`<article class="card ${anim?'up':''}" style="animation-delay:${Math.min(i*.05,.4)}s"><div class="in">
+  <button class="shot" data-img="${esc(p.id)}">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
+  <div class="cb">
+   <div class="ur">
+    <button class="u" data-user="${esc(p.handle)}"><span class="av me">${esc(p.handle[0].toUpperCase())}</span>
+     <span class="ui"><span dir="ltr" class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
+    <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span>
+   </div>
+   <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
+   <div class="ac">
+    <button class="btn neon cp sm" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}</button>
+    <button class="btn ghost lk sm ${myLikes.has(p.id)?'on':''}" data-like="${esc(p.id)}" aria-pressed="${myLikes.has(p.id)}" aria-label="Like"><i class="fa-${myLikes.has(p.id)?'solid':'regular'} fa-heart"></i> ${p.likeCount||0}</button>
+    ${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost sm" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}
+   </div>
+  </div></div></article>`).join('')
+ :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t('noneSub')}</span></div>`;
+ anim=false;
 }
 
 const renderRail=()=>{$('rail').innerHTML=['',...POP,'more'].map(f=>f==='more'?`<button class="chip d more" id="moreF"><i class="fa-solid fa-diagram-project"></i> ${t('allF')}</button>`:`<button class="chip d ${f===fFilter?'on':''}" data-f="${f}">${f||`<i class="fa-solid fa-layer-group"></i> ${t('all')}`}</button>`).join('')};
 
 function renderAuth(){
-  $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn" title="${t('admin')}"><i class="fa-solid fa-crown"></i> <span class="lb">Admin</span></button>`:''}
-  <button class="btn ghost sm" id="prBtn"><span class="av me">${esc(me.handle?me.handle[0].toUpperCase():(me.displayName?me.displayName[0].toUpperCase():'U'))}</span><span class="lb">@${esc(me.handle||'new')}</span></button>`
-  :`<button class="btn neon sm" id="loginBtn"><i class="fa-brands fa-google"></i> <span class="lb">${t('signinS')}</span></button>`;
+ $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn" title="${t('admin')}"><i class="fa-solid fa-crown"></i> <span class="lb">Admin</span></button>`:''}
+ <button class="btn ghost sm" id="prBtn"><span class="av me">${esc(me.handle?me.handle[0].toUpperCase():(me.displayName?me.displayName[0].toUpperCase():'U'))}</span><span class="lb">@${esc(me.handle||'new')}</span></button>`
+ :`<button class="btn neon sm" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> <span class="lb">${t('signinS')}</span></button>`;
 }
 
-// تشغيل النظام وتحديث واجهة المستخدم
 async function init(){
     try{
-        store=await firebaseStore(FIREBASE_CONFIG);
+        store = await firebaseStore(FIREBASE_CONFIG);
     }catch(e){
         console.error(e);
     }
-    
+
     document.addEventListener('click', async e=>{
         const lBtn=$('loginBtn');
         if(lBtn&&lBtn.contains(e.target)){
-            try{ await store.login(); }catch(err){ toast(authMsg(err)); }
+            $('aU').value=''; $('aP').value=''; $('aE').textContent='';
+            $('aDlg').showModal();
         }
-        
+
         const prBtn=$('prBtn');
         if(prBtn&&prBtn.contains(e.target)){
             $('prH').value=me.handle||'';
@@ -424,7 +387,7 @@ async function init(){
             $('prB').value=me.bio||'';
             $('prDlg').showModal();
         }
-        
+
         const adBtn=$('adBtn');
         if(adBtn&&adBtn.contains(e.target)){
             $('adDlg').showModal();
@@ -455,7 +418,7 @@ async function init(){
 
         const lkBtn=e.target.closest('[data-like]');
         if(lkBtn){
-            if(!me){ toast(t('loginLike')); return; }
+            if(!me){ $('aDlg').showModal(); return; }
             const id=lkBtn.getAttribute('data-like');
             const post=posts.find(p=>p.id===id);
             if(post){
@@ -512,7 +475,7 @@ async function init(){
     });
 
     $('fab').addEventListener('click',()=>{
-        if(!me){ store.login(); return; }
+        if(!me){ $('aDlg').showModal(); return; }
         if(!me.handle){ $('prDlg').showModal(); return; }
         $('pF').innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
         $('pDlg').showModal();
@@ -525,23 +488,43 @@ async function init(){
     $('prForm').addEventListener('submit',async e=>{
         e.preventDefault();
         $('prE').textContent='';
-        const h=$('prH').value.trim().replace(/^@/,'');
         const n=$('prN').value.trim();
         const b=$('prB').value.trim();
-        if(!/^[A-Za-z0-9_]{3,16}$/.test(h)){ $('prE').textContent=t('bad'); return; }
         try{
-            await store.saveProfile(me,{handle:h,displayName:n,bio:b});
+            await store.saveProfile(me,{displayName:n,bio:b});
             $('prDlg').close();
             toast(t('done'));
         }catch(err){
-            $('prE').textContent=err.message==='taken'?t('taken'):authMsg(err);
+            $('prE').textContent=authMsg(err);
         }
     });
 
-    // زر تسجيل الخروج بدون رسائل تأكيد مزعجة
     $('outBtn').addEventListener('click', async () => {
         await store.logout();
         $('prDlg').close();
+    });
+
+    let authMode='in';
+    $('tIn').addEventListener('click',()=>{authMode='in';$('tIn').classList.add('on');$('tUp').classList.remove('on');$('aGo').textContent=t('signinS');$('aNote').classList.add('hidden')});
+    $('tUp').addEventListener('click',()=>{authMode='up';$('tUp').classList.add('on');$('tIn').classList.remove('on');$('aGo').textContent=t('signup');$('aNote').classList.remove('hidden')});
+
+    $('aForm').addEventListener('submit',async e=>{
+        e.preventDefault();
+        $('aE').textContent='';
+        const h=$('aU').value.trim().toLowerCase();
+        const pw=$('aP').value;
+        if(!/^[a-z0-9_]{3,16}$/.test(h)){$('aE').textContent=t('bad');return;}
+        try{
+            $('aGo').disabled=true;
+            if(authMode==='in')await store.signIn(h,pw);
+            else await store.signUp(h,pw);
+            $('aDlg').close();
+            toast(t('done'));
+        }catch(err){
+            $('aE').textContent=authMsg(err);
+        }finally{
+            $('aGo').disabled=false;
+        }
     });
 
     $('pForm').addEventListener('submit',async e=>{
@@ -600,13 +583,18 @@ async function init(){
         store.onAuth(user=>{
             me=user;
             renderAuth();
-            if(me && !me.handle){
-                $('prDlg').showModal();
+            if(me){
+                unLikes();
+                unLikes=store.subscribeLikes(me.uid,set=>{myLikes=set;render()});
+            }else{
+                myLikes.clear();
+                unLikes();
+                render();
             }
         });
-        store.subscribe(data=>{ posts=data; loaded=true; render(); });
-        store.subscribeVerified(v=>{ verified=v; render(); });
-    } else {
+        unFeed=store.subscribe(data=>{posts=data;loaded=true;render()});
+        store.subscribeVerified(v=>{verified=v;render()});
+    }else{
         loaded=true; render();
     }
 
@@ -621,6 +609,7 @@ async function init(){
         const k=el.getAttribute('data-ph');
         if(T[lang][k]) el.placeholder=T[lang][k];
     });
+    $('aGo').textContent=t('signinS');
 }
 
 init();
