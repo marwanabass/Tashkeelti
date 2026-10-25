@@ -40,7 +40,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 #toast.on{opacity:1}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
-/* ===== v3: mobile-first layout, calm luxury cards ===== */
+/* ===== v3 Layout ===== */
 .hidden{display:none}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(7,10,9,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
@@ -101,6 +101,9 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .ft{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:8px;cursor:pointer;color:inherit;text-align:center;transition:border-color .15s,transform .15s}
 .ft:hover{border-color:var(--neon);transform:translateY(-2px)}.ft.on{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon)}
 .ft svg{width:100%;aspect-ratio:16/10;display:block;border-radius:8px;margin-bottom:6px}.ft span{font-size:15px;line-height:1.1;display:block}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;margin-bottom:10px}
+.tab{border:0;background:none;color:var(--mute);padding:.5rem;border-radius:8px;font:700 0.9rem Cairo,sans-serif;cursor:pointer}
+.tab.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f}
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes sh{to{background-position:-200% 0}}
 @media(max-width:559px){.lb{display:none}}
@@ -113,7 +116,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 
 <header class="topbar"><div class="wrap hd">
  <div class="logo d">Tashkeelti</div><span class="sp"></span>
- <button id="langBtn" class="btn ghost sm" aria-label="Language"></button>
+ <button id="langBtn" class="btn ghost sm" aria-label="Language">عربي / English</button>
  <span id="auth"></span>
  <label class="sr"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" class="f" data-ph="search" aria-label="Search"></label>
 </div></header>
@@ -132,7 +135,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 </main>
 <button id="fab" class="fab" aria-label="Share tactics"><i class="fa-solid fa-plus"></i></button>
 
-<!-- Profile / first-time handle setup -->
+<!-- Profile Dialog -->
 <dialog id="prDlg"><form id="prForm">
  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-user-pen"></i> <span data-i="profile"></span></h2>
  <div><label class="l" for="prH"><i class="fa-solid fa-at"></i> <span data-i="handleLbl"></span></label><input id="prH" class="f" dir="ltr" maxlength="16" pattern="[A-Za-z0-9_]{3,16}" placeholder="@username"></div>
@@ -142,7 +145,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
  <div class="flex justify-between gap-2"><button type="button" id="outBtn" class="btn ghost"><i class="fa-solid fa-right-from-bracket"></i> <span data-i="signout"></span></button><button class="btn gold" type="submit"><i class="fa-solid fa-floppy-disk"></i> <span data-i="save"></span></button></div>
 </form></dialog>
 
-<!-- Share tactics -->
+<!-- Share Tactics Dialog -->
 <dialog id="pDlg"><form id="pForm">
  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-futbol"></i> <span data-i="shareT"></span></h2>
  <div><label class="l" for="pF"><i class="fa-solid fa-diagram-project"></i> <span data-i="formation"></span></label><select id="pF" class="f" dir="ltr" required></select></div>
@@ -153,7 +156,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
  <div class="flex justify-end gap-2"><button type="button" class="btn ghost" id="pCancel"><i class="fa-solid fa-xmark"></i> <span data-i="cancel"></span></button><button class="btn gold" id="pGo" type="submit"><i class="fa-solid fa-paper-plane"></i> <span data-i="publish"></span></button></div>
 </form></dialog>
 
-<!-- Admin panel -->
+<!-- Admin Panel Dialog -->
 <dialog id="adDlg"><div class="box">
  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-crown"></i> <span data-i="admin"></span></h2>
  <p class="text-sm text-[var(--mute)]" data-i="adminHint"></p>
@@ -161,6 +164,21 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
  <p class="err" id="adE"></p>
  <div class="flex gap-2"><button id="grant" class="btn neon flex-1"><i class="fa-solid fa-circle-check"></i> <span data-i="grant"></span></button><button id="revoke" class="btn ghost flex-1"><i class="fa-solid fa-ban"></i> <span data-i="revoke"></span></button></div>
 </div></dialog>
+
+<!-- Auth Dialog (Sign in / Sign up with Username & Password) -->
+<dialog id="authDlg"><form id="authForm">
+ <div class="tabs">
+  <button type="button" class="tab on" id="tabIn">تسجيل الدخول</button>
+  <button type="button" class="tab" id="tabUp">حساب جديد</button>
+ </div>
+ <div><label class="l" for="authU"><i class="fa-solid fa-at"></i> اسم المستخدم (Username)</label><input id="authU" class="f" dir="ltr" required placeholder="username"></div>
+ <div><label class="l" for="authP"><i class="fa-solid fa-key"></i> كلمة المرور (Password)</label><input id="authP" type="password" class="f" dir="ltr" required minlength="6" placeholder="••••••••"></div>
+ <p class="err" id="authE"></p>
+ <div class="flex justify-end gap-2">
+  <button type="button" class="btn ghost" id="authCancel">إلغاء</button>
+  <button class="btn gold" id="authGo" type="submit">دخول</button>
+ </div>
+</form></dialog>
 
 <dialog id="fDlg"><div class="fh"><h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-diagram-project"></i> <span data-i="allF"></span></h2><button class="btn ghost sm" id="fClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><div id="fBody" class="fb"></div></dialog>
 <dialog id="big" style="width:min(1000px,96vw);background:#000"><img alt="" style="width:100%;display:block"></dialog>
@@ -176,24 +194,24 @@ const FIREBASE_CONFIG = {
   appId: "1:557159294253:web:f2f57117485a8ff9ab9fa4",
   measurementId: "G-J8JHXBT74B"
 };
-const ADMIN_EMAIL = "m2aruoo@gmail.com";
 const ADMIN_HANDLE = "maroo";
+const AUTH_DOMAIN = "tashkeelti.app"; // نطاق وهمي آمن لتسجيل حسابات اليوزر والباسورد
 
 const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
-  signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Unique @username (cannot be changed later)',nameLbl:'Display name',bioLbl:'Short bio',
+  signin:'Sign in',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Unique @username (cannot be changed later)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Google sign-in is not enabled: Firebase → Authentication → Sign-in method.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',signinS:'Sign in',nTac:'tactics',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
-  failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign in as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
+  failed:'Something went wrong',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
-  signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
+  signin:'تسجيل الدخول',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Google مش مفعّل: Firebase ← Authentication ← Sign-in method.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',signinS:'دخول',nTac:'تكتيك',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
-  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب الدخول باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
+  failed:'حصل خطأ',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];
@@ -220,8 +238,8 @@ const ICONS={
  send:'<path d="m22 2-11 11M22 2l-7 20-4-9-9-4z"/>',ban:'<circle cx="12" cy="12" r="10"/><path d="m5 5 14 14"/>',
  sort:'<path d="M3 6h13M3 12h9M3 18h5M18 8v12m0 0-3-3m3 3 3-3"/>',layers:'<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',expand:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
- crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
-const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown'};
+ crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>'};
+const ICON_OF={'magnifying-glass':'search',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown'};
 function swapIcon(el){
  const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
  const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
@@ -233,15 +251,12 @@ const hydrate=r=>r.querySelectorAll('i[class*="fa-"]').forEach(swapIcon);
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1){n.matches('i[class*="fa-"]')?swapIcon(n):hydrate(n)}}))).observe(document.body,{childList:true,subtree:true});
 hydrate(document);
 
-let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
+let lang=localStorage.getItem('tk_lang')||'ar';
 const t=k=>T[lang][k]||k;
 let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true;
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
-const authMsg=x=>{const c=(x&&x.code)||'';
- return c==='auth/unauthorized-domain'?t('eDomain'):c==='auth/operation-not-allowed'?t('eOff'):/api-key/.test(c)?t('eKey')
-  :['auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(c)?t('eEnv')
-  :['auth/popup-closed-by-user','auth/cancelled-popup-request'].includes(c)?t('eClosed'):t('failed')+(c?' ('+c+')':'')};
+const authMsg=x=>(x&&x.message)||'حدث خطأ في المصادقة';
 const ago=ts=>{const s=(Date.now()-ts)/1e3;return s<60?'•':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d'};
 async function copy(x){try{await navigator.clipboard.writeText(x);return true}catch(e){const a=document.createElement('textarea');a.value=x;document.body.append(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}}
 const okImg=u=>/^(data:image\/|https:\/\/)/.test(u||'');
@@ -251,22 +266,40 @@ async function firebaseStore(cfg){
  const [{initializeApp},A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
  const app=initializeApp(cfg),auth=A.getAuth(app),fs=F.getFirestore(app);
  let cb=()=>{};
+ const getEmail=h=>h.toLowerCase()+'@'+AUTH_DOMAIN;
+
  async function load(u){
   if(!u)return cb(null);
-  let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){console.error(e);toast(t('ePerm'),7000)}
-  cb({uid:u.uid,photo:u.photoURL,handle:d.handle||null,displayName:d.displayName||u.displayName||'',bio:d.bio||'',isAdmin:u.email===ADMIN_EMAIL});
+  let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){}
+  cb({uid:u.uid,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',isAdmin:d.handle===ADMIN_HANDLE||u.email===getEmail(ADMIN_HANDLE)});
  }
- return{demo:false,
+ return{
   onAuth(f){cb=f;A.onAuthStateChanged(auth,load)},
-  async login(){const g=new A.GoogleAuthProvider();
-   try{await A.signInWithPopup(auth,g)}catch(e){if(e.code==='auth/popup-blocked')return A.signInWithRedirect(auth,g);throw e}},
+  async signIn(h,pw){await A.signInWithEmailAndPassword(auth,getEmail(h),pw)},
+  async signUp(h,pw){
+   const cleanH=h.toLowerCase();
+   if(!/^[a-z0-9_]{3,16}$/.test(cleanH))throw new Error('bad');
+   const r=F.doc(fs,'handles',cleanH);
+   if((await F.getDoc(r)).exists())throw new Error('taken');
+   const u=(await A.createUserWithEmailAndPassword(auth,getEmail(cleanH),pw)).user;
+   const b=F.writeBatch(fs);
+   b.set(r,{uid:u.uid,isVerified:false});
+   b.set(F.doc(fs,'users',u.uid),{handle:cleanH,displayName:cleanH,bio:''});
+   await b.commit();
+   await load(auth.currentUser);
+  },
   logout:()=>A.signOut(auth),
   async saveProfile(u,p){
    const b=F.writeBatch(fs);let h=u.handle;
-   if(!h){h=p.handle.toLowerCase();if(h===ADMIN_HANDLE&&!u.isAdmin)throw new Error('taken');const r=F.doc(fs,'handles',h);
+   if(!h){
+    h=p.handle.toLowerCase();
+    if(!/^[a-z0-9_]{3,16}$/.test(h))throw new Error('bad');
+    if(h===ADMIN_HANDLE&&!u.isAdmin)throw new Error('taken');
+    const r=F.doc(fs,'handles',h);
     if((await F.getDoc(r)).exists())throw new Error('taken');
-    b.set(r,{uid:u.uid,isVerified:false});}
-   b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:p.displayName,bio:p.bio});
+    b.set(r,{uid:u.uid,isVerified:false});
+   }
+   b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:p.displayName,bio:p.bio},{merge:true});
    await b.commit();await load(auth.currentUser)},
   subscribe(f){F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy('at','desc'),F.limit(80)),
    s=>f(s.docs.map(d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}})))},
@@ -327,34 +360,35 @@ const renderRail=()=>{$('rail').innerHTML=['',...POP,'more'].map(f=>f==='more'?`
 
 function renderAuth(){
  $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn" title="${t('admin')}"><i class="fa-solid fa-crown"></i> <span class="lb">Admin</span></button>`:''}
- <button class="btn ghost sm" id="prBtn"><span class="av me">${esc(me.handle?me.handle[0].toUpperCase():(me.displayName?me.displayName[0].toUpperCase():'U'))}</span><span class="lb">@${esc(me.handle||'new')}</span></button>`
+ <button class="btn ghost sm" id="prBtn"><span class="av me">${esc(me.handle?me.handle[0].toUpperCase():'U')}</span><span class="lb">@${esc(me.handle||'new')}</span></button>`
  :`<button class="btn neon sm" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> <span class="lb">${t('signin')}</span></button>`;
 }
 
 async function init(){
     try{ store = await firebaseStore(FIREBASE_CONFIG); }catch(e){ console.error(e); }
 
+    let authMode='in';
+    $('tabIn').addEventListener('click',()=>{authMode='in';$('tabIn').classList.add('on');$('tabUp').classList.remove('on');$('authGo').textContent='دخول';});
+    $('tabUp').addEventListener('click',()=>{authMode='up';$('tabUp').classList.add('on');$('tabIn').classList.remove('on');$('authGo').textContent='إنشاء حساب';});
+
     document.addEventListener('click', async e=>{
-        const lBtn=$('loginBtn');
-        if(lBtn&&lBtn.contains(e.target)){
-            try{ await store.login(); }catch(err){ toast(authMsg(err)); }
+        if($('loginBtn')?.contains(e.target)){
+            $('authU').value=''; $('authP').value=''; $('authE').textContent='';
+            $('authDlg').showModal();
         }
 
-        const prBtn=$('prBtn');
-        if(prBtn&&prBtn.contains(e.target)){
+        if($('prBtn')?.contains(e.target)){
             $('prH').value=me.handle||'';
             $('prN').value=me.displayName||'';
             $('prB').value=me.bio||'';
             $('prDlg').showModal();
         }
 
-        const adBtn=$('adBtn');
-        if(adBtn&&adBtn.contains(e.target)){
+        if($('adBtn')?.contains(e.target)){
             $('adDlg').showModal();
         }
 
-        const moreF=$('moreF');
-        if(moreF&&moreF.contains(e.target)){
+        if($('moreF')?.contains(e.target)){
             $('fBody').innerHTML=`<div class="gh">${t('allF')}</div><div class="fg">${FORMATIONS.map(f=>`<button class="ft ${f===fFilter?'on':''}" data-f="${f}">${pitch(f)}<span>${f}</span></button>`).join('')}</div>`;
             $('fDlg').showModal();
         }
@@ -362,60 +396,62 @@ async function init(){
         const chip=e.target.closest('[data-f]');
         if(chip){
             fFilter=chip.getAttribute('data-f');
-            renderRail();
-            render();
-            $('fDlg').close();
+            renderRail(); render(); $('fDlg').close();
         }
 
         const cpBtn=e.target.closest('[data-copy]');
         if(cpBtn){
-            const id=cpBtn.getAttribute('data-copy');
-            const post=posts.find(p=>p.id===id);
-            if(post&&await copy(post.code)){
-                toast(t('copyDone'));
-            }
+            const post=posts.find(p=>p.id===cpBtn.getAttribute('data-copy'));
+            if(post&&await copy(post.code)) toast(t('copyDone'));
         }
 
         const lkBtn=e.target.closest('[data-like]');
         if(lkBtn){
-            if(!me){ await store.login(); return; }
-            const id=lkBtn.getAttribute('data-like');
-            const post=posts.find(p=>p.id===id);
-            if(post){
-                const on=!myLikes.has(id);
-                try{ await store.toggleLike(me,post,on); }catch(err){ console.error(err); }
-            }
+            if(!me){$('authDlg').showModal();return;}
+            const post=posts.find(p=>p.id===lkBtn.getAttribute('data-like'));
+            if(post) await store.toggleLike(me,post,!myLikes.has(post.id));
         }
 
         const delBtn=e.target.closest('[data-del]');
-        if(delBtn){
-            const id=delBtn.getAttribute('data-del');
-            if(confirm(t('del'))){
-                try{ await store.remove(id); }catch(err){ toast(authMsg(err)); }
-            }
+        if(delBtn&&confirm(t('del'))){
+            try{ await store.remove(delBtn.getAttribute('data-del')); }catch(err){ toast(authMsg(err)); }
         }
 
         const shotBtn=e.target.closest('[data-img]');
         if(shotBtn){
-            const id=shotBtn.getAttribute('data-img');
-            const post=posts.find(p=>p.id===id);
-            if(post&&okImg(post.img)){
-                $('big').querySelector('img').src=post.img;
-                $('big').showModal();
-            }
+            const post=posts.find(p=>p.id===shotBtn.getAttribute('data-img'));
+            if(post&&okImg(post.img)){$('big').querySelector('img').src=post.img; $('big').showModal();}
         }
 
         const uBtn=e.target.closest('[data-user]');
         if(uBtn){
-            const h=uBtn.getAttribute('data-user');
-            $('q').value='@'+h;
-            render();
-            window.scrollTo({top:0,behavior:'smooth'});
+            $('q').value='@'+uBtn.getAttribute('data-user');
+            render(); window.scrollTo({top:0,behavior:'smooth'});
         }
     });
 
+    $('authForm').addEventListener('submit',async e=>{
+        e.preventDefault();
+        $('authE').textContent='';
+        const u=$('authU').value.trim().toLowerCase();
+        const p=$('authP').value;
+        try{
+            if(authMode==='in'){
+                await store.signIn(u,p);
+            }else{
+                await store.signUp(u,p);
+            }
+            $('authDlg').close();
+            toast('تم تسجيل الدخول بنجاح');
+        }catch(err){
+            $('authE').textContent=authMsg(err);
+        }
+    });
+    $('authCancel').addEventListener('click',()=>$('authDlg').close());
+
     $('q').addEventListener('input',()=>render());
     $('sort').addEventListener('change',()=>render());
+    
     $('langBtn').addEventListener('click',()=>{
         lang=lang==='ar'?'en':'ar';
         localStorage.setItem('tk_lang',lang);
@@ -429,14 +465,12 @@ async function init(){
             const k=el.getAttribute('data-ph');
             if(T[lang][k]) el.placeholder=T[lang][k];
         });
-        renderRail();
-        render();
-        renderAuth();
+        renderRail(); render(); renderAuth();
     });
 
     $('fab').addEventListener('click',()=>{
-        if(!me){ store.login(); return; }
-        if(!me.handle){ $('prDlg').showModal(); return; }
+        if(!me){$('authDlg').showModal();return;}
+        if(!me.handle){$('prDlg').showModal();return;}
         $('pF').innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
         $('pDlg').showModal();
     });
@@ -454,8 +488,7 @@ async function init(){
         if(!/^[a-z0-9_]{3,16}$/.test(h)){$('prE').textContent=t('bad');return;}
         try{
             await store.saveProfile(me,{handle:h,displayName:n,bio:b});
-            $('prDlg').close();
-            toast(t('done'));
+            $('prDlg').close(); toast(t('done'));
         }catch(err){
             $('prE').textContent=err.message==='taken'?t('taken'):authMsg(err);
         }
@@ -473,30 +506,24 @@ async function init(){
         const c=$('pC').value.trim();
         const u=$('pU').value.trim();
         const file=$('pI').files[0];
-        let img=u;
 
         const go=async imgData=>{
             try{
                 $('pGo').disabled=true;
                 await store.add({formation:f,code:c,img:imgData||'',uid:me.uid,handle:me.handle,displayName:me.displayName||''});
-                $('pDlg').close();
-                $('pForm').reset();
-                toast(t('done'));
-            }catch(err){
-                $('pE').textContent=authMsg(err);
-            }finally{
-                $('pGo').disabled=false;
-            }
+                $('pDlg').close(); $('pForm').reset(); toast(t('done'));
+            }catch(err){$('pE').textContent=authMsg(err);}
+            finally{$('pGo').disabled=false;}
         };
 
         if(file){
-            if(file.size>1.2*1024*1024){ $('pE').textContent=t('big'); return; }
+            if(file.size>1.2*1024*1024){$('pE').textContent=t('big');return;}
             const reader=new FileReader();
             reader.onload=e=>go(e.target.result);
             reader.readAsDataURL(file);
-        }else if(img){
-            if(!okImg(img)){ $('pE').textContent=t('needImg'); return; }
-            go(img);
+        }else if(u){
+            if(!okImg(u)){$('pE').textContent=t('needImg');return;}
+            go(u);
         }else{
             go('');
         }
@@ -511,8 +538,7 @@ async function init(){
         if(!h)return;
         try{
             await store.setVerified(h,v);
-            toast(t('done'));
-            $('adDlg').close();
+            toast(t('done')); $('adDlg').close();
         }catch(err){
             $('adE').textContent=err.message==='nouser'?t('nouser'):authMsg(err);
         }
@@ -526,9 +552,7 @@ async function init(){
                 unLikes();
                 unLikes=store.subscribeLikes(me.uid,set=>{myLikes=set;render()});
             }else{
-                myLikes.clear();
-                unLikes();
-                render();
+                myLikes.clear(); unLikes(); render();
             }
         });
         store.subscribe(data=>{posts=data;loaded=true;render()});
