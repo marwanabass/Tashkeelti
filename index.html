@@ -11,180 +11,184 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Cairo:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#070a09;--s1:#0d1311;--s2:#141c19;--line:#1f2d27;--mute:#84978d;--gold:#1fb27a;--gold2:#b9f3d9;--neon:#34d399;--blue:#4aa3ff;color-scheme:dark;}
-body{background:var(--bg);color:#eef1f6;font-family:Cairo,system-ui,sans-serif;min-height:100vh;margin:0;
+:root{--bg:#070a09;--s1:#0d1311;--s2:#141c19;--line:#1f2d27;--mute:#84978d;--gold:#1fb27a;--gold2:#b9f3d9;--neon:#34d399;--blue:#4aa3ff;color-scheme:dark;
+ --cut:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
+body{background:var(--bg);color:#eef1f6;font-family:Cairo,system-ui,sans-serif;min-height:100vh;
  background-image:radial-gradient(900px 340px at 85% -120px,rgba(52,211,153,.07),transparent),radial-gradient(800px 340px at 5% -120px,rgba(31,178,122,.07),transparent)}
 .d{font-family:'Barlow Condensed',Impact,sans-serif;font-style:italic;font-weight:800;text-transform:uppercase}
-.btn{font-weight:700;padding:.5rem 1rem;border-radius:.75rem;transition:transform .15s,box-shadow .2s;white-space:nowrap;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn{font-weight:700;padding:.6rem 1.1rem;border-radius:.75rem;transition:transform .15s,box-shadow .2s;white-space:nowrap;cursor:pointer;border:0}
 .btn:focus-visible,.chip:focus-visible,.f:focus-visible{outline:2px solid var(--neon);outline-offset:2px}
 .neon{background:var(--neon);color:#04170f}.neon:hover{box-shadow:0 6px 18px rgba(52,211,153,.28);transform:translateY(-1px)}
 .gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f}.gold:hover{box-shadow:0 6px 18px rgba(31,178,122,.28);transform:translateY(-1px)}
-.ghost{background:var(--s2);border:1px solid var(--line);color:#eef1f6}.ghost:hover{border-color:var(--gold)}
+.ghost{background:var(--s2);border:1px solid var(--line)}.ghost:hover{border-color:var(--gold)}
 .f{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:.6rem;padding:.6rem .8rem;color:inherit;font:inherit}
 .f:focus{outline:0;border-color:var(--neon);box-shadow:0 0 0 3px rgba(52,211,153,.18)}
-.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f;display:grid;place-items:center;font-weight:700;font-size:13px;overflow:hidden;flex:none}
+.av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f;display:grid;place-items:center;font-weight:700;font-size:13px;overflow:hidden;flex:none}
 .av img{width:100%;height:100%;object-fit:cover}
-.chip{border:1px solid var(--line);background:var(--s1);padding:.35rem 1rem;cursor:pointer;white-space:nowrap;font-size:1.05rem;transition:all .15s}
+.chip{border:1px solid var(--line);background:var(--s1);padding:.35rem 1rem;cursor:pointer;white-space:nowrap;font-size:1.05rem;transition:all .15s;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
 .chip:hover{border-color:var(--gold)}.chip.on{background:var(--gold);color:#04170f;border-color:var(--gold)}
 dialog{background:var(--s1);color:#eef1f6;border:1px solid var(--line);border-radius:1.1rem;padding:0;width:min(480px,94vw);max-height:92vh;box-shadow:0 20px 70px rgba(0,0,0,.65)}
-.vb{color:var(--blue);font-size:.95em;margin-inline-start:.3rem}
+.vb{color:var(--blue);font-size:.95em;margin-inline-start:.3rem;filter:drop-shadow(0 0 4px rgba(74,163,255,.45))}
 .lk.on{color:#ff7a93;border-color:#ff7a93}
 .ic{width:1.1em;height:1.1em;display:inline-block;vertical-align:-.17em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.ic.solid path{fill:currentColor}.ic-badge circle{fill:currentColor;stroke:none}.ic-badge path{stroke:#fff}
+.ic.solid path{fill:currentColor}.ic-badge circle{fill:currentColor;stroke:none}.ic-badge path{stroke:#fff}.ic-crown{fill:rgba(255,255,255,.18)}
 dialog::backdrop{background:rgba(0,0,0,.82)}
 dialog form,dialog .box{padding:1.3rem;display:grid;gap:.9rem}
 label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .err{color:#ff8b8b;font-size:.85rem;min-height:1.1rem}
-#toast{position:fixed;inset-inline:0;margin:auto;width:max-content;bottom:22px;background:var(--neon);color:#031a0d;font-weight:700;padding:.6rem 1.4rem;border-radius:.75rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+#toast{position:fixed;inset-inline:0;margin:auto;width:max-content;bottom:calc(22px + env(safe-area-inset-bottom,0px));background:var(--neon);color:#031a0d;font-weight:700;padding:.6rem 1.4rem;border-radius:.75rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
 #toast.on{opacity:1}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
+/* ===== v3: mobile-first layout, calm luxury cards ===== */
 .hidden{display:none}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
-.topbar{position:sticky;top:0;z-index:10;background:rgba(7,10,9,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
-.logo{font-size:28px;line-height:1;background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.search-box{flex:1;max-width:400px;position:relative}
-.search-box input{padding:.6rem 1rem;padding-inline-start:38px;border-radius:999px;background:#0b110f}
-.search-box .ic{position:absolute;top:50%;inset-inline-start:12px;transform:translateY(-50%);color:var(--mute)}
-.auth-area{display:flex;align-items:center;gap:8px}
-
-.hero{position:relative;padding:32px 0 12px}
-.hp{position:absolute;inset-inline-end:0;top:10px;width:240px;opacity:.1;stroke:var(--neon);fill:none;stroke-width:1.5;pointer-events:none}
-.hero h1{font-size:clamp(36px,8vw,64px);line-height:1;margin:0}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(7,10,9,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.hd{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0}
+.logo{order:0;font-size:30px;line-height:1;background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sp{order:2;flex:1}#langBtn{order:3}#auth{order:4;display:flex;align-items:center;gap:8px}
+.sr{order:5;flex:1 1 100%;position:relative;display:block}
+.sr .ic{position:absolute;top:50%;inset-inline-start:15px;transform:translateY(-50%);color:var(--mute);pointer-events:none}
+.sr input{padding:.7rem 1rem;padding-inline-start:42px;border-radius:999px;background:#0b110f}
+.btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.sm{padding:.45rem .9rem;min-height:40px}
+.av.me{width:40px;height:40px;border:0;cursor:pointer;font-size:15px}
+.hero{position:relative;padding:26px 0 6px}
+.hp{position:absolute;inset-inline-end:-30px;top:0;width:290px;opacity:.11;stroke:var(--neon);fill:none;stroke-width:1.5;pointer-events:none}
+.hero h1{position:relative;font-size:clamp(40px,10vw,72px);line-height:.95}
 .hero em{font-style:inherit;color:var(--neon)}
-.sub{color:var(--mute);margin-top:10px;max-width:540px;font-size:15px}
-.stats{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
-.stat{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:8px 16px;display:flex;align-items:baseline;gap:8px}
-.stat b{font-size:24px;background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat span{color:var(--mute);font-size:12px}
-
-.rail{display:flex;gap:8px;overflow-x:auto;padding:16px 0;scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
-.meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0 16px;color:var(--mute);font-size:14px}
-.sortb select{width:auto;min-width:130px;padding:.4rem .8rem}
-
-#grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));padding-bottom:100px}
-.card{border-radius:20px;background:linear-gradient(180deg,#101a16,#0a100e);border:1px solid var(--line);overflow:hidden;transition:transform .2s,border-color .2s}
-.card:hover{transform:translateY(-3px);border-color:rgba(52,211,153,.4)}
+.sub{position:relative;color:var(--mute);margin-top:12px;max-width:540px}
+.stats{position:relative;display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:16px;padding:8px 16px;display:flex;align-items:baseline;gap:8px}
+.stat b{font-size:28px;line-height:1;background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--mute);font-size:13px}
+.banner{margin-top:14px;border:1px solid #1f5a41;background:#0d2a1f;color:#bdf3d9;border-radius:12px;padding:10px 14px;font-size:14px}
+.rail{display:flex;gap:8px;overflow-x:auto;padding:16px 0 10px;scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
+.chip{flex:none}.chip.more{color:var(--gold2);border-color:rgba(31,178,122,.5)}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 0 14px;color:var(--mute);font-size:14px}
+.sortb{display:flex;align-items:center;gap:8px}.sortb select{width:auto;min-width:130px;padding:.45rem .8rem}
+#grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));padding-bottom:120px}
+.card{border-radius:22px;background:linear-gradient(180deg,#101a16,#0a100e);border:1px solid var(--line);overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
+.card.up{animation:up .55s cubic-bezier(.2,.7,.2,1) both}
+.card:hover{transform:translateY(-3px);border-color:rgba(52,211,153,.4);box-shadow:0 18px 40px rgba(0,0,0,.5)}
 .shot{position:relative;display:block;width:100%;aspect-ratio:16/11;background:#07130d;border:0;padding:0;cursor:zoom-in;overflow:hidden}
-.shot>img,.shot>svg{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-.fm{position:absolute;z-index:2;top:10px;inset-inline-start:10px;padding:2px 12px;font-size:18px;border-radius:999px;background:rgba(7,10,9,.8);border:1px solid rgba(52,211,153,.5);color:var(--neon)}
-.zoom{position:absolute;z-index:2;inset-inline-end:10px;top:10px;background:rgba(7,10,9,.6);border-radius:8px;padding:4px 6px;font-size:12px;color:#fff}
-.cb{padding:14px;display:flex;flex-direction:column;gap:10px}
-.ur{display:flex;align-items:center;justify-content:space-between}
-.u{display:flex;align-items:center;gap:8px;background:none;border:0;color:inherit;cursor:pointer;padding:0;font:inherit}
-.un{font-weight:700;direction:ltr;font-size:14px;display:flex;align-items:center}
-.dn{font-size:11px;color:var(--mute)}
-.tk{display:flex;align-items:center;gap:8px;background:#070b09;border:1px dashed #2f4a3f;border-radius:10px;padding:8px 12px;color:var(--mute)}
-.tk span{font:600 14px monospace;color:var(--gold2);direction:ltr}
-.ac{display:flex;gap:6px}.ac .cp{flex:1}
-
-.fab{position:fixed;z-index:15;inset-inline-end:20px;bottom:24px;width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;font-size:20px;color:#04170f;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 10px 25px rgba(31,178,122,.4)}
-.empty{grid-column:1/-1;text-align:center;padding:48px 12px;border:1px dashed var(--line);border-radius:16px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:8px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
-.tab{border:0;background:none;color:var(--mute);padding:.5rem;border-radius:8px;font:700 0.9rem Cairo,sans-serif;cursor:pointer}
+.shot>img,.shot>svg{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .5s}
+.card:hover .shot>img{transform:scale(1.04)}
+.shot::after{content:"";position:absolute;inset:auto 0 0;height:50%;background:linear-gradient(transparent,#0a100e);pointer-events:none}
+.fm{position:absolute;z-index:2;top:12px;inset-inline-start:12px;padding:3px 14px;font-size:22px;line-height:1.2;border-radius:999px;background:rgba(7,10,9,.72);border:1px solid rgba(52,211,153,.55);color:var(--neon);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.zoom{position:absolute;z-index:2;inset-inline-end:10px;top:12px;background:rgba(7,10,9,.6);border-radius:10px;padding:5px 8px;font-size:13px;color:#fff}
+.cb{position:relative;z-index:2;margin-top:-30px;padding:0 16px 16px;display:flex;flex-direction:column;gap:12px}
+.ur{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.u{display:flex;align-items:center;gap:10px;min-width:0;background:none;border:0;color:inherit;cursor:pointer;text-align:start;padding:0;font:inherit}
+.u .av{width:40px;height:40px;font-size:15px;box-shadow:0 0 0 2px #0a100e,0 0 0 3.5px var(--neon)}
+.ui{display:flex;flex-direction:column;min-width:0}
+.un{font-weight:700;direction:ltr;text-align:start;display:flex;align-items:center;overflow:hidden;white-space:nowrap}
+.dn{font-size:12px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag{color:var(--mute);font-size:12px;white-space:nowrap}
+.tk{display:flex;align-items:center;gap:10px;background:#070b09;border:1px dashed #2f4a3f;border-radius:14px;padding:11px 14px;color:var(--mute)}
+.tk span{font:600 15px ui-monospace,Menlo,monospace;color:var(--gold2);direction:ltr;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.04em}
+.ac{display:flex;gap:8px}.ac .cp{flex:1}
+.empty{grid-column:1/-1;text-align:center;padding:56px 12px;border:1px dashed var(--line);border-radius:20px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:8px}
+.empty .ic{font-size:34px}.empty b{color:#fff;font-size:30px}
+.sk{height:330px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(100deg,#0d1311 30%,#16211c 50%,#0d1311 70%);background-size:200% 100%;animation:sh 1.3s linear infinite}
+.fab{position:fixed;z-index:15;inset-inline-end:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;font-size:22px;color:#04170f;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 12px 30px rgba(31,178,122,.4);transition:transform .2s}
+.fab:hover{transform:scale(1.07)}.fab:active{transform:scale(.95)}
+#fDlg{width:min(720px,96vw)}
+.fh{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.fb{overflow:auto;max-height:70vh;padding:4px 18px 22px}
+.gh{margin:18px 0 10px;color:var(--gold2);font-size:20px}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.ft{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:8px;cursor:pointer;color:inherit;text-align:center;transition:border-color .15s,transform .15s}
+.ft:hover{border-color:var(--neon);transform:translateY(-2px)}.ft.on{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon)}
+.ft svg{width:100%;aspect-ratio:16/10;display:block;border-radius:8px;margin-bottom:6px}.ft span{font-size:15px;line-height:1.1;display:block}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes sh{to{background-position:-200% 0}}
+@media(max-width:559px){.lb{display:none}}
+@media(max-width:759px){.hm{display:none}}
+@media(min-width:760px){.sr{order:1;flex:1 1 360px;max-width:520px;margin-inline:auto}.sp{display:none}.fab{display:none}}
+@media(prefers-reduced-motion:reduce){.card.up,.sk{animation:none}}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
+.tab{border:0;background:none;color:var(--mute);padding:.65rem;border-radius:10px;font:700 1rem Cairo,sans-serif;cursor:pointer;transition:all .15s}
 .tab.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f}
+.hint{font-size:.8rem;color:var(--mute)}
+.pf{display:flex;flex-direction:column;gap:14px;padding:20px 0 10px;align-items:flex-start}
+.pfh{display:flex;align-items:center;gap:16px}
+.av.big{width:78px;height:78px;font-size:32px;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--neon)}
+.pfn{font-size:34px;line-height:1;direction:ltr;display:flex;align-items:center}
+.sk-av{display:block;width:40px;height:40px;border-radius:50%;background:linear-gradient(100deg,#0d1311 30%,#16211c 50%,#0d1311 70%);background-size:200% 100%;animation:sh 1.3s linear infinite}
+.more{grid-column:1/-1;text-align:center;padding:6px 0 10px}
 </style>
 </head>
-<body>
+<body style="padding-top:env(safe-area-inset-top,0px)">
 
-<header class="topbar">
-  <div class="wrap hd">
-    <div class="logo d">Tashkeelti</div>
-    <div class="search-box">
-      <i class="fa-solid fa-magnifying-glass ic"></i>
-      <input id="q" type="search" class="f" data-ph="search" aria-label="Search" placeholder="ابحث بالخطة أو اليوزر...">
-    </div>
-    <div class="auth-area">
-      <button id="langBtn" class="btn ghost sm">EN / AR</button>
-      <span id="auth"></span>
-    </div>
-  </div>
-</header>
+<header class="topbar"><div class="wrap hd">
+  <div class="logo d">Tashkeelti</div><span class="sp"></span>
+  <button id="langBtn" class="btn ghost sm" aria-label="Language"></button>
+  <span id="auth"></span>
+  <label class="sr"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" class="f" data-ph="search" aria-label="Search"></label>
+</div></header>
 
 <main class="wrap">
   <section class="hero" id="hero">
-    <svg class="hp" viewBox="0 0 160 100" aria-hidden="true"><rect x="3" y="3" width="154" height="94"/><line x1="80" y1="3" x2="80" y2="97"/><circle cx="80" cy="50" r="14"/></svg>
-    <h1 class="d"><span data-i="h1">انسخ التكتيك.</span><br><em data-i="h2">اكسب المباراة.</em></h1>
-    <p class="sub" data-i="sub">أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.</p>
-    <div class="stats">
-      <div class="stat"><b id="sT">0</b><span data-i="sTac">تكتيك</span></div>
-      <div class="stat"><b id="sC">0</b><span data-i="sCre">صانع محتوى</span></div>
-      <div class="stat"><b id="sF">0</b><span data-i="sFor">خطة</span></div>
-    </div>
+    <svg class="hp" viewBox="0 0 160 100" aria-hidden="true"><rect x="3" y="3" width="154" height="94"/><line x1="80" y1="3" x2="80" y2="97"/><circle cx="80" cy="50" r="14"/><rect x="3" y="28" width="26" height="44"/><rect x="131" y="28" width="26" height="44"/></svg>
+    <h1 class="d"><span data-i="h1"></span><br><em data-i="h2"></em></h1>
+    <p class="sub" data-i="sub"></p>
+    <div class="stats"><div class="stat"><b id="sT">0</b><span data-i="sTac"></span></div><div class="stat"><b id="sC">0</b><span data-i="sCre"></span></div><div class="stat"><b id="sF">0</b><span data-i="sFor"></span></div></div>
+    <div id="banner" class="banner hidden"></div>
   </section>
-  
+  <section id="profile" class="hidden"></section>
   <nav id="rail" class="rail" aria-label="Formations"></nav>
-  
-  <div class="meta">
-    <span id="count">0 تكتيك</span>
-    <label class="sortb">
-      <select id="sort" class="f" aria-label="Sort">
-        <option value="new" data-i="sNew">الأحدث</option>
-        <option value="top" data-i="sTop">الأكثر إعجاباً</option>
-      </select>
-    </label>
-  </div>
-  
+  <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
 </main>
+<button id="fab" class="fab" aria-label="Share tactics"><i class="fa-solid fa-plus"></i></button>
 
-<button id="fab" class="fab" aria-label="Share tactics"><i class="fa-solid fa-plus ic"></i></button>
-
-<!-- Profile / setup dialog -->
+<!-- Profile / first-time handle setup -->
 <dialog id="prDlg"><form id="prForm">
-  <h2 class="d text-2xl text-[var(--gold2)]">ملفك الشخصي</h2>
-  <div><label class="l">اسم المستخدم @</label><input id="prH" class="f" dir="ltr" maxlength="16" placeholder="@username"></div>
-  <div><label class="l">الاسم المعروض</label><input id="prN" class="f" maxlength="30"></div>
-  <div><label class="l">نبذة قصيرة</label><input id="prB" class="f" maxlength="100"></div>
+  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-user-pen"></i> <span data-i="profile"></span></h2>
+  <div><label class="l" for="prH"><i class="fa-solid fa-at"></i> <span data-i="handleLbl"></span></label><input id="prH" class="f" dir="ltr" maxlength="16" pattern="[A-Za-z0-9_]{3,16}" placeholder="@username"></div>
+  <div><label class="l" for="prN"><i class="fa-solid fa-id-card"></i> <span data-i="nameLbl"></span></label><input id="prN" class="f" maxlength="30"></div>
+  <div><label class="l" for="prB"><i class="fa-solid fa-pen"></i> <span data-i="bioLbl"></span></label><input id="prB" class="f" maxlength="100"></div>
   <p class="err" id="prE"></p>
-  <div class="flex justify-between gap-2">
-    <button type="button" id="outBtn" class="btn ghost">تسجيل الخروج</button>
-    <button class="btn gold" type="submit">حفظ</button>
-  </div>
+  <div class="flex justify-between gap-2"><button type="button" id="outBtn" class="btn ghost"><i class="fa-solid fa-right-from-bracket"></i> <span data-i="signout"></span></button><button class="btn gold" type="submit"><i class="fa-solid fa-floppy-disk"></i> <span data-i="save"></span></button></div>
 </form></dialog>
 
-<!-- Share tactics dialog -->
+<!-- Share tactics -->
 <dialog id="pDlg"><form id="pForm">
-  <h2 class="d text-2xl text-[var(--gold2)]">شارك تكتيكك</h2>
-  <div><label class="l">الخطة</label><select id="pF" class="f" dir="ltr" required></select></div>
-  <div><label class="l">كود التكتيك</label><input id="pC" class="f" dir="ltr" required maxlength="40" placeholder="الكود..."></div>
-  <div><label class="l">صورة التكتيك (اختياري)</label><input id="pI" type="file" accept="image/*" class="f"></div>
-  <div><label class="l">أو رابط الصورة</label><input id="pU" type="url" dir="ltr" class="f" placeholder="https://..."></div>
+  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-futbol"></i> <span data-i="shareT"></span></h2>
+  <div><label class="l" for="pF"><i class="fa-solid fa-diagram-project"></i> <span data-i="formation"></span></label><select id="pF" class="f" dir="ltr" required></select></div>
+  <div><label class="l" for="pC"><i class="fa-solid fa-key"></i> <span data-i="code"></span></label><input id="pC" class="f" dir="ltr" required maxlength="40" placeholder="e8%&amp;M#k9P" autocomplete="off"></div>
+  <div><label class="l" for="pI"><i class="fa-solid fa-image"></i> <span data-i="shot"></span></label><input id="pI" type="file" accept="image/*" class="f"></div>
+  <div><label class="l" for="pU"><i class="fa-solid fa-link"></i> <span data-i="orUrl"></span></label><input id="pU" type="url" dir="ltr" class="f" placeholder="https://..."></div>
   <p class="err" id="pE"></p>
-  <div class="flex justify-end gap-2">
-    <button type="button" class="btn ghost" id="pCancel">إلغاء</button>
-    <button class="btn gold" id="pGo" type="submit">نشر</button>
-  </div>
+  <div class="flex justify-end gap-2"><button type="button" class="btn ghost" id="pCancel"><i class="fa-solid fa-xmark"></i> <span data-i="cancel"></span></button><button class="btn gold" id="pGo" type="submit"><i class="fa-solid fa-paper-plane"></i> <span data-i="publish"></span></button></div>
 </form></dialog>
 
-<!-- Admin dialog -->
+<!-- Admin panel -->
 <dialog id="adDlg"><div class="box">
-  <h2 class="d text-2xl text-[var(--gold2)]">لوحة الأدمن</h2>
-  <input id="adH" class="f" dir="ltr" placeholder="@username">
+  <h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-crown"></i> <span data-i="admin"></span></h2>
+  <p class="text-sm text-[var(--mute)]" data-i="adminHint"></p>
+  <input id="adH" class="f" dir="ltr" placeholder="@ProPlayer">
   <p class="err" id="adE"></p>
-  <div class="flex gap-2">
-    <button id="grant" class="btn neon flex-1">منح الشارة</button>
-    <button id="revoke" class="btn ghost flex-1">سحب</button>
-  </div>
+  <div class="flex gap-2"><button id="grant" class="btn neon flex-1"><i class="fa-solid fa-circle-check"></i> <span data-i="grant"></span></button><button id="revoke" class="btn ghost flex-1"><i class="fa-solid fa-ban"></i> <span data-i="revoke"></span></button></div>
 </div></dialog>
 
-<!-- Auth dialog -->
 <dialog id="aDlg"><form id="aForm">
-  <div class="tabs">
-    <button type="button" class="tab on" id="tIn">دخول</button>
-    <button type="button" class="tab" id="tUp">حساب جديد</button>
-  </div>
-  <div><label class="l">اسم المستخدم</label><input id="aU" class="f" dir="ltr" required placeholder="username"></div>
-  <div><label class="l">كلمة المرور</label><input id="aP" type="password" class="f" dir="ltr" required minlength="6"></div>
+  <div class="tabs"><button type="button" class="tab on" id="tIn" data-mode="in" data-i="signinS"></button><button type="button" class="tab" id="tUp" data-mode="up" data-i="signup"></button></div>
+  <div><label class="l" for="aU"><i class="fa-solid fa-at"></i> <span data-i="userLbl"></span></label><input id="aU" class="f" dir="ltr" maxlength="16" required autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="username"></div>
+  <div><label class="l" for="aP"><i class="fa-solid fa-key"></i> <span data-i="passLbl"></span></label><input id="aP" type="password" class="f" dir="ltr" required minlength="6" autocomplete="current-password"></div>
   <p class="err" id="aE"></p>
-  <button class="btn gold" id="aGo" type="submit">دخول</button>
+  <button class="btn gold" id="aGo" type="submit"></button>
+  <p class="hint hidden" id="aNote" data-i="noRecover"></p>
 </form></dialog>
-
-<dialog id="fDlg"><div class="p-4"><div class="flex justify-between items-center mb-3"><h2 class="d text-xl text-[var(--gold2)]">كل الخطط</h2><button class="btn ghost sm" id="fClose">✕</button></div><div id="fBody" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div></div></dialog>
-<dialog id="big" style="background:#000"><img alt="" style="width:100%"></dialog>
+<dialog id="fDlg"><div class="fh"><h2 class="d text-3xl text-[var(--gold2)]"><i class="fa-solid fa-diagram-project"></i> <span data-i="allF"></span></h2><button class="btn ghost sm" id="fClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><div id="fBody" class="fb"></div></dialog>
+<dialog id="big" style="width:min(1000px,96vw);background:#000"><img alt="" style="width:100%;display:block"></dialog>
 <div id="toast" role="status"></div>
 
 <script type="module">
+/* =====================================================================
+   1) CONFIG — Your Firebase web config + admin email integration
+   ===================================================================== */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCHvO61P8KXIltGfgl-9oGgATON6B1TyVI",
   authDomain: "tashkeelti.firebaseapp.com",
@@ -194,190 +198,444 @@ const FIREBASE_CONFIG = {
   appId: "1:557159294253:web:f2f57117485a8ff9ab9fa4",
   measurementId: "G-J8JHXBT74B"
 };
-const ADMIN_HANDLE = "maroo";
-const AUTH_DOMAIN  = "tashkeelti.app";
+const ADMIN_HANDLE = "maroo";         // Admin username
+const AUTH_DOMAIN  = "tashkeelti.app"; // Internal suffix for auth (maroo@tashkeelti.app)
 
+/* ---------------- Translations ---------------- */
 const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
-  signin:'Sign in',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username',nameLbl:'Display name',bioLbl:'Short bio',
-  save:'Save',formation:'Formation',code:'Tactics share code',shot:'Screenshot',cancel:'Cancel',publish:'Publish',
-  copy:'Copy',sNew:'Newest',sTop:'Most liked',signinS:'Sign in',nTac:'tactics',copied:'Copied',copyDone:'Code copied',none:'No tactics found',noneSub:'Share the first one.',
-  admin:'Admin panel',grant:'Grant badge',revoke:'Revoke',done:'Updated',verified:'Verified',del:'Delete?',out:'Sign out?'},
+  signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
+  save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
+  taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
+  failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
-  signin:'تسجيل الدخول',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @',nameLbl:'الاسم المعروض',bioLbl:'نبذة',
-  save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ',sNew:'الأحدث',sTop:'الأكثر إعجاباً',signinS:'دخول',nTac:'تكتيك',copied:'تم النسخ',copyDone:'تم نسخ الكود',none:'مفيش تكتيكات',noneSub:'شارك أول تكتيك.',
-  admin:'لوحة الأدمن',grant:'منح الشارة',revoke:'سحب',done:'تم',verified:'موثّق',del:'حذف؟',out:'خروج؟'}};
+  signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
+  save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
+  taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
+  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-let lang=localStorage.getItem('tk_lang')||'ar';
+const ICONS={
+ search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',plus:'<path d="M12 5v14M5 12h14"/>',
+ trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/>',
+ copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+ heart:'<path d="M12 21s-8-5.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.5-8 11-8 11z"/>',
+ badge:'<circle cx="12" cy="12" r="10"/><path d="m8 12.3 3 3 5-6"/>',
+ logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+ globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/>',
+ at:'<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ pen:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+ key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M16 7l3 3M14 9l2 2"/>',
+ image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
+ link:'<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+ ball:'<circle cx="12" cy="12" r="10"/><path d="m12 7 4 3-1.5 5h-5L8 10zM12 2v5M16 10l5-1.5M14.5 15l3 4.5M9.5 15l-3 4.5M8 10 3 8.5"/>',
+ save:'<path d="M5 3h11l4 4v14H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ send:'<path d="m22 2-11 11M22 2l-7 20-4-9-9-4z"/>',ban:'<circle cx="12" cy="12" r="10"/><path d="m5 5 14 14"/>',
+ sort:'<path d="M3 6h13M3 12h9M3 18h5M18 8v12m0 0-3-3m3 3 3-3"/>',layers:'<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
+ clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',expand:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
+ crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
+const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown'};
+
+function swapIcon(el){
+  const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
+  const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
+  v.setAttribute('viewBox','0 0 24 24');v.setAttribute('aria-hidden',ti?'false':'true');
+  v.setAttribute('class',['ic','ic-'+key,key==='heart'&&c.includes('fa-solid')?'solid':'',...c.filter(x=>!x.startsWith('fa-'))].join(' '));
+  if(el.getAttribute('style'))v.setAttribute('style',el.getAttribute('style'));
+  v.innerHTML=(ti?'<title>'+esc(ti)+'</title>':'')+ICONS[key];el.replaceWith(v)}
+const hydrate=r=>r.querySelectorAll('i[class*="fa-"]').forEach(swapIcon);
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1){n.matches('i[class*="fa-"]')?swapIcon(n):hydrate(n)}}))).observe(document.body,{childList:true,subtree:true});
+hydrate(document);
+
+let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
 const t=k=>T[lang][k]||k;
-let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false;
+let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{};
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
-const authMsg=x=>(x&&x.message)||'حدث خطأ';
+
+const authMsg=x=>{const c=(x&&x.code)||'',m=(x&&x.message)||'';
+  return m==='taken'||c==='auth/email-already-in-use'?t('taken')
+   :m==='cred'||/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)?t('eCred')
+   :c==='auth/weak-password'?t('ePw'):c==='auth/too-many-requests'?t('eMany')
+   :c==='auth/operation-not-allowed'?t('eOff'):/api-key/.test(c)?t('eKey')
+   :['auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(c)?t('eEnv')
+   :t('failed')+(c?' ('+c+')':'')};
 const ago=ts=>{const s=(Date.now()-ts)/1e3;return s<60?'•':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d'};
-async function copyText(x){try{await navigator.clipboard.writeText(x);return true}catch(e){return false}}
+async function copy(x){try{await navigator.clipboard.writeText(x);return true}catch(e){const a=document.createElement('textarea');a.value=x;document.body.append(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}}
 const okImg=u=>/^(data:image\/|https:\/\/)/.test(u||'');
 
+/* ---------------- Data layer: Firebase Engine ---------------- */
 async function firebaseStore(cfg){
- const B='https://www.gstatic.com/firebasejs/10.12.2/';
- const [{initializeApp},A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
- const app=initializeApp(cfg),auth=A.getAuth(app);
- let fs;try{fs=F.initializeFirestore(app,{localCache:F.persistentLocalCache()})}catch(e){fs=F.getFirestore(app)}
- const mapDoc=d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}};
- let cb=(),busy=false;
- const mail=h=>h+'@'+AUTH_DOMAIN;
- async function load(u){
-  if(busy)return;
-  if(!u)return cb(null);
-  let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){}
-  cb({uid:u.uid,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',isAdmin:u.email===mail(ADMIN_HANDLE)});
- }
- return{
-  onAuth(f){cb=f;A.onAuthStateChanged(auth,load)},
-  async signIn(h,pw){await A.signInWithEmailAndPassword(auth,mail(h),pw)},
-  async signUp(h,pw){
-   busy=true;
-   try{const u=(await A.createUserWithEmailAndPassword(auth,mail(h),pw)).user;
-    const b=F.writeBatch(fs);b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:h,bio:''});await b.commit()}
-   finally{busy=false}
-   await load(auth.currentUser)},
-  logout:()=>A.signOut(auth),
-  async saveProfile(u,p){
-   const b=F.writeBatch(fs);b.set(F.doc(fs,'users',u.uid),{handle:u.handle,displayName:p.displayName,bio:p.bio},{merge:true});await b.commit();await load(auth.currentUser)},
-  subscribe(f){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy('at','desc'),F.limit(80)),s=>f(s.docs.map(mapDoc)),()=>f([]))},
-  subscribeVerified(f){return F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>f(new Set(s.docs.map(d=>d.id))),()=>f(new Set()))},
-  add:p=>F.addDoc(F.collection(fs,'tactics'),{...p,likeCount:0,at:F.serverTimestamp()}),
-  async toggleLike(u,p,on){const b=F.writeBatch(fs),lr=F.doc(fs,'likes',p.id+'_'+u.uid),tr=F.doc(fs,'tactics',p.id);
-   if(on){b.set(lr,{pid:p.id,uid:u.uid});b.update(tr,{likeCount:F.increment(1)})}else{b.delete(lr);b.update(tr,{likeCount:F.increment(-1)})}await b.commit()},
-  subscribeLikes:(uid,f)=>F.onSnapshot(F.query(F.collection(fs,'likes'),F.where('uid','==',uid)),s=>f(new Set(s.docs.map(d=>d.data().pid))),()=>f(new Set())),
-  remove:id=>F.deleteDoc(F.doc(fs,'tactics',id)),
-  async setVerified(h,v){const r=F.doc(fs,'handles',h.toLowerCase());if(!(await F.getDoc(r)).exists())throw new Error('nouser');await F.updateDoc(r,{isVerified:v})}
- };
+  const B='https://www.gstatic.com/firebasejs/10.12.2/';
+  const [{initializeApp},A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
+  const app=initializeApp(cfg),auth=A.getAuth(app);
+  let fs;try{fs=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})})}catch(e){fs=F.getFirestore(app)}
+  const mapDoc=d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}};
+  let cb=()=>{},busy=false;
+  const mail=h=>h+'@'+AUTH_DOMAIN;
+  async function load(u){
+    if(busy)return;
+    if(!u)return cb(null);
+    let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){console.error(e);toast(t('ePerm'),7000)}
+    cb({uid:u.uid,photo:null,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',isAdmin:u.email===mail(ADMIN_HANDLE)});
+  }
+  return{demo:false,
+    onAuth(f){cb=f;A.onAuthStateChanged(auth,load)},
+    async signIn(h,pw){await A.signInWithEmailAndPassword(auth,mail(h),pw)},
+    async signUp(h,pw){
+      busy=true;
+      try{const u=(await A.createUserWithEmailAndPassword(auth,mail(h),pw)).user;
+        try{const b=F.writeBatch(fs);b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:h,bio:''});await b.commit()}
+        catch(e){console.error(e);await A.deleteUser(u).catch(()=>{});throw new Error('taken')}}
+      finally{busy=false}
+      await load(auth.currentUser)},
+    async logout(){await A.signOut(auth)},
+    async saveProfile(u,h,dn,bio){
+      const b=F.writeBatch(fs);
+      if(!u.handle){
+        const hs=await F.getDoc(F.doc(fs,'handles',h));if(hs.exists())throw new Error('taken');
+        b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});
+      }
+      b.set(F.doc(fs,'users',u.uid),{handle:h||u.handle,displayName:dn||h||u.handle,bio:bio||''},{merge:true});
+      await b.commit();await load(auth.currentUser);
+    },
+    async setBadge(h,val){
+      const hs=await F.getDoc(F.doc(fs,'handles',h));if(!hs.exists())throw new Error('nouser');
+      await F.updateDoc(F.doc(fs,'handles',h),{isVerified:val});
+    },
+    subVerified(f){return F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>{const set=new Set();s.forEach(d=>set.add(d.id));f(set)})},
+    subLikes(uid,f){if(!uid)return f(new Set()),()=>{};return F.onSnapshot(F.collection(fs,'users',uid,'likes'),s=>{const set=new Set();s.forEach(d=>set.add(d.id));f(set)})},
+    subFeed(lim,f,errF){
+      return F.onSnapshot(F.query(F.collection(fs,'posts'),F.orderBy('at','desc'),F.limit(lim)),s=>f(s.docs.map(mapDoc)),errF);
+    },
+    subUserPosts(h,f){
+      return F.onSnapshot(F.query(F.collection(fs,'posts'),F.where('handle','==',h)),s=>{
+        const arr=s.docs.map(mapDoc);arr.sort((a,b)=>b.at-a.at);f(arr);
+      });
+    },
+    async fetchProfile(h){
+      const hs=await F.getDoc(F.doc(fs,'handles',h));if(!hs.exists())return null;
+      const uid=hs.data().uid;const u=await F.getDoc(F.doc(fs,'users',uid));
+      return u.exists()?{uid,handle:h,...u.data()}:{uid,handle:h,displayName:h,bio:''};
+    },
+    async publish(p){
+      await F.addDoc(F.collection(fs,'posts'),{...p,likes:0,at:F.serverTimestamp()});
+    },
+    async delPost(id){await F.deleteDoc(F.doc(fs,'posts',id))},
+    async toggleLike(id,uid,inc){
+      const b=F.writeBatch(fs),lRef=F.doc(fs,'users',uid,'likes',id),pRef=F.doc(fs,'posts',id);
+      if(inc){b.set(lRef,{at:F.serverTimestamp()});b.update(pRef,{likes:F.increment(1)})}
+      else{b.delete(lRef);b.update(pRef,{likes:F.increment(-1)})}
+      await b.commit();
+    },
+    subStats(f){return F.onSnapshot(F.doc(fs,'stats','global'),s=>f(s.exists()?s.data():null))}
+  };
 }
 
-function pitch(f){
- return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#0b1f14"/><g fill="none" stroke="#1fb27a" stroke-opacity=".4"><rect x="4" y="4" width="152" height="92"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="14"/></g><circle cx="80" cy="50" r="4.5" fill="#34d399"/></svg>`}
+/* ---------------- UI logic ---------------- */
+async function init(){
+  try {
+    store = await firebaseStore(FIREBASE_CONFIG);
+  } catch(e) {
+    console.error("Firebase init failed, fallback to memory", e);
+  }
 
-function renderStats(){
- $('sT').textContent=posts.length;
- $('sC').textContent=new Set(posts.map(p=>p.handle)).size;
- $('sF').textContent=new Set(posts.map(p=>p.formation)).size}
+  store.subVerified(v=>{verified=v;render()});
+  store.onAuth(u=>{
+    me=u;authReady=true;
+    unLikes();unLikes=store.subLikes(me?me.uid:null,l=>{myLikes=l;render()});
+    if(me&&!me.handle)openProfile(true);
+    renderAuth();render();
+  });
+  
+  if(store.subStats) store.subStats(s=>{statsN=s;renderStats()});
 
-function render(){
- const q=$('q').value.trim().toLowerCase();
- let l=posts.filter(p=>!fFilter||p.formation===fFilter);
- if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle].some(s=>s.includes(q)));
- if($('sort').value==='top')l=[...l].sort((a,b)=>(b.likeCount||0)-(a.likeCount||0));
- 
- $('count').textContent=l.length+' '+t('nTac');
- renderStats();
+  buildRail();buildFormationsModal();applyLang();
+  $('sort').onchange=()=>render();
+  $('q').oninput=()=>render();
+  
+  // Handlers
+  $('langBtn').onclick=toggleLang;
+  $('fab').onclick=()=>me?(me.handle?openPost():openProfile(true)):openAuth('in');
+  $('pForm').onsubmit=handlePublish;
+  $('pCancel').onclick=()=>$('pDlg').close();
+  $('prForm').onsubmit=handleProfile;
+  $('outBtn').onclick=()=>{if(confirm(t('out'))){store.logout();$('prDlg').close()}};
+  $('aForm').onsubmit=handleAuth;
+  $('tIn').onclick=()=>setAuthMode('in');
+  $('tUp').onclick=()=>setAuthMode('up');
+  $('grant').onclick=()=>handleAdmin(true);
+  $('revoke').onclick=()=>handleAdmin(false);
+  $('fClose').onclick=()=>$('fDlg').close();
+  $('big').onclick=()=>$('big').close();
 
- if(!loaded){$('grid').innerHTML='<div class="empty">جاري التحميل...</div>';return;}
-
- $('grid').innerHTML=l.length?l.map(p=>`<article class="card">
-  <button class="shot" data-img="${esc(p.id)}">${okImg(p.img)?`<img src="${esc(p.img)}" alt="">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom">🔍</span></button>
-  <div class="cb">
-   <div class="ur">
-    <button class="u" data-user="${esc(p.handle)}"><span class="av">${esc(p.handle[0].toUpperCase())}</span>
-     <div><span dir="ltr" class="un">@${esc(p.handle)}${verified.has(p.handle)?'<span class="vb">✓</span>':''}</span><span class="dn">${esc(p.displayName||'')}</span></div></button>
-    <span class="text-xs text-[var(--mute)]">${ago(p.at)}</span>
-   </div>
-   <div class="tk"><span>🔑 ${esc(p.code)}</span></div>
-   <div class="ac">
-    <button class="btn neon cp sm" data-copy="${esc(p.id)}">📋 ${t('copy')}</button>
-    <button class="btn ghost lk sm ${myLikes.has(p.id)?'on':''}" data-like="${esc(p.id)}">❤️ ${p.likeCount||0}</button>
-    ${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost sm" data-del="${esc(p.id)}">🗑️</button>`:''}
-   </div>
-  </div></article>`).join('')
- :`<div class="empty"><b class="d">${t('none')}</b><span>${t('noneSub')}</span></div>`;
+  listenFeed();
 }
 
-const renderRail=()=>{$('rail').innerHTML=['',...POP,'more'].map(f=>f==='more'?`<button class="chip d" id="moreF">📂 ${t('all')}</button>`:`<button class="chip d ${f===fFilter?'on':''}" data-f="${f}">${f||'الكل'}</button>`).join('')};
+function listenFeed(){
+  unFeed();
+  unFeed=store.subFeed(feedLimit,ps=>{
+    posts=ps;loaded=true;loadErr=false;render();
+  },e=>{
+    console.error(e);loadErr=true;loaded=true;render();
+  });
+}
 
 function renderAuth(){
- $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn">👑</button>`:''}
- <button class="btn ghost sm" id="prBtn"><span class="av" style="width:24px;height:24px;font-size:11px">${esc(me.handle?me.handle[0].toUpperCase():'U')}</span> @${esc(me.handle||'new')}</button>`
- :`<button class="btn neon sm" id="loginBtn">${t('signinS')}</button>`;
+  const a=$('auth');
+  if(!authReady){a.innerHTML='<span class="sk-av"></span>';return}
+  if(!me){
+    a.innerHTML=`<button class="btn gold sm" onclick="openAuth('in')"><i class="fa-solid fa-at"></i> ${t('signinS')}</button>`;
+  } else {
+    a.innerHTML=`<button class="av me" id="meBtn">${esc((me.displayName||me.handle||'U')[0].toUpperCase())}</button>`;
+    $('meBtn').onclick=()=>openProfile(false);
+  }
 }
 
-async function init(){
-    try{ store = await firebaseStore(FIREBASE_CONFIG); }catch(e){}
-
-    document.addEventListener('click', async e=>{
-        if($('loginBtn')?.contains(e.target)) $('aDlg').showModal();
-        if($('prBtn')?.contains(e.target)){ $('prH').value=me.handle||''; $('prN').value=me.displayName||''; $('prB').value=me.bio||''; $('prDlg').showModal(); }
-        if($('adBtn')?.contains(e.target)) $('adDlg').showModal();
-        if($('moreF')?.contains(e.target)){ $('fBody').innerHTML=FORMATIONS.map(f=>`<button class="btn ghost text-xs p-2" data-f="${f}">${f}</button>`).join(''); $('fDlg').showModal(); }
-
-        const chip=e.target.closest('[data-f]');
-        if(chip){ fFilter=chip.getAttribute('data-f'); renderRail(); render(); $('fDlg').close(); }
-
-        const cpBtn=e.target.closest('[data-copy]');
-        if(cpBtn){ const post=posts.find(p=>p.id===cpBtn.getAttribute('data-copy')); if(post&&await copyText(post.code)) toast(t('copyDone')); }
-
-        const lkBtn=e.target.closest('[data-like]');
-        if(lkBtn&&store){ if(!me){$('aDlg').showModal();return;} await store.toggleLike(me,posts.find(p=>p.id===lkBtn.getAttribute('data-like')),!myLikes.has(lkBtn.getAttribute('data-like'))); }
-
-        const delBtn=e.target.closest('[data-del]');
-        if(delBtn&&store&&confirm('حذف؟')) await store.remove(delBtn.getAttribute('data-del'));
-    });
-
-    $('q').addEventListener('input',()=>render());
-    $('sort').addEventListener('change',()=>render());
-    $('langBtn').addEventListener('click',()=>{
-        lang=lang==='ar'?'en':'ar'; localStorage.setItem('tk_lang',lang);
-        document.documentElement.lang=lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-        renderRail(); render(); renderAuth();
-    });
-
-    $('fab').addEventListener('click',()=>{
-        if(!me){$('aDlg').showModal();return;}
-        if(!me.handle){$('prDlg').showModal();return;}
-        $('pF').innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
-        $('pDlg').showModal();
-    });
-
-    $('pCancel').addEventListener('click',()=>$('pDlg').close());
-    $('fClose').addEventListener('click',()=>$('fDlg').close());
-
-    let authMode='in';
-    $('tIn').addEventListener('click',()=>{authMode='in';$('tIn').classList.add('on');$('tUp').classList.remove('on');});
-    $('tUp').addEventListener('click',()=>{authMode='up';$('tUp').classList.add('on');$('tIn').classList.remove('on');});
-
-    $('aForm').addEventListener('submit',async e=>{
-        e.preventDefault(); if(!store)return;
-        try{
-            if(authMode==='in') await store.signIn($('aU').value.trim().toLowerCase(), $('aP').value);
-            else await store.signUp($('aU').value.trim().toLowerCase(), $('aP').value);
-            $('aDlg').close(); toast('تم');
-        }catch(err){$('aE').textContent=authMsg(err);}
-    });
-
-    $('prForm').addEventListener('submit',async e=>{
-        e.preventDefault(); if(!store)return;
-        await store.saveProfile(me,{displayName:$('prN').value,bio:$('prB').value});
-        $('prDlg').close(); toast('تم الحفظ');
-    });
-
-    $('outBtn').addEventListener('click',async()=>{if(store)await store.logout();$('prDlg').close();});
-
-    $('grant').addEventListener('click',async()=>{if(store)try{await store.setVerified($('adH').value,true);toast('تم');$('adDlg').close();}catch(e){$('adE').textContent='خطأ';}});
-    $('revoke').addEventListener('click',async()=>{if(store)try{await store.setVerified($('adH').value,false);toast('تم');$('adDlg').close();}catch(e){$('adE').textContent='خطأ';}});
-
-    if(store){
-        store.onAuth(u=>{me=u;renderAuth();if(me)unLikes=store.subscribeLikes(me.uid,s=>{myLikes=s;render()});else{myLikes.clear();render();}});
-        store.subscribe(d=>{posts=d;loaded=true;render();});
-        store.subscribeVerified(v=>{verified=v;render();});
-    }else{loaded=true;render();}
-
-    renderRail(); renderAuth();
+function setAuthMode(m){
+  $('tIn').classList.toggle('on',m==='in');
+  $('tUp').classList.toggle('on',m==='up');
+  $('aGo').textContent=m==='in'?t('signinS'):t('signup');
+  $('aNote').classList.toggle('hidden',m==='in');
+  $('aE').textContent='';
 }
+
+function openAuth(m='in'){setAuthMode(m);$('aForm').reset();$('aDlg').showModal()}
+
+async function handleAuth(e){
+  e.preventDefault();
+  const u=$('aU').value.trim(),p=$('aP').value,isUp=$('tUp').classList.contains('on');
+  $('aE').textContent='';
+  try{
+    if(isUp) await store.signUp(u,p);
+    else await store.signIn(u,p);
+    $('aDlg').close();
+  }catch(err){
+    $('aE').textContent=authMsg(err);
+  }
+}
+
+function openProfile(first=false){
+  $('prE').textContent='';
+  $('prH').value=me?.handle||'';
+  $('prH').disabled=!!me?.handle;
+  $('prN').value=me?.displayName||'';
+  $('prB').value=me?.bio||'';
+  $('outBtn').classList.toggle('hidden',first);
+  $('prDlg').showModal();
+}
+
+async function handleProfile(e){
+  e.preventDefault();
+  const h=$('prH').value.trim(),dn=$('prN').value.trim(),b=$('prB').value.trim();
+  $('prE').textContent='';
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(h)){$('prE').textContent=t('bad');return}
+  try{
+    await store.saveProfile(me,h,dn,b);
+    $('prDlg').close();
+    toast(t('done'));
+  }catch(err){
+    $('prE').textContent=authMsg(err);
+  }
+}
+
+function openPost(){
+  $('pForm').reset();
+  $('pE').textContent='';
+  const sel=$('pF');sel.innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
+  $('pDlg').showModal();
+}
+
+async function handlePublish(e){
+  e.preventDefault();
+  const f=$('pF').value,c=$('pC').value.trim(),file=$('pI').files[0],uUrl=$('pU').value.trim();
+  $('pE').textContent='';
+  let img=uUrl;
+  if(file){
+    if(file.size>1.5*1024*1024){$('pE').textContent=t('big');return}
+    img=await new Promise(r=>{const rd=new FileReader();rd.onload=()=>r(rd.result);rd.readAsDataURL(file)});
+  }
+  if(!img){$('pE').textContent=t('needImg');return}
+  try{
+    $('pGo').disabled=true;
+    await store.publish({
+      formation:f,code:c,img,handle:me.handle,
+      displayName:me.displayName||me.handle,
+      userUid:me.uid
+    });
+    $('pDlg').close();
+    toast(t('copyDone'));
+  }catch(err){
+    $('pE').textContent=t('failed');
+  }finally{$('pGo').disabled=false}
+}
+
+function openAdmin(){
+  if(!me?.isAdmin)return;
+  $('adH').value='';$('adE').textContent='';$('adDlg').showModal();
+}
+
+async function handleAdmin(val){
+  const h=$('adH').value.trim().replace(/^@/,'');
+  $('adE').textContent='';
+  if(!h)return;
+  try{
+    await store.setBadge(h,val);
+    $('adDlg').close();
+    toast(t('done'));
+  }catch(err){
+    $('adE').textContent=authMsg(err);
+  }
+}
+
+function toggleLang(){
+  lang=lang==='ar'?'en':'ar';
+  localStorage.setItem('tk_lang',lang);
+  applyLang();buildRail();buildFormationsModal();render();
+}
+
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));
+  document.querySelectorAll('[data-ph]').forEach(el=>el.placeholder=t(el.dataset.ph));
+  $('langBtn').textContent=lang==='ar'?'English':'عربي';
+}
+
+function buildRail(){
+  const r=$('rail');
+  let h=`<button class="chip ${fFilter===''?'on':''}" onclick="setFilter('')">${t('all')}</button>`;
+  POP.forEach(f=>{
+    h+=`<button class="chip ${fFilter===f?'on':''}" onclick="setFilter('${f}')">${f}</button>`;
+  });
+  h+=`<button class="chip more" onclick="$('fDlg').showModal()"><i class="fa-solid fa-layer-group"></i> ${t('allF')}</button>`;
+  r.innerHTML=h;
+}
+
+function buildFormationsModal(){
+  const b=$('fBody');
+  b.innerHTML=`<div class="fg">${FORMATIONS.map(f=>`
+    <button class="ft ${fFilter===f?'on':''}" onclick="setFilter('${f}');$('fDlg').close()">
+      <div class="d text-lg">${f}</div>
+    </button>
+  `).join('')}</div>`;
+}
+
+window.setFilter=f=>{fFilter=f;buildRail();buildFormationsModal();render()};
+
+function renderStats(){
+  const totalP=posts.length;
+  const totalC=new Set(posts.map(p=>p.handle)).size;
+  $('sT').textContent=statsN?.tactics||totalP;
+  $('sC').textContent=statsN?.creators||totalC;
+  $('sF').textContent=FORMATIONS.length;
+}
+
+function render(){
+  renderAuth();
+  if(!loaded){
+    $('grid').innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
+    return;
+  }
+  if(loadErr){
+    $('grid').innerHTML=`<div class="empty"><i class="fa-solid fa-ban"></i><b>${t('eConn')}</b><span>${t('eConnSub')}</span><button class="btn gold" onclick="listenFeed()">${t('retry')}</button></div>`;
+    return;
+  }
+
+  let list=[...posts];
+  const q=$('q').value.trim().toLowerCase();
+  
+  if(fFilter) list=list.filter(p=>p.formation===fFilter);
+  if(q){
+    list=list.filter(p=>
+      p.formation.toLowerCase().includes(q) ||
+      p.handle.toLowerCase().includes(q) ||
+      (p.displayName&&p.displayName.toLowerCase().includes(q)) ||
+      p.code.toLowerCase().includes(q)
+    );
+  }
+
+  const s=$('sort').value;
+  if(s==='top') list.sort((a,b)=>(b.likes||0)-(a.likes||0));
+  else list.sort((a,b)=>b.at-a.at);
+
+  $('count').textContent=`${list.length} ${t('nTac')}`;
+  renderStats();
+
+  if(!list.length){
+    $('grid').innerHTML=`<div class="empty"><i class="fa-solid fa-futbol"></i><b>${t('none')}</b><span>${t('noneSub')}</span></div>`;
+    return;
+  }
+
+  $('grid').innerHTML=list.map(p=>{
+    const isV=verified.has(p.handle);
+    const isLiked=myLikes.has(p.id);
+    const isMine=me?.uid===p.userUid;
+    return `
+    <article class="card ${anim?'up':''}">
+      <button class="shot" onclick="zoom('${esc(p.img)}')">
+        <span class="fm d">${p.formation}</span>
+        <span class="zoom"><i class="fa-solid fa-expand"></i></span>
+        <img src="${esc(p.img)}" alt="${p.formation}" loading="lazy">
+      </button>
+      <div class="cb">
+        <div class="ur">
+          <button class="u" onclick="viewUser('${p.handle}')">
+            <span class="av">${esc((p.displayName||p.handle)[0].toUpperCase())}</span>
+            <span class="ui">
+              <span class="un">@${esc(p.handle)} ${isV?'<i class="fa-solid fa-circle-check vb" title="'+t('verified')+'"></i>':''}</span>
+              <span class="dn">${esc(p.displayName||'')}</span>
+            </span>
+          </button>
+          <span class="ag">${ago(p.at)}</span>
+        </div>
+        <div class="tk">
+          <i class="fa-solid fa-key"></i>
+          <span>${esc(p.code)}</span>
+        </div>
+        <div class="ac">
+          <button class="btn gold cp" onclick="doCopy('${esc(p.code)}')"><i class="fa-solid fa-copy"></i> ${t('copy')}</button>
+          <button class="btn ghost lk ${isLiked?'on':''}" onclick="doLike('${p.id}')">
+            <i class="fa-${isLiked?'solid':'regular'} fa-heart"></i> ${p.likes||0}
+          </button>
+          ${isMine||me?.isAdmin?`<button class="btn ghost" onclick="doDel('${p.id}')"><i class="fa-solid fa-trash"></i></button>`:''}
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+  anim=false;
+}
+
+window.zoom=src=>{$('big').querySelector('img').src=src;$('big').showModal()};
+window.doCopy=async code=>{
+  if(await copy(code)) toast(t('copyDone'));
+};
+window.doLike=async id=>{
+  if(!me) return openAuth('in');
+  const inc=!myLikes.has(id);
+  await store.toggleLike(id,me.uid,inc);
+};
+window.doDel=async id=>{
+  if(confirm(t('del'))){
+    await store.delPost(id);
+    toast(t('done'));
+  }
+};
+window.viewUser=async h=>{
+  $('q').value='@'+h;
+  render();
+};
+
 init();
 </script>
 </body>
