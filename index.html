@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tashkeelti | تشكيلتي</title>
-<meta name="description" content="Tashkeelti — copy EA FC tactic codes shared by real players. تشكيلتي: أكواد تكتيكات EA FC من لاعبين حقيقيين.">
-<meta name="theme-color" content="#070a09"><meta property="og:title" content="Tashkeelti | تشكيلتي"><meta property="og:description" content="EA FC tactics library: pick a formation, copy the code, play.">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070a09'/%3E%3Cpath d='M8 10h16M16 10v13' stroke='%2334d399' stroke-width='3.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Cairo:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -111,12 +107,6 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .tab{border:0;background:none;color:var(--mute);padding:.65rem;border-radius:10px;font:700 1rem Cairo,sans-serif;cursor:pointer;transition:all .15s}
 .tab.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f}
 .hint{font-size:.8rem;color:var(--mute)}
-.pf{display:flex;flex-direction:column;gap:14px;padding:20px 0 10px;align-items:flex-start}
-.pfh{display:flex;align-items:center;gap:16px}
-.av.big{width:78px;height:78px;font-size:32px;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--neon)}
-.pfn{font-size:34px;line-height:1;direction:ltr;display:flex;align-items:center}
-.sk-av{display:block;width:40px;height:40px;border-radius:50%;background:linear-gradient(100deg,#0d1311 30%,#16211c 50%,#0d1311 70%);background-size:200% 100%;animation:sh 1.3s linear infinite}
-.more{grid-column:1/-1;text-align:center;padding:6px 0 10px}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
@@ -129,14 +119,13 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 </div></header>
 
 <main class="wrap">
-  <section class="hero" id="hero">
+  <section class="hero">
     <svg class="hp" viewBox="0 0 160 100" aria-hidden="true"><rect x="3" y="3" width="154" height="94"/><line x1="80" y1="3" x2="80" y2="97"/><circle cx="80" cy="50" r="14"/><rect x="3" y="28" width="26" height="44"/><rect x="131" y="28" width="26" height="44"/></svg>
     <h1 class="d"><span data-i="h1"></span><br><em data-i="h2"></em></h1>
     <p class="sub" data-i="sub"></p>
     <div class="stats"><div class="stat"><b id="sT">0</b><span data-i="sTac"></span></div><div class="stat"><b id="sC">0</b><span data-i="sCre"></span></div><div class="stat"><b id="sF">0</b><span data-i="sFor"></span></div></div>
     <div id="banner" class="banner hidden"></div>
   </section>
-  <section id="profile" class="hidden"></section>
   <nav id="rail" class="rail" aria-label="Formations"></nav>
   <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
@@ -187,7 +176,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 
 <script type="module">
 /* =====================================================================
-   1) CONFIG — Your Firebase web config + admin email integration
+   1) CONFIG — Firebase web config + Admin Email Integration
    ===================================================================== */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCHvO61P8KXIltGfgl-9oGgATON6B1TyVI",
@@ -198,22 +187,22 @@ const FIREBASE_CONFIG = {
   appId: "1:557159294253:web:f2f57117485a8ff9ab9fa4",
   measurementId: "G-J8JHXBT74B"
 };
-const ADMIN_HANDLE = "maroo";         // Admin username
-const AUTH_DOMAIN  = "tashkeelti.app"; // Internal suffix for auth (maroo@tashkeelti.app)
+const ADMIN_HANDLE = "maroo";         
+const AUTH_DOMAIN  = "tashkeelti.app"; 
 
 /* ---------------- Translations ---------------- */
 const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
   signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
   failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
   signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
   failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
@@ -259,7 +248,7 @@ hydrate(document);
 
 let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
 const t=k=>T[lang][k]||k;
-let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{};
+let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true;
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
 
@@ -281,7 +270,7 @@ async function firebaseStore(cfg){
   const app=initializeApp(cfg),auth=A.getAuth(app);
   let fs;try{fs=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})})}catch(e){fs=F.getFirestore(app)}
   const mapDoc=d=>{const x=d.data();return{id:d.id,...x,at:x.at&&x.at.toMillis?x.at.toMillis():Date.now()}};
-  let cb=()=>{},busy=false;
+  let cb=(),busy=false;
   const mail=h=>h+'@'+AUTH_DOMAIN;
   async function load(u){
     if(busy)return;
@@ -318,16 +307,6 @@ async function firebaseStore(cfg){
     subFeed(lim,f,errF){
       return F.onSnapshot(F.query(F.collection(fs,'posts'),F.orderBy('at','desc'),F.limit(lim)),s=>f(s.docs.map(mapDoc)),errF);
     },
-    subUserPosts(h,f){
-      return F.onSnapshot(F.query(F.collection(fs,'posts'),F.where('handle','==',h)),s=>{
-        const arr=s.docs.map(mapDoc);arr.sort((a,b)=>b.at-a.at);f(arr);
-      });
-    },
-    async fetchProfile(h){
-      const hs=await F.getDoc(F.doc(fs,'handles',h));if(!hs.exists())return null;
-      const uid=hs.data().uid;const u=await F.getDoc(F.doc(fs,'users',uid));
-      return u.exists()?{uid,handle:h,...u.data()}:{uid,handle:h,displayName:h,bio:''};
-    },
     async publish(p){
       await F.addDoc(F.collection(fs,'posts'),{...p,likes:0,at:F.serverTimestamp()});
     },
@@ -342,29 +321,27 @@ async function firebaseStore(cfg){
   };
 }
 
-/* ---------------- UI logic ---------------- */
 async function init(){
   try {
     store = await firebaseStore(FIREBASE_CONFIG);
   } catch(e) {
-    console.error("Firebase init failed, fallback to memory", e);
+    console.error("Firebase init failed", e);
   }
 
   store.subVerified(v=>{verified=v;render()});
   store.onAuth(u=>{
-    me=u;authReady=true;
+    me=u;
     unLikes();unLikes=store.subLikes(me?me.uid:null,l=>{myLikes=l;render()});
     if(me&&!me.handle)openProfile(true);
     renderAuth();render();
   });
   
-  if(store.subStats) store.subStats(s=>{statsN=s;renderStats()});
+  if(store.subStats) store.subStats(s=>{renderStats()});
 
   buildRail();buildFormationsModal();applyLang();
   $('sort').onchange=()=>render();
   $('q').oninput=()=>render();
   
-  // Handlers
   $('langBtn').onclick=toggleLang;
   $('fab').onclick=()=>me?(me.handle?openPost():openProfile(true)):openAuth('in');
   $('pForm').onsubmit=handlePublish;
@@ -383,17 +360,15 @@ async function init(){
 }
 
 function listenFeed(){
-  unFeed();
-  unFeed=store.subFeed(feedLimit,ps=>{
-    posts=ps;loaded=true;loadErr=false;render();
+  store.subFeed(18,ps=>{
+    posts=ps;loaded=true;render();
   },e=>{
-    console.error(e);loadErr=true;loaded=true;render();
+    console.error(e);loaded=true;render();
   });
 }
 
 function renderAuth(){
   const a=$('auth');
-  if(!authReady){a.innerHTML='<span class="sk-av"></span>';return}
   if(!me){
     a.innerHTML=`<button class="btn gold sm" onclick="openAuth('in')"><i class="fa-solid fa-at"></i> ${t('signinS')}</button>`;
   } else {
@@ -480,24 +455,6 @@ async function handlePublish(e){
   }finally{$('pGo').disabled=false}
 }
 
-function openAdmin(){
-  if(!me?.isAdmin)return;
-  $('adH').value='';$('adE').textContent='';$('adDlg').showModal();
-}
-
-async function handleAdmin(val){
-  const h=$('adH').value.trim().replace(/^@/,'');
-  $('adE').textContent='';
-  if(!h)return;
-  try{
-    await store.setBadge(h,val);
-    $('adDlg').close();
-    toast(t('done'));
-  }catch(err){
-    $('adE').textContent=authMsg(err);
-  }
-}
-
 function toggleLang(){
   lang=lang==='ar'?'en':'ar';
   localStorage.setItem('tk_lang',lang);
@@ -536,8 +493,8 @@ window.setFilter=f=>{fFilter=f;buildRail();buildFormationsModal();render()};
 function renderStats(){
   const totalP=posts.length;
   const totalC=new Set(posts.map(p=>p.handle)).size;
-  $('sT').textContent=statsN?.tactics||totalP;
-  $('sC').textContent=statsN?.creators||totalC;
+  $('sT').textContent=totalP;
+  $('sC').textContent=totalC;
   $('sF').textContent=FORMATIONS.length;
 }
 
@@ -545,10 +502,6 @@ function render(){
   renderAuth();
   if(!loaded){
     $('grid').innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
-    return;
-  }
-  if(loadErr){
-    $('grid').innerHTML=`<div class="empty"><i class="fa-solid fa-ban"></i><b>${t('eConn')}</b><span>${t('eConnSub')}</span><button class="btn gold" onclick="listenFeed()">${t('retry')}</button></div>`;
     return;
   }
 
@@ -617,9 +570,7 @@ function render(){
 }
 
 window.zoom=src=>{$('big').querySelector('img').src=src;$('big').showModal()};
-window.doCopy=async code=>{
-  if(await copy(code)) toast(t('copyDone'));
-};
+window.doCopy=async code=>{if(await copy(code)) toast(t('copyDone'))};
 window.doLike=async id=>{
   if(!me) return openAuth('in');
   const inc=!myLikes.has(id);
