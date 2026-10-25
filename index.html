@@ -13,6 +13,8 @@
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"><link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"><link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Cairo:wght@500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Cairo:wght@500;700&display=swap" rel="stylesheet"></noscript>
 <style>
+button{color:inherit;font-family:inherit}
+.ghost,.chip{color:#eef1f6}.chip.on{color:#04170f}
 :root{--bg:#070a09;--s1:#0d1311;--s2:#141c19;--line:#1f2d27;--mute:#84978d;--gold:#1fb27a;--gold2:#b9f3d9;--neon:#34d399;--blue:#4aa3ff;color-scheme:dark;
  --cut:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
 body{background:var(--bg);color:#eef1f6;font-family:Cairo,system-ui,sans-serif;min-height:100vh;
@@ -119,19 +121,19 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .pfn{font-size:34px;line-height:1;direction:ltr;display:flex;align-items:center}
 .sk-av{display:block;width:40px;height:40px;border-radius:50%;background:linear-gradient(100deg,#0d1311 30%,#16211c 50%,#0d1311 70%);background-size:200% 100%;animation:sh 1.3s linear infinite}
 .more{grid-column:1/-1;text-align:center;padding:6px 0 10px}
-#installBtn{order:3}
 .rpl{display:grid;gap:10px;max-height:40vh;overflow:auto}
 .rp{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px;font-size:14px}
 .bdg{background:#ff7a93;color:#2a0510;border-radius:999px;padding:0 7px;font-size:12px;margin-inline-start:4px}
 .fx{display:flex}.f1{flex:1}.g2{gap:.5rem}.jb{justify-content:space-between}.je{justify-content:flex-end}
 .x2{font-size:1.5rem;line-height:2rem}.x3{font-size:1.875rem;line-height:2.25rem}.xs{font-size:.875rem}.cg{color:var(--gold2)}.cm{color:var(--mute)}
+.sr input[type=search]{-webkit-appearance:none;appearance:none}
+.sr input::-webkit-search-decoration,.sr input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
 
 <header class="topbar"><div class="wrap hd">
   <div class="logo d">Tashkeelti</div><span class="sp"></span>
-  <button id="installBtn" class="btn ghost sm hidden"><i class="fa-solid fa-plus"></i> <span data-i="install"></span></button>
   <button id="langBtn" class="btn ghost sm" aria-label="Language"></button>
   <span id="auth"></span>
   <label class="sr"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" class="f" data-ph="search" aria-label="Search"></label>
@@ -545,8 +547,6 @@ const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(ne
 addEventListener('hashchange',route);
 addEventListener('offline',()=>toast(t('offline'),4000));addEventListener('online',()=>toast(t('online')));
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-let installEv;addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEv=e;$('installBtn').classList.remove('hidden')});
-$('installBtn').onclick=async()=>{if(!installEv)return;installEv.prompt();await installEv.userChoice;installEv=null;$('installBtn').classList.add('hidden')};
 try{const c=JSON.parse(localStorage.getItem('tk_feed')||'null');if(c&&c.posts&&c.posts.length){posts=c.posts;loaded=true}}catch(e){}   // show the last feed instantly, refresh in the background
 route();applyLang();   // paint the page immediately — never wait for the network
 (async()=>{
