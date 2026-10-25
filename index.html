@@ -7,6 +7,7 @@
 <meta name="description" content="Tashkeelti — copy EA FC tactic codes shared by real players. تشكيلتي: أكواد تكتيكات EA FC من لاعبين حقيقيين.">
 <meta name="theme-color" content="#070a09"><meta property="og:title" content="Tashkeelti | تشكيلتي"><meta property="og:description" content="EA FC tactics library: pick a formation, copy the code, play.">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<!-- الشعار الدقيق بحرف T وخلفية سوداء -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070a09'/%3E%3Cpath d='M8 10h16M16 10v13' stroke='%2334d399' stroke-width='3.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Cairo:wght@500;700&display=swap" rel="stylesheet">
@@ -40,7 +41,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 #toast.on{opacity:1}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
-/* ===== v3: mobile-first layout, calm luxury cards ===== */
+/* ===== v3 Layout ===== */
 .hidden{display:none}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(7,10,9,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
@@ -183,25 +184,25 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 <div id="toast" role="status"></div>
 
 <script type="module">
-const FIREBASE_CONFIG = { apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com", projectId:"YOUR_PROJECT", appId:"YOUR_APP_ID" };
+const FIREBASE_CONFIG = { apiKey:"AIzaSyCHvO61P8KXIltGfgl-9oGgATON6B1TyVI", authDomain:"tashkeelti.firebaseapp.com", projectId:"tashkeelti", appId:"1:557159294253:web:f2f57117485a8ff9ab9fa4" };
 const ADMIN_HANDLE = "maroo";
 const AUTH_DOMAIN  = "tashkeelti.app";
 
 const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
-  signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
+  signin:'Sign in',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase.',eOff:'Email/Password sign-in is not enabled.',eKey:'The apiKey is not valid.',eEnv:'Open the page from http://localhost.',eClosed:'The sign-in window was closed.',ePerm:'Firestore blocked reading your profile.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
-  failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
+  failed:'Something went wrong',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
-  signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
+  signin:'تسجيل الدخول',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase.',eOff:'تسجيل Email/Password مش مفعّل.',eKey:'الـ apiKey غير صحيح.',eEnv:'افتح الصفحة من http://localhost.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'Firestore منع قراءة ملفك.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
-  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
+  failed:'حصل خطأ',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];
@@ -271,35 +272,41 @@ async function firebaseStore(cfg){
   let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){console.error(e);toast(t('ePerm'),7000)}
   cb({uid:u.uid,photo:null,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',isAdmin:u.email===mail(ADMIN_HANDLE)});
  }
- return{demo:false,
+ return{
   onAuth(f){cb=f;A.onAuthStateChanged(auth,load)},
   async signIn(h,pw){await A.signInWithEmailAndPassword(auth,mail(h),pw)},
   async signUp(h,pw){
    busy=true;
-   try{const u=(await A.createUserWithEmailAndPassword(auth,mail(h),pw)).user;
-    try{const b=F.writeBatch(fs);b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:h,bio:''});await b.commit()}
-    catch(e){console.error(e);await A.deleteUser(u).catch(()=>{});throw new Error('taken')}}
-   finally{busy=false}
+   try{
+    const u=(await A.createUserWithEmailAndPassword(auth,mail(h),pw)).user;
+    try{
+     const b=F.writeBatch(fs);
+     b.set(F.doc(fs,'handles',h),{uid:u.uid,isVerified:false});
+     b.set(F.doc(fs,'users',u.uid),{handle:h,displayName:h,bio:''});
+     await b.commit();
+    }catch(e){
+     console.error(e);
+     await A.deleteUser(u).catch(()=>{});
+     throw new Error('taken');
+    }
+   } finally{
+    busy=false;
+   }
    await load(auth.currentUser);
   },
-  async signOut(){await A.signOut()},
+  async signOut(){await A.signOut(auth)},
   async saveProfile(p){
    const u=auth.currentUser;if(!u)return;
    await F.updateDoc(F.doc(fs,'users',u.uid),{displayName:p.displayName,bio:p.bio});
    await load(u);
   },
-  watchFeed(cb){
+  subscribe(cb){
    const q=F.query(F.collection(fs,'posts'),F.orderBy('at','desc'),F.limit(50));
    return F.onSnapshot(q,s=>cb(s.docs.map(mapDoc)));
   },
-  watchVerified(cb){
+  subscribeVerified(cb){
    return F.onSnapshot(F.collection(fs,'handles'),s=>{
     const v=new Set();s.forEach(d=>{if(d.data().isVerified)v.add(d.id)});cb(v);
-   });
-  },
-  watchStats(cb){
-   return F.onSnapshot(F.doc(fs,'meta','stats'),s=>{
-    cb(s.exists()?s.data():{posts:0,creators:0,formations:29});
    });
   },
   async addPost(p){
@@ -326,14 +333,161 @@ async function firebaseStore(cfg){
   },
   async setBadge(h,v){
    await F.updateDoc(F.doc(fs,'handles',h),{isVerified:v});
-  },
-  async getPostsBy(uid){
-   const q=F.query(F.collection(fs,'posts'),F.where('uid','==',uid));
-   const s=await F.getDocs(q);
-   return s.docs.map(mapDoc);
   }
  };
 }
+
+// تشغيل الواجهة
+document.addEventListener('DOMContentLoaded',async()=>{
+ try{
+  store=await firebaseStore(FIREBASE_CONFIG);
+  store.onAuth(u=>{
+   me=u;
+   const authEl=$('auth');
+   if(u){
+    authEl.innerHTML=`<button class="av me" id="meBtn">${u.handle?u.handle[0].toUpperCase():'U'}</button>${u.isAdmin?`<button class="btn ghost sm" id="adminBtn"><i class="fa-solid fa-crown"></i></button>`:''}`;
+   }else{
+    authEl.innerHTML=`<button class="btn neon sm" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> <span data-i="signinS">دخول</span></button>`;
+   }
+   render();
+  });
+  store.subscribe(d=>{posts=d;loaded=true;render();});
+  store.subscribeVerified(v=>{verified=v;render();});
+ }catch(e){
+  console.error(e);
+ }
+
+ $('langBtn').onclick=()=>{
+  lang=lang==='ar'?'en':'ar';
+  localStorage.setItem('tk_lang',lang);
+  location.reload();
+ };
+
+ document.body.addEventListener('click',e=>{
+  const btn=e.target.closest('button');if(!btn)return;
+  if(btn.id==='loginBtn'||btn.id==='meBtn'){
+   if(me){
+    $('prH').value=me.handle||'';$('prH').disabled=!!me.handle;
+    $('prN').value=me.displayName||'';$('prB').value=me.bio||'';
+    $('prDlg').showModal();
+   }else{
+    $('aDlg').showModal();
+   }
+  }
+  if(btn.id==='adminBtn')$('adDlg').showModal();
+  if(btn.id==='fab'){
+   if(!me){$('aDlg').showModal();return;}
+   if(!me.handle){$('prDlg').showModal();return;}
+   $('pDlg').showModal();
+  }
+  if(btn.dataset.f!==undefined){fFilter=btn.dataset.f;anim=true;renderRail();render();}
+  if(btn.id==='moreF')$('fDlg').showModal();
+  if(btn.id==='fClose')$('fDlg').close();
+  const cp=btn.dataset.copy;if(cp){const p=posts.find(x=>x.id===cp);if(p){copy(p.code);toast(t('copyDone'));}}
+  const del=btn.dataset.del;if(del&&confirm(t('del')))store.delPost(del);
+ });
+
+ $('tIn').onclick=()=>{
+  $('tIn').classList.add('on');$('tUp').classList.remove('on');
+  $('aGo').textContent='دخول';
+ };
+ $('tUp').onclick=()=>{
+  $('tUp').classList.add('on');$('tIn').classList.remove('on');
+  $('aGo').textContent='إنشاء حساب';
+ };
+
+ $('aForm').onsubmit=async e=>{
+  e.preventDefault();
+  const u=$('aU').value.trim(),p=$('aP').value,isUp=$('tUp').classList.contains('on');
+  $('aE').textContent='';
+  try{
+   if(isUp)await store.signUp(u,p);
+   else await store.signIn(u,p);
+   $('aDlg').close();$('aForm').reset();
+  }catch(err){$('aE').textContent=authMsg(err);}
+ };
+
+ $('prForm').onsubmit=async e=>{
+  e.preventDefault();
+  $('prE').textContent='';
+  try{
+   await store.saveProfile({displayName:$('prN').value.trim(),bio:$('prB').value.trim()});
+   $('prDlg').close();
+  }catch(err){$('prE').textContent=authMsg(err);}
+ };
+ $('outBtn').onclick=()=>{if(confirm(t('out'))){store.signOut();$('prDlg').close();}};
+
+ $('grant').onclick=async()=>{
+  try{await store.setBadge($('adH').value.trim(),true);$('adDlg').close();toast(t('done'));}catch(e){$('adE').textContent=authMsg(e);}
+ };
+ $('revoke').onclick=async()=>{
+  try{await store.setBadge($('adH').value.trim(),false);$('adDlg').close();toast(t('done'));}catch(e){$('adE').textContent=authMsg(e);}
+ };
+
+ $('pForm').onsubmit=async e=>{
+  e.preventDefault();
+  let imgUrl=$('pU').value.trim();
+  const file=$('pI').files[0];
+  if(file){
+   if(file.size>1e6){$('pE').textContent=t('big');return;}
+   imgUrl=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(file)});
+  }
+  if(!imgUrl){$('pE').textContent=t('needImg');return;}
+  try{
+   await store.addPost({formation:$('pF').value,code:$('pC').value.trim(),img:imgUrl,handle:me.handle,displayName:me.displayName||me.handle});
+   $('pDlg').close();$('pForm').reset();toast('تم النشر بنجاح!');
+  }catch(err){$('pE').textContent=authMsg(err);}
+ };
+ $('pCancel').onclick=$('pDlg').close;
+
+ $('q').oninput=render;
+ $('sort').onchange=render;
+ $('pF').innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
+ $('fBody').innerHTML=`<div class="fg">${FORMATIONS.map(f=>`<button class="ft" data-f="${f}"><span>${f}</span></button>`).join('')}</div>`;
+ $('fBody').onclick=e=>{const btn=e.target.closest('.ft');if(btn){fFilter=btn.dataset.f;anim=true;$('fDlg').close();renderRail();render();}};
+ renderRail();
+});
+
+function renderStats(){
+ $('sT').textContent=posts.length;
+ $('sC').textContent=new Set(posts.map(p=>p.handle)).size;
+ $('sF').textContent=new Set(posts.map(p=>p.formation)).size;
+}
+
+function render(){
+ const q=$('q').value.trim().toLowerCase();
+ let l=posts.filter(p=>!fFilter||p.formation===fFilter);
+ if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase()].some(s=>s.includes(q)));
+ if($('sort').value==='top')l=[...l].sort((a,b)=>(b.likes||0)-(a.likes||0));
+ 
+ $('count').textContent=l.length+' '+t('nTac');
+ renderStats();
+
+ if(!loaded){
+  $('grid').innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
+  return;
+ }
+
+ $('grid').innerHTML=l.length?l.map((p,i)=>`<article class="card ${anim?'up':''}" style="animation-delay:${Math.min(i*.05,.4)}s"><div class="in">
+  <button class="shot" data-img="${esc(p.id)}">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:''}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
+  <div class="cb">
+   <div class="ur">
+    <button class="u" data-user="${esc(p.handle)}"><span class="av me">${esc(p.handle[0].toUpperCase())}</span>
+     <span class="ui"><span dir="ltr" class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
+    <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span>
+   </div>
+   <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
+   <div class="ac">
+    <button class="btn neon cp sm" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}</button>
+    <button class="btn ghost sm" data-like="${esc(p.id)}"><i class="fa-regular fa-heart"></i> ${p.likes||0}</button>
+    ${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost sm" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}
+   </div>
+  </div></div></article>`).join('')
+ :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t('noneSub')}</span></div>`;
+ anim=false;
+}
+
+const renderRail=()=>{$('rail').innerHTML=['',...POP,'more'].map(f=>f==='more'?`<button class="chip d more" id="moreF"><i class="fa-solid fa-diagram-project"></i> ${t('allF')}</button>`:`<button class="chip d ${f===fFilter?'on':''}" data-f="${f}">${f||`<i class="fa-solid fa-layer-group"></i> ${t('all')}`}</button>`).join('')};
 </script>
 </body>
 </html>
