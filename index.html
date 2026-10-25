@@ -180,7 +180,6 @@ const ADMIN_HANDLE = "maroo";
 
 /* ---------------- Welcome Email System (Resend API Secure Split) ---------------- */
 const tashkeeltiLogoUrl = 'https://i.ibb.co/W4ckNGSb/Gemini-Generated-Image-k44536k44536k445.jpg'; 
-// تقسيم المفتاح لمنع اكتشافه تلقائياً بواسطة GitHub Secret Scanning
 const k1 = 're_d5YmKLVo_';
 const k2 = 'F25RhtDgD1y7A2TitZ186dqd';
 const getResendKey = () => k1 + k2;
@@ -326,7 +325,6 @@ async function firebaseStore(cfg){
     async login(){const g=new A.GoogleAuthProvider();
       try{
             const res = await A.signInWithPopup(auth, g);
-            // 🚀 إرسال إيميل الترحيب عند تسجيل الدخول الناجح
             if (res && res.user && res.user.email) {
                 sendWelcomeEmail(res.user.email);
             }
@@ -415,20 +413,198 @@ async function init(){
         console.error(e);
     }
     
-    // ربط أزرار الدخول والخروج وغيرها
     document.addEventListener('click', async e=>{
         const lBtn=$('loginBtn');
         if(lBtn&&lBtn.contains(e.target)){
             try{ await store.login(); }catch(err){ toast(authMsg(err)); }
         }
+        
+        const prBtn=$('prBtn');
+        if(prBtn&&prBtn.contains(e.target)){
+            $('prH').value=me.handle||'';
+            $('prN').value=me.displayName||'';
+            $('prB').value=me.bio||'';
+            $('prDlg').showModal();
+        }
+        
+        const adBtn=$('adBtn');
+        if(adBtn&&adBtn.contains(e.target)){
+            $('adDlg').showModal();
+        }
+
+        const moreF=$('moreF');
+        if(moreF&&moreF.contains(e.target)){
+            $('fBody').innerHTML=`<div class="gh">${t('allF')}</div><div class="fg">${FORMATIONS.map(f=>`<button class="ft ${f===fFilter?'on':''}" data-f="${f}">${pitch(f)}<span>${f}</span></button>`).join('')}</div>`;
+            $('fDlg').showModal();
+        }
+
+        const chip=e.target.closest('[data-f]');
+        if(chip){
+            fFilter=chip.getAttribute('data-f');
+            renderRail();
+            render();
+            $('fDlg').close();
+        }
+
+        const cpBtn=e.target.closest('[data-copy]');
+        if(cpBtn){
+            const id=cpBtn.getAttribute('data-copy');
+            const post=posts.find(p=>p.id===id);
+            if(post&&await copy(post.code)){
+                toast(t('copyDone'));
+            }
+        }
+
+        const lkBtn=e.target.closest('[data-like]');
+        if(lkBtn){
+            if(!me){ toast(t('loginLike')); return; }
+            const id=lkBtn.getAttribute('data-like');
+            const post=posts.find(p=>p.id===id);
+            if(post){
+                const on=!myLikes.has(id);
+                try{ await store.toggleLike(me,post,on); }catch(err){ console.error(err); }
+            }
+        }
+
+        const delBtn=e.target.closest('[data-del]');
+        if(delBtn){
+            const id=delBtn.getAttribute('data-del');
+            if(confirm(t('del'))){
+                try{ await store.remove(id); }catch(err){ toast(authMsg(err)); }
+            }
+        }
+
+        const shotBtn=e.target.closest('[data-img]');
+        if(shotBtn){
+            const id=shotBtn.getAttribute('data-img');
+            const post=posts.find(p=>p.id===id);
+            if(post&&okImg(post.img)){
+                $('big').querySelector('img').src=post.img;
+                $('big').showModal();
+            }
+        }
+
+        const uBtn=e.target.closest('[data-user]');
+        if(uBtn){
+            const h=uBtn.getAttribute('data-user');
+            $('q').value='@'+h;
+            render();
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
     });
+
+    $('q').addEventListener('input',()=>render());
+    $('sort').addEventListener('change',()=>render());
+    $('langBtn').addEventListener('click',()=>{
+        lang=lang==='ar'?'en':'ar';
+        localStorage.setItem('tk_lang',lang);
+        document.documentElement.lang=lang;
+        document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+        document.querySelectorAll('[data-i]').forEach(el=>{
+            const k=el.getAttribute('data-i');
+            if(T[lang][k]) el.textContent=T[lang][k];
+        });
+        document.querySelectorAll('[data-ph]').forEach(el=>{
+            const k=el.getAttribute('data-ph');
+            if(T[lang][k]) el.placeholder=T[lang][k];
+        });
+        renderRail();
+        render();
+        renderAuth();
+    });
+
+    $('fab').addEventListener('click',()=>{
+        if(!me){ store.login(); return; }
+        if(!me.handle){ $('prDlg').showModal(); return; }
+        $('pF').innerHTML=FORMATIONS.map(f=>`<option value="${f}">${f}</option>`).join('');
+        $('pDlg').showModal();
+    });
+
+    $('pCancel').addEventListener('click',()=>$('pDlg').close());
+    $('fClose').addEventListener('click',()=>$('fDlg').close());
+    $('big').addEventListener('click',()=>$('big').close());
+
+    $('prForm').addEventListener('submit',async e=>{
+        e.preventDefault();
+        $('prE').textContent='';
+        const h=$('prH').value.trim().replace(/^@/,'');
+        const n=$('prN').value.trim();
+        const b=$('prB').value.trim();
+        if(!/^[A-Za-z0-9_]{3,16}$/.test(h)){ $('prE').textContent=t('bad'); return; }
+        try{
+            await store.saveProfile(me,{handle:h,displayName:n,bio:b});
+            $('prDlg').close();
+            toast(t('done'));
+        }catch(err){
+            $('prE').textContent=err.message==='taken'?t('taken'):authMsg(err);
+        }
+    });
+
+    $('outBtn').addEventListener('click',async()=>{
+        if(confirm(t('out'))){
+            await store.logout();
+            $('prDlg').close();
+        }
+    });
+
+    $('pForm').addEventListener('submit',async e=>{
+        e.preventDefault();
+        $('pE').textContent='';
+        const f=$('pF').value;
+        const c=$('pC').value.trim();
+        const u=$('pU').value.trim();
+        const file=$('pI').files[0];
+        let img=u;
+
+        const go=async imgData=>{
+            try{
+                $('pGo').disabled=true;
+                await store.add({formation:f,code:c,img:imgData||'',uid:me.uid,handle:me.handle,displayName:me.displayName||''});
+                $('pDlg').close();
+                $('pForm').reset();
+                toast(t('done'));
+            }catch(err){
+                $('pE').textContent=authMsg(err);
+            }finally{
+                $('pGo').disabled=false;
+            }
+        };
+
+        if(file){
+            if(file.size>1.2*1024*1024){ $('pE').textContent=t('big'); return; }
+            const reader=new FileReader();
+            reader.onload=e=>go(e.target.result);
+            reader.readAsDataURL(file);
+        }else if(img){
+            if(!okImg(img)){ $('pE').textContent=t('needImg'); return; }
+            go(img);
+        }else{
+            go('');
+        }
+    });
+
+    $('grant').addEventListener('click',async()=>adminBadge(true));
+    $('revoke').addEventListener('click',async()=>adminBadge(false));
+
+    async function adminBadge(v){
+        $('adE').textContent='';
+        const h=$('adH').value.trim().replace(/^@/,'');
+        if(!h){ return; }
+        try{
+            await store.setVerified(h,v);
+            toast(t('done'));
+            $('adDlg').close();
+        }catch(err){
+            $('adE').textContent=err.message==='nouser'?t('nouser'):authMsg(err);
+        }
+    }
 
     if(store){
         store.onAuth(user=>{
             me=user;
             renderAuth();
             if(me && !me.handle){
-                // لو المستخدم ملوش يوزر لسه، ممكن نفتحه أو نسيبه
+                $('prDlg').showModal();
             }
         });
         store.subscribe(data=>{ posts=data; loaded=true; render(); });
@@ -436,6 +612,18 @@ async function init(){
     } else {
         loaded=true; render();
     }
+
+    renderRail();
+    document.documentElement.lang=lang;
+    document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+    document.querySelectorAll('[data-i]').forEach(el=>{
+        const k=el.getAttribute('data-i');
+        if(T[lang][k]) el.textContent=T[lang][k];
+    });
+    document.querySelectorAll('[data-ph]').forEach(el=>{
+        const k=el.getAttribute('data-ph');
+        if(T[lang][k]) el.placeholder=T[lang][k];
+    });
 }
 
 init();
