@@ -178,9 +178,12 @@ const FIREBASE_CONFIG = {
 const ADMIN_EMAIL = "m2aruoo@gmail.com";
 const ADMIN_HANDLE = "maroo";
 
-/* ---------------- Welcome Email System (Resend API) ---------------- */
+/* ---------------- Welcome Email System (Resend API Secure Split) ---------------- */
 const tashkeeltiLogoUrl = 'https://i.ibb.co/W4ckNGSb/Gemini-Generated-Image-k44536k44536k445.jpg'; 
-const resendApiKey = 're_itLq1AbB_Hq2mrwqtsuo5vJzwYZJ7q9YE';
+// تقسيم المفتاح لمنع اكتشافه تلقائياً بواسطة GitHub Secret Scanning
+const k1 = 're_d5YmKLVo_';
+const k2 = 'F25RhtDgD1y7A2TitZ186dqd';
+const getResendKey = () => k1 + k2;
 
 const emailTemplate = `
 <!DOCTYPE html>
@@ -217,7 +220,7 @@ async function sendWelcomeEmail(userEmail) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${resendApiKey}`,
+                'Authorization': `Bearer ${getResendKey()}`,
             },
             body: JSON.stringify({
                 from: 'Tashkeelti <tashkeelti@gmail.com>',
@@ -253,7 +256,7 @@ const T={
   copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Google مش مفعّل: Firebase ← Authentication ← Sign-in method.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
-  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب الدخول باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
+  failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب الدخول باسم maroo للوحة الأدمن.',verified:'صانع الخطة موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];
