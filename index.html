@@ -28,7 +28,7 @@ body{background:var(--bg);color:#eef1f6;font-family:Cairo,system-ui,sans-serif;m
 .f{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:.6rem;padding:.6rem .8rem;color:inherit;font:inherit}
 .f:focus{outline:0;border-color:var(--neon);box-shadow:0 0 0 3px rgba(52,211,153,.18)}
 .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f;display:grid;place-items:center;font-weight:700;font-size:13px;overflow:hidden;flex:none}
-.av img{width:100%;height:100%;object-fit:cover}
+.av{position:relative}.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .chip{border:1px solid var(--line);background:var(--s1);padding:.35rem 1rem;cursor:pointer;white-space:nowrap;font-size:1.05rem;transition:all .15s;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
 .chip:hover{border-color:var(--gold)}.chip.on{background:var(--gold);color:#04170f;border-color:var(--gold)}
 dialog{background:var(--s1);color:#eef1f6;border:1px solid var(--line);border-radius:1.1rem;padding:0;width:min(480px,94vw);max-height:92vh;box-shadow:0 20px 70px rgba(0,0,0,.65)}
@@ -56,7 +56,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .sr input{padding:.7rem 1rem;padding-inline-start:42px;border-radius:999px;background:#0b110f}
 .btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .sm{padding:.45rem .9rem;min-height:40px}
-.av.me{width:40px;height:40px;border:0;cursor:pointer;font-size:15px}
+.av.me{width:40px;height:40px;border:0;cursor:pointer;font-size:15px;padding:0;display:block;line-height:40px;text-align:center}
 .hero{position:relative;padding:26px 0 6px}
 .hp{position:absolute;inset-inline-end:-30px;top:0;width:290px;opacity:.11;stroke:var(--neon);fill:none;stroke-width:1.5;pointer-events:none}
 .hero h1{position:relative;font-size:clamp(40px,10vw,72px);line-height:.95}
@@ -305,7 +305,7 @@ hydrate(document);
 
 let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
 const t=k=>T[lang][k]||k;
-let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,slow=false,analyticsDone=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{},editId=null,rpId=null,platFilter='',mySaves=new Set(),unSaves=()=>{},savedPosts=null,savedMode=false,savesReady=false,reports=[],unRep=()=>{};
+let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,slow=false,analyticsDone=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{},editId=null,rpId=null,platFilter='',mySaves=new Set(),unSaves=()=>{},savedPosts=null,savedMode=false,savesReady=false,avatarMap={},avReq=new Set(),reports=[],unRep=()=>{};
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
 // Turn a Firebase sign-in error into a message that says what to fix
@@ -355,7 +355,7 @@ async function firebaseStore(cfg){
       await F.setDoc(F.doc(fs,'users',u.uid),{handle:u.handle,displayName:p.displayName,bio:p.bio,photo:p.photo||'',...(p.x||{})});
       try{ // keep the photo and name on this person's existing tactics in sync
         const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where('uid','==',u.uid),F.limit(100)));
-        if(!s.empty){const b=F.writeBatch(fs);s.docs.forEach(d=>b.update(d.ref,{photo:p.photo||'',displayName:p.displayName}));await b.commit()}}
+        if(!s.empty){const b=F.writeBatch(fs);s.docs.forEach(d=>b.update(d.ref,{displayName:p.displayName}));await b.commit()}}
       catch(e){console.error(e)}
       await load(auth.currentUser)},
     subscribe(f,n,err,o,flt){ // filters use equality only, so no composite index is needed
@@ -364,6 +364,7 @@ async function firebaseStore(cfg){
       return F.onSnapshot(q,s=>{if(s.empty&&s.metadata.fromCache)return;const l=s.docs.map(mapDoc);if(w.length)l.sort((a,b)=>key==='at'?b.at-a.at:(b[key]||0)-(a[key]||0));f(l)},err)},
     async toggleSave(u,p,on){const r=F.doc(fs,'saves',p.id+'_'+u.uid);on?await F.setDoc(r,{pid:p.id,uid:u.uid,at:F.serverTimestamp()}):await F.deleteDoc(r)},
     subscribeSaves:(uid,f)=>F.onSnapshot(F.query(F.collection(fs,'saves'),F.where('uid','==',uid)),s=>f(new Set(s.docs.map(d=>d.data().pid)))),
+    async getAvatars(hs){const out={};for(let i=0;i<hs.length;i+=30){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','in',hs.slice(i,i+30))));s.docs.forEach(d=>{const x=d.data();out[x.handle]=x.photo||''})}return out},
     async getMany(ids){const out=[];for(let i=0;i<ids.length;i+=10){const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where(F.documentId(),'in',ids.slice(i,i+10))));s.docs.forEach(d=>out.push(mapDoc(d)))}return out},
     byHandle(h,f,err){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.where('handle','==',h),F.limit(60)),s=>f(s.docs.map(mapDoc).sort((a,b)=>b.at-a.at)),err)},
     async profile(h){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','==',h),F.limit(1)));return s.empty?null:s.docs[0].data()},
@@ -412,6 +413,7 @@ function demoStore(){ // demo only: accounts and passwords live in this browser'
     async toggleSave(u,p,on){const v=new Set(get('tk_sv',[]));on?v.add(p.id):v.delete(p.id);set('tk_sv',[...v]);sf(v)},
     subscribeSaves(uid,f){sf=f;f(new Set(get('tk_sv',[])));return()=>{}},
     async getMany(ids){return list().filter(p=>ids.includes(p.id))},
+    async getAvatars(hs){const a=accts(),o={};hs.forEach(h=>{o[h]=(a[h]&&a[h].photo)||''});return o},
     async update(id,p){const {full,uid,...d}=p;set('tk_posts',get('tk_posts',[]).map(x=>x.id===id?{...x,...d}:x));push()},
     async bumpCopy(id){const c=get('tk_cc',{});c[id]=(c[id]||0)+1;set('tk_cc',c);push()},
     async report(u,post,reason){const r=get('tk_rep',[]);r.unshift({id:post.id+'_'+u.uid,pid:post.id,uid:u.uid,reason,handle:post.handle,formation:post.formation,code:post.code,at:Date.now()});set('tk_rep',r);rf(r)},
@@ -432,6 +434,9 @@ function pitch(f){
   const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],w=/Narrow/.test(f)?.7:1,rows=[1,...base.split('-').map(Number)],d=[];
   rows.forEach((n,i)=>{const x=14+i*(132/(rows.length-1));for(let k=0;k<n;k++)d.push(`<circle cx="${x.toFixed(1)}" cy="${(50+((k+1)*100/(n+1)-50)*w).toFixed(1)}" r="4.5" fill="#34d399"/>`)});
   return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="100" fill="#0b1f14"/><g fill="none" stroke="#1fb27a" stroke-opacity=".4"><rect x="4" y="4" width="152" height="92"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="14"/></g>${d.join('')}</svg>`}
+function avOf(p){return me&&me.handle===p.handle?me.photo:(avatarMap[p.handle]!==undefined?avatarMap[p.handle]:p.photo)}
+function ensureAvatars(l){if(!store||!store.getAvatars)return;const need=[...new Set(l.map(p=>p.handle))].filter(h=>!(h in avatarMap)&&!avReq.has(h));if(!need.length)return;need.forEach(h=>avReq.add(h));
+  store.getAvatars(need).then(o=>{need.forEach(h=>{avatarMap[h]=o[h]||''});render()}).catch(()=>need.forEach(h=>avReq.delete(h)))}
 const byId=id=>[...posts,...(userPosts||[]),...(savedPosts||[])].find(x=>x.id===id);
 function render(){
   const src=savedMode?savedPosts:view?userPosts:posts,q=$('q').value.trim().toLowerCase();
@@ -447,7 +452,7 @@ function render(){
   $('grid').innerHTML=(l.length?l.map((p,i)=>`<article class="card${anim?' up':''}" style="${anim?`animation-delay:${Math.min(i,8)*55}ms`:''}">
     <button class="shot" data-img="${esc(p.id)}" aria-label="View">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
     <div class="cb">
-      <div class="ur"><button class="u" data-user="${esc(p.handle)}"><span class="av">${okImg(p.photo)?`<img src="${esc(p.photo)}" alt="">`:esc(p.handle[0].toUpperCase())}</span><span class="ui"><span class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
+      <div class="ur"><button class="u" data-user="${esc(p.handle)}"><span class="av">${okImg(avOf(p))?`<img src="${esc(avOf(p))}" alt="">`:esc(p.handle[0].toUpperCase())}</span><span class="ui"><span class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
         <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span></div>
       ${p.platform||p.note?`<div class="tags">${p.platform?`<span class="tag">${PNAME[p.platform]||''}</span>`:''}${p.note?`<span class="nt">${esc(p.note)}</span>`:''}</div>`:''}
       <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
@@ -457,7 +462,7 @@ function render(){
         ${me&&p.uid===me.uid?`<button class="btn ghost" data-edit="${esc(p.id)}" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>`:''}${me&&p.uid!==me.uid?`<button class="btn ghost" data-report="${esc(p.id)}" aria-label="Report"><i class="fa-solid fa-flag"></i></button>`:''}${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}</div>
     </div></article>`).join('')
   :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t(savedMode?'noSaved':view&&me&&me.handle===view?'noneMine':'noneSub')}</span></div>`)+more;
-  anim=false;
+  ensureAvatars(l);anim=false;
 }
 function renderRail(){
   const L=[...POP];if(fFilter&&!L.includes(fFilter))L.unshift(fFilter);
@@ -582,9 +587,9 @@ $('pDlg').addEventListener('close',()=>{editId=null;$('pForm').reset();setPTitle
 $('rpCancel').onclick=()=>$('rpDlg').close();
 $('rpForm').onsubmit=async e=>{e.preventDefault();const p=byId(rpId);if(!p||!me)return;
   try{await store.report(me,p,$('rpR').value);$('rpDlg').close();toast(t('reported'))}catch(x){console.error(x);$('rpE').textContent=t('failed')}};
-$('prPh').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{prPhoto=await cropSq(f,160,.78);renderPrAv()}catch(x){$('prE').textContent=t('failed')}};
+$('prPh').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{prPhoto=await cropSq(f,320,.88,55000);renderPrAv()}catch(x){$('prE').textContent=t('failed')}};
 $('prPhRm').onclick=()=>{prPhoto=null;$('prPh').value='';renderPrAv()};
-$('prCv').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{prCover=await cropBox(f,900,300,.72);renderPrCv()}catch(x){$('prE').textContent=t('failed')}};
+$('prCv').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{prCover=await cropBox(f,1200,400,.85,230000);renderPrCv()}catch(x){$('prE').textContent=t('failed')}};
 $('prCvRm').onclick=()=>{prCover=null;$('prCv').value='';renderPrCv()};
 $('pCancel').onclick=()=>$('pDlg').close();
 $('prForm').onsubmit=async e=>{e.preventDefault();$('prE').textContent='';
@@ -592,27 +597,30 @@ $('prForm').onsubmit=async e=>{e.preventDefault();$('prE').textContent='';
   try{const had=!!me.handle;await store.saveProfile(me,{handle:h,displayName:$('prN').value.trim(),bio:$('prB').value.trim(),photo:prPhoto,x:profileExtras()});$('prDlg').close();if(!had)$('pDlg').showModal()}
   catch(x){$('prE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}};
 // Compress uploads to a small JPEG data URL (stored directly in Firestore — no Storage plan needed)
-const cropSq=(f,n=160,q=.78)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const m=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=n;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)});   // square, centered, tiny
+const cropSq=(f,n=320,q=.88,max=55000)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const m=Math.min(im.width,im.height);let N=Math.min(n,m),Q=q,out;
+  for(let i=0;i<8;i++){const c=document.createElement('canvas');c.width=c.height=N;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,N,N);out=c.toDataURL('image/jpeg',Q);if(out.length<=max)break;if(Q>.55)Q-=.07;else N=Math.round(N*.85)}ok(out)};im.onerror=no;im.src=URL.createObjectURL(f)});
 let prPhoto=null,prCover=null;
-const cropBox=(f,w,h,q)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.max(w/im.width,h/im.height),sw=w/k,sh=h/k,c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,(im.width-sw)/2,(im.height-sh)/2,sw,sh,0,0,w,h);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)});
+const cropBox=(f,w,h,q,max=230000)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{let W=Math.min(w,im.width),Q=q,out;
+  for(let i=0;i<8;i++){const H=Math.round(W*h/w),k=Math.max(W/im.width,H/im.height),sw=W/k,sh=H/k,c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(im,(im.width-sw)/2,(im.height-sh)/2,sw,sh,0,0,W,H);out=c.toDataURL('image/jpeg',Q);if(out.length<=max)break;if(Q>.55)Q-=.07;else W=Math.round(W*.85)}ok(out)};im.onerror=no;im.src=URL.createObjectURL(f)});
 function renderPrCv(){const has=okImg(prCover);$('prCvImg').classList.toggle('hidden',!has);$('prCvRm').classList.toggle('hidden',!has);if(has)$('prCvImg').src=prCover}
 const cleanH=v=>String(v||'').trim().replace(/^@/,'').replace(/^https?:\/\/[^/]+\/@?/,'').replace(/[^A-Za-z0-9._]/g,'').slice(0,30);
 function profileExtras(){return{pref:$('prPref').value,country:$('prCountry').value,psn:$('prPsn').value.trim().slice(0,32),xbox:$('prXbox').value.trim().slice(0,32),ea:$('prEa').value.trim().slice(0,32),ig:cleanH($('prIg').value),tt:cleanH($('prTt').value),yt:cleanH($('prYt').value),cover:prCover||''}}
 function fillCountries(){const sel=$('prCountry'),cur=sel.value;let dn=null;try{dn=new Intl.DisplayNames([lang],{type:'region'})}catch(e){}
   sel.innerHTML='<option value=""></option>'+COUNTRIES.map(c=>{let n=c;try{n=dn?dn.of(c):c}catch(e){}return`<option value="${c}">${esc(n)}</option>`}).join('');sel.value=cur}
 function renderPrAv(){$('prAv').innerHTML=okImg(prPhoto)?`<img src="${esc(prPhoto)}" alt="">`:esc(((me&&(me.handle||me.displayName))||'?')[0].toUpperCase())}
-const shrink=(f,w=900,q=.72)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,w/im.width),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)});
+const shrink=(f,w=900,q=.72,max=1e9)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{let W=Math.min(w,im.width),Q=q,out;
+  for(let i=0;i<8;i++){const c=document.createElement('canvas');c.width=W;c.height=Math.round(im.height*W/im.width);c.getContext('2d').drawImage(im,0,0,c.width,c.height);out=c.toDataURL('image/jpeg',Q);if(out.length<=max)break;if(Q>.55)Q-=.07;else W=Math.round(W*.85)}ok(out)};im.onerror=no;im.src=URL.createObjectURL(f)});
 $('pForm').onsubmit=async e=>{e.preventDefault();const g=$('pGo');g.disabled=true;$('pE').textContent='';
   try{const f=$('pI').files[0],u=$('pU').value.trim();let img,full;
     if(!editId&&Date.now()-(+localStorage.getItem('tk_last')||0)<30000)throw new Error('wait');
-    if(f){[img,full]=await Promise.all([shrink(f,520,.62),shrink(f,1000,.72)])}else img=u;
+    if(f){[img,full]=await Promise.all([shrink(f,640,.74,120000),shrink(f,1600,.9,860000)])}else img=u;
     if(img&&!/^(data:image\/|https:\/\/)/.test(img))throw new Error('needImg');
     if(!img&&!editId)throw new Error('needImg');
-    if((img||'').length>150000||(full&&full.length>800000))throw new Error('big');
+    if((img||'').length>150000||(full&&full.length>880000))throw new Error('big');
     if(!$('pP').value)throw new Error('needPlat');
     const base={formation:$('pF').value.trim(),code:$('pC').value.trim(),platform:$('pP').value,note:$('pN').value.trim()};
     if(editId)await store.update(editId,{...base,...(img?{img,full}:{}),uid:me.uid});
-    else{await store.add({uid:me.uid,handle:me.handle,displayName:me.displayName,photo:me.photo||'',...base,img,full});try{localStorage.setItem('tk_last',Date.now())}catch(_){}}
+    else{await store.add({uid:me.uid,handle:me.handle,displayName:me.displayName,...base,img,full});try{localStorage.setItem('tk_last',Date.now())}catch(_){}}
     $('pDlg').close();toast(t('done'))}
   catch(x){$('pE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}g.disabled=false};
 for(const [id,v] of [['grant',true],['revoke',false]])$(id).onclick=async()=>{$('adE').textContent='';
