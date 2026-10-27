@@ -128,6 +128,18 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .x2{font-size:1.5rem;line-height:2rem}.x3{font-size:1.875rem;line-height:2.25rem}.xs{font-size:.875rem}.cg{color:var(--gold2)}.cm{color:var(--mute)}
 .sr input[type=search]{-webkit-appearance:none;appearance:none}
 .sr input::-webkit-search-decoration,.sr input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.plats{padding:14px 0 0}.pill{border:1px solid var(--line);background:var(--s1);color:#eef1f6;padding:.4rem 1rem;border-radius:999px;cursor:pointer;font-weight:700;white-space:nowrap;flex:none;font-family:inherit}
+.pill.on{background:var(--neon);color:#04170f;border-color:var(--neon)}
+.tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.tag{border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:12px;font-weight:700;color:var(--gold2)}.nt{font-size:13px;color:var(--mute)}
+.sv.on{color:var(--gold2);border-color:var(--gold2)}.ac .btn{padding:.5rem .75rem}
+.avrow{display:flex;align-items:center;gap:14px}.avrow .av.big{width:68px;height:68px;font-size:26px;box-shadow:none;flex:none}.avc{display:grid;gap:8px;flex:1;min-width:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cvp{width:100%;height:90px;object-fit:cover;border-radius:12px;margin:8px 0}
+.cover{width:100%;height:150px;border-radius:18px;overflow:hidden;background:var(--s2)}.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.pfh.up{margin-top:-44px;padding:0 8px}
+.ids,.socs{display:flex;gap:8px;flex-wrap:wrap}
+.idc{display:inline-flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:7px 12px;cursor:pointer;font-family:inherit;color:#eef1f6}.idc b{color:var(--gold2);font-size:12px}.idc:hover{border-color:var(--neon)}
+.soc{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--s2);border:1px solid var(--line);color:#eef1f6;transition:border-color .15s}.soc:hover{border-color:var(--neon)}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
@@ -148,6 +160,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
     <div id="banner" class="banner hidden"></div>
   </section>
   <section id="profile" class="hidden"></section>
+  <nav id="plats" class="rail plats" aria-label="Platforms"></nav>
   <nav id="rail" class="rail" aria-label="Formations"></nav>
   <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option><option value="copied" data-i="sCop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
@@ -157,9 +170,18 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 <!-- Profile / first-time handle setup -->
 <dialog id="prDlg"><form id="prForm">
   <h2 class="d x3 cg"><i class="fa-solid fa-user-pen"></i> <span data-i="profile"></span></h2>
+  <div class="avrow"><span class="av big" id="prAv"></span><div class="avc"><label class="l" for="prPh"><i class="fa-solid fa-image"></i> <span data-i="photoLbl"></span></label><input id="prPh" type="file" accept="image/*" class="f"><button type="button" id="prPhRm" class="btn ghost sm"><i class="fa-solid fa-trash"></i> <span data-i="rmPhoto"></span></button></div></div>
   <div><label class="l" for="prH"><i class="fa-solid fa-at"></i> <span data-i="handleLbl"></span></label><input id="prH" class="f" dir="ltr" maxlength="16" pattern="[A-Za-z0-9_]{3,16}" placeholder="@username"></div>
   <div><label class="l" for="prN"><i class="fa-solid fa-id-card"></i> <span data-i="nameLbl"></span></label><input id="prN" class="f" maxlength="30"></div>
   <div><label class="l" for="prB"><i class="fa-solid fa-pen"></i> <span data-i="bioLbl"></span></label><input id="prB" class="f" maxlength="100"></div>
+  <div class="two"><div><label class="l" for="prPref"><i class="fa-solid fa-diagram-project"></i> <span data-i="platform"></span></label><select id="prPref" class="f"><option value="" data-i="choose"></option><option value="pc">PC</option><option value="ps">PlayStation</option><option value="xbox">Xbox</option></select></div>
+  <div><label class="l" for="prCountry"><i class="fa-solid fa-globe"></i> <span data-i="country"></span></label><select id="prCountry" class="f"></select></div></div>
+  <div class="two"><div><label class="l" for="prPsn">PSN ID</label><input id="prPsn" class="f" dir="ltr" maxlength="32" autocomplete="off"></div><div><label class="l" for="prXbox">Xbox Gamertag</label><input id="prXbox" class="f" dir="ltr" maxlength="32" autocomplete="off"></div></div>
+  <div><label class="l" for="prEa">EA ID</label><input id="prEa" class="f" dir="ltr" maxlength="32" autocomplete="off"></div>
+  <div><label class="l" for="prIg"><i class="fa-brands fa-instagram"></i> Instagram</label><input id="prIg" class="f" dir="ltr" maxlength="60" placeholder="@username" autocapitalize="none"></div>
+  <div><label class="l" for="prTt"><i class="fa-brands fa-tiktok"></i> TikTok</label><input id="prTt" class="f" dir="ltr" maxlength="60" placeholder="@username" autocapitalize="none"></div>
+  <div><label class="l" for="prYt"><i class="fa-brands fa-youtube"></i> YouTube</label><input id="prYt" class="f" dir="ltr" maxlength="60" placeholder="@channel" autocapitalize="none"></div>
+  <div><label class="l" for="prCv"><i class="fa-solid fa-image"></i> <span data-i="coverLbl"></span></label><input id="prCv" type="file" accept="image/*" class="f"><img id="prCvImg" class="cvp hidden" alt=""><button type="button" id="prCvRm" class="btn ghost sm hidden"><i class="fa-solid fa-trash"></i> <span data-i="rmPhoto"></span></button></div>
   <p class="err" id="prE"></p>
   <div class="fx jb g2"><button type="button" id="outBtn" class="btn ghost"><i class="fa-solid fa-right-from-bracket"></i> <span data-i="signout"></span></button><button class="btn gold" type="submit"><i class="fa-solid fa-floppy-disk"></i> <span data-i="save"></span></button></div>
 </form></dialog>
@@ -168,6 +190,8 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 <dialog id="pDlg"><form id="pForm">
   <h2 class="d x3 cg"><i class="fa-solid fa-futbol"></i> <span id="pTitle" data-i="shareT"></span></h2>
   <div><label class="l" for="pF"><i class="fa-solid fa-diagram-project"></i> <span data-i="formation"></span></label><select id="pF" class="f" dir="ltr" required></select></div>
+  <div><label class="l" for="pP"><i class="fa-solid fa-diagram-project"></i> <span data-i="platform"></span></label><select id="pP" class="f" required><option value="" data-i="choose"></option><option value="pc">PC</option><option value="ps">PlayStation</option><option value="xbox">Xbox</option></select></div>
+  <div><label class="l" for="pN"><i class="fa-solid fa-pen"></i> <span data-i="noteLbl"></span></label><input id="pN" class="f" maxlength="120"></div>
   <div><label class="l" for="pC"><i class="fa-solid fa-key"></i> <span data-i="code"></span></label><input id="pC" class="f" dir="ltr" required maxlength="40" placeholder="e8%&amp;M#k9P" autocomplete="off"></div>
   <div><label class="l" for="pI"><i class="fa-solid fa-image"></i> <span data-i="shot"></span></label><input id="pI" type="file" accept="image/*" class="f"></div>
   <div><label class="l" for="pU"><i class="fa-solid fa-link"></i> <span data-i="orUrl"></span></label><input id="pU" type="url" dir="ltr" class="f" placeholder="https://..."></div>
@@ -225,20 +249,22 @@ const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
   signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',slow:'Slow connection… still loading.',editT:'Edit your tactics',sCop:'Most copied',reportT:'Report this tactic',rWrong:'Wrong or fake code',rSpam:'Spam',rOff:'Offensive',rOther:'Other',send:'Send',reported:'Thanks, we will review it.',reports:'Reports',noRep:'No reports',delT:'Delete tactic',dismiss:'Dismiss',install:'Install app',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',country:'Country',coverLbl:'Cover image',copiedId:'ID copied',photoLbl:'Profile photo',rmPhoto:'Remove photo',platform:'Platform',choose:'Choose…',allP:'All platforms',noteLbl:'Note (optional): play style or tip',saved:'Saved',noSaved:'You have not saved any tactics yet.',needPlat:'Choose a platform',slow:'Slow connection… still loading.',editT:'Edit your tactics',sCop:'Most copied',reportT:'Report this tactic',rWrong:'Wrong or fake code',rSpam:'Spam',rOff:'Offensive',rOther:'Other',send:'Send',reported:'Thanks, we will review it.',reports:'Reports',noRep:'No reports',delT:'Delete tactic',dismiss:'Dismiss',install:'Install app',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
   failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
   signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',slow:'النت بطيء… لسه بيحمّل.',editT:'عدّل تكتيكك',sCop:'الأكثر نسخاً',reportT:'الإبلاغ عن التكتيك',rWrong:'كود غلط أو مزيّف',rSpam:'سبام',rOff:'محتوى مسيء',rOther:'سبب آخر',send:'إرسال',reported:'شكراً، هنراجعه.',reports:'البلاغات',noRep:'مفيش بلاغات',delT:'حذف التكتيك',dismiss:'تجاهل',install:'ثبّت التطبيق',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',country:'الدولة',coverLbl:'صورة الغلاف',copiedId:'تم نسخ الـ ID',photoLbl:'الصورة الشخصية',rmPhoto:'إزالة الصورة',platform:'المنصة',choose:'اختار…',allP:'كل المنصات',noteLbl:'ملاحظة (اختياري): أسلوب اللعب أو نصيحة',saved:'المحفوظات',noSaved:'لسه ما حفظتش أي تكتيك.',needPlat:'اختار المنصة',slow:'النت بطيء… لسه بيحمّل.',editT:'عدّل تكتيكك',sCop:'الأكثر نسخاً',reportT:'الإبلاغ عن التكتيك',rWrong:'كود غلط أو مزيّف',rSpam:'سبام',rOff:'محتوى مسيء',rOther:'سبب آخر',send:'إرسال',reported:'شكراً، هنراجعه.',reports:'البلاغات',noRep:'مفيش بلاغات',delT:'حذف التكتيك',dismiss:'تجاهل',install:'ثبّت التطبيق',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
   failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
 // Every formation in the current game (29), ordered by how often they are used. Add new ones here.
 const FORMATIONS=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-3-3 Holding','4-2-3-1 Wide','4-4-2','4-1-2-1-2 Wide','4-2-3-1','4-3-3 Defend','4-3-2-1','4-1-4-1','4-2-2-2','4-4-2 Holding','4-3-3','4-2-4','4-1-3-2','4-5-1 Flat','4-5-1 Attack','3-5-2','5-2-1-2','3-4-1-2','5-3-2','3-4-2-1','5-2-3','5-4-1','3-4-3','3-1-4-2'];
 const ORD={new:'at',top:'likeCount',copied:'copyCount'};   // server-side sort fields
+const COUNTRIES=['EG','SA','AE','KW','QA','BH','OM','JO','LB','SY','IQ','PS','YE','LY','TN','DZ','MA','SD','MR','SO','DJ','KM','TR','GB','US','CA','FR','DE','ES','IT','NL','BE','SE','NO','DK','CH','AT','PT','GR','RU','BR','AR','MX','AU','IN','PK','ID','MY','JP','KR','NG','ZA'];
+const PNAME={pc:'PC',ps:'PlayStation',xbox:'Xbox'};
 const POP=['4-2-1-3','4-3-1-2','4-4-1-1','4-1-2-1-2 Narrow','4-3-3 Attack','4-2-3-1 Wide','4-4-2'];  // quick chips
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -264,13 +290,13 @@ const ICONS={
  send:'<path d="m22 2-11 11M22 2l-7 20-4-9-9-4z"/>',ban:'<circle cx="12" cy="12" r="10"/><path d="m5 5 14 14"/>',
  sort:'<path d="M3 6h13M3 12h9M3 18h5M18 8v12m0 0-3-3m3 3 3-3"/>',layers:'<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',expand:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
- crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
-const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown',flag:'flag'};
+ crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',ig:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',yt:'<path d="M22 8.5a3 3 0 0 0-2-2C18 6 12 6 12 6s-6 0-8 .5a3 3 0 0 0-2 2C1.5 10.5 1.5 12 1.5 12s0 1.5.5 3.5a3 3 0 0 0 2 2C6 18 12 18 12 18s6 0 8-.5a3 3 0 0 0 2-2c.5-2 .5-3.5.5-3.5s0-1.5-.5-3.5z"/><path d="m10 9 5 3-5 3z"/>',tt:'<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.5 2.5 4 5 4"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
+const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown',flag:'flag',bookmark:'bookmark',instagram:'ig',tiktok:'tt',youtube:'yt'};
 function swapIcon(el){
   const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
   const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
   v.setAttribute('viewBox','0 0 24 24');v.setAttribute('aria-hidden',ti?'false':'true');
-  v.setAttribute('class',['ic','ic-'+key,key==='heart'&&c.includes('fa-solid')?'solid':'',...c.filter(x=>!x.startsWith('fa-'))].join(' '));
+  v.setAttribute('class',['ic','ic-'+key,(key==='heart'||key==='bookmark')&&c.includes('fa-solid')?'solid':'',...c.filter(x=>!x.startsWith('fa-'))].join(' '));
   if(el.getAttribute('style'))v.setAttribute('style',el.getAttribute('style'));
   v.innerHTML=(ti?'<title>'+esc(ti)+'</title>':'')+ICONS[key];el.replaceWith(v)}
 const hydrate=r=>r.querySelectorAll('i[class*="fa-"]').forEach(swapIcon);
@@ -279,7 +305,7 @@ hydrate(document);
 
 let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
 const t=k=>T[lang][k]||k;
-let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,slow=false,analyticsDone=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{},editId=null,rpId=null,reports=[],unRep=()=>{};
+let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,slow=false,analyticsDone=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{},editId=null,rpId=null,platFilter='',mySaves=new Set(),unSaves=()=>{},savedPosts=null,savedMode=false,savesReady=false,reports=[],unRep=()=>{};
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
 // Turn a Firebase sign-in error into a message that says what to fix
@@ -311,7 +337,7 @@ async function firebaseStore(cfg){
     if(busy)return;
     if(!u)return cb(null);
     let d={};try{const s=await F.getDoc(F.doc(fs,'users',u.uid));d=s.exists()?s.data():{}}catch(e){console.error(e);toast(t('ePerm'),7000)}
-    cb({uid:u.uid,photo:null,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',isAdmin:u.email===mail(ADMIN_HANDLE)});
+    cb({uid:u.uid,photo:d.photo||null,handle:d.handle||null,displayName:d.displayName||d.handle||'',bio:d.bio||'',x:d,isAdmin:u.email===mail(ADMIN_HANDLE)});
   }
   return{demo:false,
     analytics(){import(B+'firebase-analytics.js').then(m=>m.getAnalytics(app)).catch(()=>{})},   // loaded late so it never slows the first load
@@ -325,8 +351,20 @@ async function firebaseStore(cfg){
       finally{busy=false}
       await load(auth.currentUser)},
     logout:()=>A.signOut(auth),
-    async saveProfile(u,p){await F.setDoc(F.doc(fs,'users',u.uid),{handle:u.handle,displayName:p.displayName,bio:p.bio});await load(auth.currentUser)},
-    subscribe(f,n,err,o){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy(o||'at','desc'),F.limit(n)),s=>{if(s.empty&&s.metadata.fromCache)return;f(s.docs.map(mapDoc))},err)},
+    async saveProfile(u,p){
+      await F.setDoc(F.doc(fs,'users',u.uid),{handle:u.handle,displayName:p.displayName,bio:p.bio,photo:p.photo||'',...(p.x||{})});
+      try{ // keep the photo and name on this person's existing tactics in sync
+        const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where('uid','==',u.uid),F.limit(100)));
+        if(!s.empty){const b=F.writeBatch(fs);s.docs.forEach(d=>b.update(d.ref,{photo:p.photo||'',displayName:p.displayName}));await b.commit()}}
+      catch(e){console.error(e)}
+      await load(auth.currentUser)},
+    subscribe(f,n,err,o,flt){ // filters use equality only, so no composite index is needed
+      const w=[];if(flt&&flt.formation)w.push(F.where('formation','==',flt.formation));if(flt&&flt.platform)w.push(F.where('platform','==',flt.platform));
+      const key=o||'at',q=w.length?F.query(F.collection(fs,'tactics'),...w,F.limit(60)):F.query(F.collection(fs,'tactics'),F.orderBy(key,'desc'),F.limit(n));
+      return F.onSnapshot(q,s=>{if(s.empty&&s.metadata.fromCache)return;const l=s.docs.map(mapDoc);if(w.length)l.sort((a,b)=>key==='at'?b.at-a.at:(b[key]||0)-(a[key]||0));f(l)},err)},
+    async toggleSave(u,p,on){const r=F.doc(fs,'saves',p.id+'_'+u.uid);on?await F.setDoc(r,{pid:p.id,uid:u.uid,at:F.serverTimestamp()}):await F.deleteDoc(r)},
+    subscribeSaves:(uid,f)=>F.onSnapshot(F.query(F.collection(fs,'saves'),F.where('uid','==',uid)),s=>f(new Set(s.docs.map(d=>d.data().pid)))),
+    async getMany(ids){const out=[];for(let i=0;i<ids.length;i+=10){const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where(F.documentId(),'in',ids.slice(i,i+10))));s.docs.forEach(d=>out.push(mapDoc(d)))}return out},
     byHandle(h,f,err){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.where('handle','==',h),F.limit(60)),s=>f(s.docs.map(mapDoc).sort((a,b)=>b.at-a.at)),err)},
     async profile(h){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','==',h),F.limit(1)));return s.empty?null:s.docs[0].data()},
     async fullImage(id){const s=await F.getDoc(F.doc(fs,'images',id));return s.exists()?s.data().data:null},
@@ -354,23 +392,26 @@ function demoStore(){ // demo only: accounts and passwords live in this browser'
   const seed=[{id:'s1',uid:'x',handle:'proplayer',displayName:'Pro Player',formation:'4-2-3-1',code:'SAMPLE-4231',img:'',likeCount:24,at:Date.now()-36e5},
     {id:'s2',uid:'x',handle:'khaled_fc',displayName:'Khaled',formation:'4-3-3',code:'SAMPLE-433',img:'',likeCount:9,at:Date.now()-9e6},
     {id:'s3',uid:'x',handle:'proplayer',displayName:'Pro Player',formation:'3-5-2',code:'SAMPLE-352',img:'',likeCount:3,at:Date.now()-5e7}];
-  let cb=()=>{},sp=()=>{},sv=()=>{},lk=()=>{},uf=null,uh='',spn=18,ord='at',rf=()=>{};
+  let cb=()=>{},sp=()=>{},sv=()=>{},lk=()=>{},uf=null,uh='',spn=18,ord='at',rf=()=>{},sf=()=>{},dflt={};
   const accts=()=>get('tk_accts',{}),mine=()=>new Set(get('tk_likes',[])),ver=()=>new Set(get('tk_ver',['proplayer']));
   const list=()=>[...get('tk_posts',[]),...seed].map(p=>({...p,likeCount:(p.likeCount||0)+(mine().has(p.id)?1:0),copyCount:(p.copyCount||0)+((get('tk_cc',{})[p.id])||0)})).sort((a,b)=>b.at-a.at);
-  const sorted=()=>{const l=list();return ord==='at'?l:l.sort((a,b)=>(b[ord]||0)-(a[ord]||0))};
+  const sorted=()=>{let l=list().filter(p=>(!dflt.formation||p.formation===dflt.formation)&&(!dflt.platform||p.platform===dflt.platform));return ord==='at'?l:l.sort((a,b)=>(b[ord]||0)-(a[ord]||0))};
   const push=()=>{sp(sorted().slice(0,spn));uf&&uf(list().filter(p=>p.handle===uh))};
   const known=()=>new Set([...list().map(p=>p.handle),...Object.keys(accts())]);
-  const mk=h=>{const a=accts()[h]||{};return{uid:'u_'+h,handle:h,displayName:a.displayName||h,bio:a.bio||'',photo:null,isAdmin:h===ADMIN_HANDLE}};
+  const mk=h=>{const a=accts()[h]||{};return{uid:'u_'+h,handle:h,displayName:a.displayName||h,bio:a.bio||'',photo:a.photo||null,x:(({pw,...r})=>r)(a),isAdmin:h===ADMIN_HANDLE}};
   return{demo:true,
     onAuth(f){cb=f;const h=get('tk_cur',null);f(h?mk(h):null)},
     async signUp(h,pw){if(known().has(h))throw new Error('taken');const a=accts();a[h]={pw,displayName:h,bio:''};set('tk_accts',a);set('tk_cur',h);cb(mk(h))},
     async signIn(h,pw){const a=accts()[h];if(!a||a.pw!==pw)throw new Error('cred');set('tk_cur',h);cb(mk(h))},
     async logout(){localStorage.removeItem('tk_cur');cb(null)},
-    async saveProfile(u,p){const a=accts();a[u.handle]={...(a[u.handle]||{}),displayName:p.displayName,bio:p.bio};set('tk_accts',a);cb(mk(u.handle))},
-    subscribe(f,n,err,o){sp=f;spn=n||18;ord=o||'at';f(sorted().slice(0,spn));return()=>{}},
+    async saveProfile(u,p){const a=accts();a[u.handle]={...(a[u.handle]||{}),displayName:p.displayName,bio:p.bio,photo:p.photo||'',...(p.x||{})};set('tk_accts',a);set('tk_posts',get('tk_posts',[]).map(x=>x.handle===u.handle?{...x,photo:p.photo||'',displayName:p.displayName}:x));cb(mk(u.handle));push()},
+    subscribe(f,n,err,o,flt){sp=f;spn=n||18;ord=o||'at';dflt=flt||{};f(sorted().slice(0,spn));return()=>{}},
     byHandle(h,f){uf=f;uh=h;f(list().filter(p=>p.handle===h));return()=>{uf=null}},
-    async profile(h){const a=accts()[h];if(a)return{displayName:a.displayName,bio:a.bio};const q=seed.find(x=>x.handle===h);return q?{displayName:q.displayName,bio:''}:null},
+    async profile(h){const a=accts()[h];if(a){const {pw,...r}=a;return r}const q=seed.find(x=>x.handle===h);return q?{displayName:q.displayName,bio:''}:null},
     async fullImage(){return null},
+    async toggleSave(u,p,on){const v=new Set(get('tk_sv',[]));on?v.add(p.id):v.delete(p.id);set('tk_sv',[...v]);sf(v)},
+    subscribeSaves(uid,f){sf=f;f(new Set(get('tk_sv',[])));return()=>{}},
+    async getMany(ids){return list().filter(p=>ids.includes(p.id))},
     async update(id,p){const {full,uid,...d}=p;set('tk_posts',get('tk_posts',[]).map(x=>x.id===id?{...x,...d}:x));push()},
     async bumpCopy(id){const c=get('tk_cc',{});c[id]=(c[id]||0)+1;set('tk_cc',c);push()},
     async report(u,post,reason){const r=get('tk_rep',[]);r.unshift({id:post.id+'_'+u.uid,pid:post.id,uid:u.uid,reason,handle:post.handle,formation:post.formation,code:post.code,at:Date.now()});set('tk_rep',r);rf(r)},
@@ -391,29 +432,31 @@ function pitch(f){
   const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],w=/Narrow/.test(f)?.7:1,rows=[1,...base.split('-').map(Number)],d=[];
   rows.forEach((n,i)=>{const x=14+i*(132/(rows.length-1));for(let k=0;k<n;k++)d.push(`<circle cx="${x.toFixed(1)}" cy="${(50+((k+1)*100/(n+1)-50)*w).toFixed(1)}" r="4.5" fill="#34d399"/>`)});
   return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="100" fill="#0b1f14"/><g fill="none" stroke="#1fb27a" stroke-opacity=".4"><rect x="4" y="4" width="152" height="92"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="14"/></g>${d.join('')}</svg>`}
-const byId=id=>[...posts,...(userPosts||[])].find(x=>x.id===id);
+const byId=id=>[...posts,...(userPosts||[]),...(savedPosts||[])].find(x=>x.id===id);
 function render(){
-  const src=view?userPosts:posts,q=$('q').value.trim().toLowerCase();
-  let l=(src||[]).filter(p=>view||!fFilter||p.formation===fFilter);
-  if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase()].some(s=>s.includes(q)));
+  const src=savedMode?savedPosts:view?userPosts:posts,q=$('q').value.trim().toLowerCase();
+  let l=(src||[]).filter(p=>view||savedMode||((!fFilter||p.formation===fFilter)&&(!platFilter||p.platform===platFilter)));
+  if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase(),(p.note||'').toLowerCase()].some(s=>s.includes(q)));
   const so=$('sort').value;if(so!=='new'){const k=so==='top'?'likeCount':'copyCount';l=[...l].sort((a,b)=>(b[k]||0)-(a[k]||0))}
   
   $('count').textContent=`${l.length} ${t('nTac')}`;
-  if(view)renderProfile();
-  if(src===null||(!view&&!loaded)){
+  if(savedMode)renderSavedHeader();else if(view)renderProfile();
+  if(src===null||(!view&&!savedMode&&!loaded)){
     $('grid').innerHTML=loadErr?`<div class="empty"><i class="fa-solid fa-ban"></i><b class="d">${t('eConn')}</b><span>${t('eConnSub')}</span><button class="btn neon" id="retry">${t('retry')}</button></div>`:'<div class="sk"></div>'.repeat(4)+(slow?`<p class="dn" style="grid-column:1/-1;text-align:center">${t('slow')}</p>`:'');return}
-  const more=!view&&posts.length>=feedLimit&&!q&&!fFilter?`<div class="more"><button class="btn ghost" id="moreFeed">${t('loadMore')}</button></div>`:'';
+  const more=!view&&!savedMode&&posts.length>=feedLimit&&!q&&!fFilter&&!platFilter?`<div class="more"><button class="btn ghost" id="moreFeed">${t('loadMore')}</button></div>`:'';
   $('grid').innerHTML=(l.length?l.map((p,i)=>`<article class="card${anim?' up':''}" style="${anim?`animation-delay:${Math.min(i,8)*55}ms`:''}">
     <button class="shot" data-img="${esc(p.id)}" aria-label="View">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
     <div class="cb">
-      <div class="ur"><button class="u" data-user="${esc(p.handle)}"><span class="av">${esc(p.handle[0].toUpperCase())}</span><span class="ui"><span class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
+      <div class="ur"><button class="u" data-user="${esc(p.handle)}"><span class="av">${okImg(p.photo)?`<img src="${esc(p.photo)}" alt="">`:esc(p.handle[0].toUpperCase())}</span><span class="ui"><span class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
         <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span></div>
+      ${p.platform||p.note?`<div class="tags">${p.platform?`<span class="tag">${PNAME[p.platform]||''}</span>`:''}${p.note?`<span class="nt">${esc(p.note)}</span>`:''}</div>`:''}
       <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
       <div class="ac"><button class="btn neon cp" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}${p.copyCount?` · ${p.copyCount}`:''}</button>
         <button class="btn ghost lk ${myLikes.has(p.id)?'on':''}" data-like="${esc(p.id)}" aria-pressed="${myLikes.has(p.id)}" aria-label="Like"><i class="fa-${myLikes.has(p.id)?'solid':'regular'} fa-heart"></i> ${p.likeCount||0}</button>
+        <button class="btn ghost sv ${mySaves.has(p.id)?'on':''}" data-save="${esc(p.id)}" aria-pressed="${mySaves.has(p.id)}" aria-label="Save"><i class="fa-${mySaves.has(p.id)?'solid':'regular'} fa-bookmark"></i></button>
         ${me&&p.uid===me.uid?`<button class="btn ghost" data-edit="${esc(p.id)}" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>`:''}${me&&p.uid!==me.uid?`<button class="btn ghost" data-report="${esc(p.id)}" aria-label="Report"><i class="fa-solid fa-flag"></i></button>`:''}${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}</div>
     </div></article>`).join('')
-  :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t(view&&me&&me.handle===view?'noneMine':'noneSub')}</span></div>`)+more;
+  :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t(savedMode?'noSaved':view&&me&&me.handle===view?'noneMine':'noneSub')}</span></div>`)+more;
   anim=false;
 }
 function renderRail(){
@@ -433,29 +476,44 @@ function openAuth(m){setMode(m);$('aDlg').showModal();$('aU').focus()}
 function renderAuth(){
   if(!authReady){$('auth').innerHTML='<span class="sk-av"></span>';return}
   $('auth').innerHTML=me?`${me.isAdmin?`<button class="btn gold sm" id="adBtn" title="${t('admin')}"><i class="fa-solid fa-crown"></i><span class="lb">${t('admin')}</span>${reports.length?`<b class="bdg">${reports.length}</b>`:''}</button>`:''}
+    <button class="btn ghost sm" id="savedBtn" aria-label="${t('saved')}"><i class="fa-solid fa-bookmark"></i><span class="lb">${t('saved')}</span></button>
     <button class="btn gold sm hm" id="newBtn"><i class="fa-solid fa-plus"></i><span class="lb">${t('share')}</span></button>
     <button class="av me" id="meBtn" aria-label="${t('profile')}">${me.photo?`<img src="${esc(me.photo)}" alt="">`:esc((me.handle||me.displayName||'?')[0].toUpperCase())}</button>`
     :`<button class="btn gold sm" id="inBtn"><i class="fa-solid fa-user-pen"></i><span>${t('signinS')}</span></button>`}
 // ---- Profile pages: #/u/<handle> shows that creator and all of their tactics (works with refresh + back button) ----
 function renderProfile(){
   if(!view)return;
-  const i=profInfo||{},own=me&&me.handle===view,l=userPosts||[],likes=l.reduce((a,p)=>a+(p.likeCount||0),0);
+  const i=profInfo||{},own=me&&me.handle===view,l=userPosts||[],likes=l.reduce((a,p)=>a+(p.likeCount||0),0),cv=okImg(i.cover);
+  let dn=null;try{dn=new Intl.DisplayNames([lang],{type:'region'})}catch(e){}
+  let cn='';try{cn=i.country&&dn?dn.of(i.country):''}catch(e){}
+  const ids=[['PSN',i.psn],['Xbox',i.xbox],['EA',i.ea]].filter(a=>a[1]),
+    soc=[['instagram','https://www.instagram.com/',i.ig,'Instagram'],['tiktok','https://www.tiktok.com/@',i.tt,'TikTok'],['youtube','https://www.youtube.com/@',i.yt,'YouTube']].filter(a=>a[2]),
+    tags=[i.pref?PNAME[i.pref]:'',cn].filter(Boolean);
   $('profile').innerHTML=`<div class="pf"><button class="btn ghost sm" data-back><i class="fa-solid fa-xmark"></i> ${t('back')}</button>
-   <div class="pfh"><span class="av big">${esc(view[0].toUpperCase())}</span><div class="ui"><div class="pfn d">@${esc(view)}${verified.has(view)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</div>${i.displayName&&i.displayName!==view?`<div class="dn">${esc(i.displayName)}</div>`:''}</div></div>
+   ${cv?`<div class="cover"><img src="${esc(i.cover)}" alt=""></div>`:''}
+   <div class="pfh${cv?' up':''}"><span class="av big">${okImg(i.photo)?`<img src="${esc(i.photo)}" alt="">`:esc(view[0].toUpperCase())}</span><div class="ui"><div class="pfn d">@${esc(view)}${verified.has(view)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</div>${i.displayName&&i.displayName!==view?`<div class="dn">${esc(i.displayName)}</div>`:''}</div></div>
    ${i.bio?`<p class="sub">${esc(i.bio)}</p>`:''}
+   ${tags.length?`<div class="tags">${tags.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>`:''}
+   ${ids.length?`<div class="ids">${ids.map(a=>`<button class="idc" data-cid="${esc(a[1])}"><b>${a[0]}</b><span dir="ltr">${esc(a[1])}</span><i class="fa-regular fa-copy"></i></button>`).join('')}</div>`:''}
+   ${soc.length?`<div class="socs">${soc.map(a=>`<a class="soc" href="${a[1]}${encodeURIComponent(a[2])}" target="_blank" rel="noopener noreferrer" aria-label="${a[3]}"><i class="fa-brands fa-${a[0]}"></i></a>`).join('')}</div>`:''}
    <div class="stats"><div class="stat"><b>${l.length}</b><span>${t('sTac')}</span></div><div class="stat"><b>${likes}</b><span>${t('likes')}</span></div></div>
    ${own?`<div class="ac"><button class="btn gold" id="editPf"><i class="fa-solid fa-pen"></i> ${t('edit')}</button><button class="btn ghost" data-out><i class="fa-solid fa-right-from-bracket"></i> ${t('signout')}</button></div>`:''}</div>`}
 function route(){
-  const m=location.hash.match(/^#\/u\/([A-Za-z0-9_]{3,16})$/);view=m?m[1].toLowerCase():'';
+  const m=location.hash.match(/^#\/u\/([A-Za-z0-9_]{3,16})$/);view=m?m[1].toLowerCase():'';savedMode=location.hash==='#/saved';savedPosts=null;
   unUser();unUser=()=>{};userPosts=null;profInfo=null;
   document.title=view?'@'+view+' · Tashkeelti':'Tashkeelti | تشكيلتي';
-  $('hero').classList.toggle('hidden',!!view);$('rail').classList.toggle('hidden',!!view);$('profile').classList.toggle('hidden',!view);
+  const sp=!!(view||savedMode);$('hero').classList.toggle('hidden',sp);$('rail').classList.toggle('hidden',sp);$('plats').classList.toggle('hidden',sp);$('profile').classList.toggle('hidden',!sp);
+  if(savedMode&&(me&&savesReady))loadSaved();else if(savedMode&&authReady&&!me)savedPosts=[];
   if(view&&store){const h=view;
     unUser=store.byHandle(h,l=>{userPosts=l;render()},e=>{console.error(e);loadErr=true;render()})||(()=>{});
     store.profile(h).then(i=>{if(view===h){profInfo=i||{};renderProfile()}}).catch(()=>{if(view===h){profInfo={};renderProfile()}})}
   scrollTo(0,0);render()}
-function cacheFeed(l){if($('sort').value!=='new'||feedLimit>18)return;try{const j=JSON.stringify({posts:l.slice(0,12)});if(j.length<1500000)localStorage.setItem('tk_feed',j)}catch(e){}}
-function startFeed(){unFeed();unFeed=store.subscribe(l=>{posts=l;loaded=true;loadErr=false;slow=false;cacheFeed(l);render();if(!analyticsDone&&store.analytics){analyticsDone=true;setTimeout(()=>store.analytics(),3000)}},feedLimit,e=>{console.error(e);loadErr=true;render()},ORD[$('sort').value]||'at')||(()=>{})}
+function cacheFeed(l){if($('sort').value!=='new'||feedLimit>18||fFilter||platFilter)return;try{const j=JSON.stringify({posts:l.slice(0,12)});if(j.length<1500000)localStorage.setItem('tk_feed',j)}catch(e){}}
+function renderSavedHeader(){$('profile').innerHTML=`<div class="pf"><button class="btn ghost sm" data-back><i class="fa-solid fa-xmark"></i> ${t('back')}</button><div class="pfn d"><i class="fa-solid fa-bookmark"></i>&nbsp;${t('saved')}</div></div>`}
+async function loadSaved(){if(!savedMode||!store)return;const ids=[...mySaves];
+  try{const l=ids.length?await store.getMany(ids):[];if(savedMode){savedPosts=l.sort((a,b)=>b.at-a.at);render()}}catch(e){console.error(e);if(savedMode){savedPosts=[];render()}}}
+function renderPlats(){$('plats').innerHTML=['','pc','ps','xbox'].map(k=>`<button class="pill ${k===platFilter?'on':''}" data-p="${k}">${k?PNAME[k]:t('allP')}</button>`).join('')}
+function startFeed(r){unFeed();if(r){loaded=false;render()}unFeed=store.subscribe(l=>{posts=l;loaded=true;loadErr=false;slow=false;cacheFeed(l);render();if(!analyticsDone&&store.analytics){analyticsDone=true;setTimeout(()=>store.analytics(),3000)}},feedLimit,e=>{console.error(e);loadErr=true;render()},ORD[$('sort').value]||'at',{formation:fFilter,platform:platFilter})||(()=>{})}
 async function refreshStats(){try{statsN=await store.stats();render()}catch(e){}}
 function bump(id){ // +1 copy per person per tactic per day (signed-in users only)
   if(!me||!store.bumpCopy)return;let c={};try{c=JSON.parse(localStorage.getItem('tk_cp')||'{}')}catch(e){}
@@ -464,7 +522,7 @@ function bump(id){ // +1 copy per person per tactic per day (signed-in users onl
 function setPTitle(){$('pTitle').dataset.i=editId?'editT':'shareT';$('pTitle').textContent=t(editId?'editT':'shareT');$('pBtnT').dataset.i=editId?'save':'publish';$('pBtnT').textContent=t(editId?'save':'publish')}
 function openEdit(id){const p=byId(id);if(!p)return;editId=id;
   if(![...$('pF').options].some(o=>o.value===p.formation))$('pF').add(new Option(p.formation,p.formation));
-  $('pF').value=p.formation;$('pC').value=p.code;$('pI').value='';$('pU').value='';setPTitle();$('pDlg').showModal()}
+  $('pF').value=p.formation;$('pC').value=p.code;$('pP').value=p.platform||'';$('pN').value=p.note||'';$('pI').value='';$('pU').value='';setPTitle();$('pDlg').showModal()}
 function openReport(id){if(!me)return openAuth('in');rpId=id;$('rpE').textContent='';$('rpDlg').showModal()}
 function renderReports(){const el=$('rpList');if(!el)return;
   el.innerHTML=reports.length?reports.map(r=>`<div class="rp"><div><b dir="ltr">@${esc(r.handle)}</b> · ${esc(r.formation)} · <span dir="ltr">${esc(r.code)}</span><br><span class="dn">${esc(r.reason)}</span></div><div class="ac"><button class="btn ghost sm" data-rdel="${esc(r.id)}" data-pid="${esc(r.pid)}"><i class="fa-solid fa-trash"></i> ${t('delT')}</button><button class="btn ghost sm" data-rdis="${esc(r.id)}"><i class="fa-solid fa-xmark"></i> ${t('dismiss')}</button></div></div>`).join(''):`<p class="dn">${t('noRep')}</p>`}
@@ -474,30 +532,36 @@ function applyLang(){ // swap text + flip page direction (RTL for Arabic)
   document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
   $('langBtn').innerHTML='<i class="fa-solid fa-globe"></i> '+(lang==='ar'?'EN':'عربي');
   if(store&&store.demo){$('banner').textContent=t('demo')}
-  setMode(authMode);renderAuth();renderRail();render()}
+  setMode(authMode);renderAuth();renderRail();renderPlats();fillCountries();render()}
 
 /* ---------------- Events ---------------- */
-const openProfile=()=>{$('prH').value=me.handle||'';$('prH').disabled=!!me.handle;$('prH').required=!me.handle;$('prN').value=me.displayName;$('prB').value=me.bio;$('prE').textContent='';$('prDlg').showModal()};
+const openProfile=()=>{$('prH').value=me.handle||'';$('prH').disabled=!!me.handle;$('prH').required=!me.handle;$('prN').value=me.displayName;$('prB').value=me.bio;$('prE').textContent='';prPhoto=me.photo||null;$('prPh').value='';renderPrAv();
+  const x=me.x||{};fillCountries();$('prPref').value=x.pref||'';$('prCountry').value=x.country||'';$('prPsn').value=x.psn||'';$('prXbox').value=x.xbox||'';$('prEa').value=x.ea||'';$('prIg').value=x.ig||'';$('prTt').value=x.tt||'';$('prYt').value=x.yt||'';prCover=x.cover||null;$('prCv').value='';renderPrCv();
+  $('prDlg').showModal()};
 document.addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;if(!store&&b.id!=='langBtn'&&b.id!=='retry'&&b.dataset.copy===undefined&&b.dataset.img===undefined)return;
   if(b.id==='langBtn'){lang=lang==='ar'?'en':'ar';applyLang()}
   else if(b.id==='inBtn')openAuth('in');
   else if(b.dataset.mode)setMode(b.dataset.mode);
   else if(b.id==='moreFeed'){feedLimit+=18;startFeed()}
+  else if(b.closest('#plats')){platFilter=b.dataset.p;anim=true;renderPlats();startFeed(true)}
+  else if(b.id==='savedBtn')location.hash='#/saved';
   else if(b.id==='retry')location.reload();
   else if(b.id==='editPf')openProfile();
   else if(b.dataset.back!==undefined)location.hash='';
   else if(b.id==='moreBtn'){renderSheet();$('fDlg').showModal()}
   else if(b.id==='fClose')$('fDlg').close();
-  else if(b.dataset.ft!==undefined){fFilter=b.dataset.ft;anim=true;$('fDlg').close();renderRail();render();scrollTo({top:0,behavior:'smooth'})}
+  else if(b.dataset.ft!==undefined){fFilter=b.dataset.ft;anim=true;$('fDlg').close();renderRail();startFeed(true);scrollTo({top:0,behavior:'smooth'})}
   else if(b.id==='meBtn'){me.handle?location.hash='#/u/'+me.handle:openProfile()}
   else if(b.id==='outBtn'||b.dataset.out!==undefined){$('prDlg').close();location.hash='';store.logout()}   // sign out immediately, no confirmation
   else if(b.id==='newBtn'||b.id==='fab'){if(!me)return openAuth('up');if(me.handle)$('pDlg').showModal()}
   else if(b.id==='adBtn'){$('adE').textContent='';renderReports();$('adDlg').showModal()}
-  else if(b.closest('#rail')){fFilter=b.dataset.f;anim=true;renderRail();render()}
+  else if(b.closest('#rail')){fFilter=b.dataset.f;anim=true;renderRail();startFeed(true)}
   else if(b.dataset.user)location.hash='#/u/'+b.dataset.user;
   else if(b.dataset.copy){const p=byId(b.dataset.copy),ok=await copy(p.code),old=b.innerHTML;b.textContent=ok?t('copied'):t('failed');setTimeout(()=>b.innerHTML=old,1500);if(ok){navigator.vibrate&&navigator.vibrate(18);toast(t('copyDone'));bump(p.id)}}
   else if(b.dataset.like){if(!me)return toast(t('loginLike'));const p=byId(b.dataset.like);try{await store.toggleLike(me,p,!myLikes.has(p.id))}catch(x){toast(t('failed'))}}
+  else if(b.dataset.cid!==undefined){copy(b.dataset.cid).then(()=>toast(t('copiedId')))}
+  else if(b.dataset.save){if(!me)return openAuth('in');const p=byId(b.dataset.save);if(p)store.toggleSave(me,p,!mySaves.has(p.id)).catch(()=>toast(t('failed')))}
   else if(b.dataset.edit)openEdit(b.dataset.edit);
   else if(b.dataset.report)openReport(b.dataset.report);
   else if(b.dataset.rdel){store.remove(b.dataset.pid).then(()=>store.dismissReport(b.dataset.rdel)).catch(()=>toast(t('failed')))}
@@ -506,7 +570,7 @@ document.addEventListener('click',async e=>{
   else if(b.dataset.img){const p=byId(b.dataset.img);if(p&&okImg(p.img)){const im=$('big').querySelector('img');im.src=p.img;$('big').showModal();
     (store?store.fullImage(p.id):Promise.resolve(null)).then(d=>{if(d&&okImg(d)&&$('big').open)im.src=d}).catch(()=>{})}}  // thumbnail first, sharp version loads on demand
 });
-$('big').onclick=()=>$('big').close();$('fDlg').addEventListener('click',e=>{if(e.target===$('fDlg'))$('fDlg').close()});$('q').oninput=render;$('sort').onchange=()=>{view?render():startFeed()};$('aForm').onsubmit=async e=>{e.preventDefault();$('aE').textContent='';
+$('big').onclick=()=>$('big').close();$('fDlg').addEventListener('click',e=>{if(e.target===$('fDlg'))$('fDlg').close()});$('q').oninput=render;$('sort').onchange=()=>{(view||savedMode)?render():startFeed(true)};$('aForm').onsubmit=async e=>{e.preventDefault();$('aE').textContent='';
   const h=$('aU').value.trim().replace(/^@/,'').toLowerCase(),pw=$('aP').value;
   if(!/^[a-z0-9_]{3,16}$/.test(h)){$('aE').textContent=t('bad');return}
   if(pw.length<6){$('aE').textContent=t('ePw');return}
@@ -518,12 +582,25 @@ $('pDlg').addEventListener('close',()=>{editId=null;$('pForm').reset();setPTitle
 $('rpCancel').onclick=()=>$('rpDlg').close();
 $('rpForm').onsubmit=async e=>{e.preventDefault();const p=byId(rpId);if(!p||!me)return;
   try{await store.report(me,p,$('rpR').value);$('rpDlg').close();toast(t('reported'))}catch(x){console.error(x);$('rpE').textContent=t('failed')}};
+$('prPh').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{prPhoto=await cropSq(f,160,.78);renderPrAv()}catch(x){$('prE').textContent=t('failed')}};
+$('prPhRm').onclick=()=>{prPhoto=null;$('prPh').value='';renderPrAv()};
+$('prCv').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{prCover=await cropBox(f,900,300,.72);renderPrCv()}catch(x){$('prE').textContent=t('failed')}};
+$('prCvRm').onclick=()=>{prCover=null;$('prCv').value='';renderPrCv()};
 $('pCancel').onclick=()=>$('pDlg').close();
 $('prForm').onsubmit=async e=>{e.preventDefault();$('prE').textContent='';
   const h=$('prH').value.replace(/^@/,'');if(!me.handle&&!/^[A-Za-z0-9_]{3,16}$/.test(h)){$('prE').textContent=t('bad');return}
-  try{const had=!!me.handle;await store.saveProfile(me,{handle:h,displayName:$('prN').value.trim(),bio:$('prB').value.trim()});$('prDlg').close();if(!had)$('pDlg').showModal()}
+  try{const had=!!me.handle;await store.saveProfile(me,{handle:h,displayName:$('prN').value.trim(),bio:$('prB').value.trim(),photo:prPhoto,x:profileExtras()});$('prDlg').close();if(!had)$('pDlg').showModal()}
   catch(x){$('prE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}};
 // Compress uploads to a small JPEG data URL (stored directly in Firestore — no Storage plan needed)
+const cropSq=(f,n=160,q=.78)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const m=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=n;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)});   // square, centered, tiny
+let prPhoto=null,prCover=null;
+const cropBox=(f,w,h,q)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.max(w/im.width,h/im.height),sw=w/k,sh=h/k,c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,(im.width-sw)/2,(im.height-sh)/2,sw,sh,0,0,w,h);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)});
+function renderPrCv(){const has=okImg(prCover);$('prCvImg').classList.toggle('hidden',!has);$('prCvRm').classList.toggle('hidden',!has);if(has)$('prCvImg').src=prCover}
+const cleanH=v=>String(v||'').trim().replace(/^@/,'').replace(/^https?:\/\/[^/]+\/@?/,'').replace(/[^A-Za-z0-9._]/g,'').slice(0,30);
+function profileExtras(){return{pref:$('prPref').value,country:$('prCountry').value,psn:$('prPsn').value.trim().slice(0,32),xbox:$('prXbox').value.trim().slice(0,32),ea:$('prEa').value.trim().slice(0,32),ig:cleanH($('prIg').value),tt:cleanH($('prTt').value),yt:cleanH($('prYt').value),cover:prCover||''}}
+function fillCountries(){const sel=$('prCountry'),cur=sel.value;let dn=null;try{dn=new Intl.DisplayNames([lang],{type:'region'})}catch(e){}
+  sel.innerHTML='<option value=""></option>'+COUNTRIES.map(c=>{let n=c;try{n=dn?dn.of(c):c}catch(e){}return`<option value="${c}">${esc(n)}</option>`}).join('');sel.value=cur}
+function renderPrAv(){$('prAv').innerHTML=okImg(prPhoto)?`<img src="${esc(prPhoto)}" alt="">`:esc(((me&&(me.handle||me.displayName))||'?')[0].toUpperCase())}
 const shrink=(f,w=900,q=.72)=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,w/im.width),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)});
 $('pForm').onsubmit=async e=>{e.preventDefault();const g=$('pGo');g.disabled=true;$('pE').textContent='';
   try{const f=$('pI').files[0],u=$('pU').value.trim();let img,full;
@@ -532,9 +609,10 @@ $('pForm').onsubmit=async e=>{e.preventDefault();const g=$('pGo');g.disabled=tru
     if(img&&!/^(data:image\/|https:\/\/)/.test(img))throw new Error('needImg');
     if(!img&&!editId)throw new Error('needImg');
     if((img||'').length>150000||(full&&full.length>800000))throw new Error('big');
-    const base={formation:$('pF').value.trim(),code:$('pC').value.trim()};
+    if(!$('pP').value)throw new Error('needPlat');
+    const base={formation:$('pF').value.trim(),code:$('pC').value.trim(),platform:$('pP').value,note:$('pN').value.trim()};
     if(editId)await store.update(editId,{...base,...(img?{img,full}:{}),uid:me.uid});
-    else{await store.add({uid:me.uid,handle:me.handle,displayName:me.displayName,...base,img,full});try{localStorage.setItem('tk_last',Date.now())}catch(_){}}
+    else{await store.add({uid:me.uid,handle:me.handle,displayName:me.displayName,photo:me.photo||'',...base,img,full});try{localStorage.setItem('tk_last',Date.now())}catch(_){}}
     $('pDlg').close();toast(t('done'))}
   catch(x){$('pE').textContent=t(x.message)==x.message?t('failed'):t(x.message)}g.disabled=false};
 for(const [id,v] of [['grant',true],['revoke',false]])$(id).onclick=async()=>{$('adE').textContent='';
@@ -556,6 +634,8 @@ route();applyLang();   // paint the page immediately — never wait for the netw
   applyLang();
   store.onAuth(u=>{authReady=true;me=u;unLikes();myLikes=new Set();unLikes=u?(store.subscribeLikes(u.uid,s=>{myLikes=s;render()})||(()=>{})):()=>{};
     unRep();reports=[];unRep=u&&u.isAdmin&&store.subscribeReports?(store.subscribeReports(l=>{reports=l;renderAuth();renderReports()})||(()=>{})):()=>{};
+    unSaves();mySaves=new Set();savesReady=false;if(!u&&savedMode)savedPosts=[];
+    unSaves=u?(store.subscribeSaves(u.uid,v=>{mySaves=v;savesReady=true;render();if(savedMode)loadSaved()})||(()=>{})):()=>{};
     renderAuth();render()});
   startFeed();store.subscribeVerified(s=>{verified=s;render()});route();
   setTimeout(()=>{if(!loaded){slow=true;render()}},6000);
