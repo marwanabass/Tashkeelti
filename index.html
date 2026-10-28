@@ -329,7 +329,7 @@ hydrate(document);
 
 let lang=localStorage.getItem('tk_lang')||((navigator.language||'').startsWith('ar')?'ar':'en');
 const t=k=>T[lang][k]||k;
-let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,slow=false,analyticsDone=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{},editId=null,rpId=null,platFilter='',mySaves=new Set(),unSaves=()=>{},savedPosts=null,savedMode=false,savesReady=false,avatarMap={},avReq=new Set(),challenge=null,chalEntries=[],lastWinner=null,leaders=[],unEnt=()=>{},profWins=0,profF='',luckyPost=null,cardPost=null,reports=[],unRep=()=>{};
+let store,me=null,posts=[],verified=new Set(),fFilter='',myLikes=new Set(),unLikes=()=>{},loaded=false,anim=true,view='',userPosts=null,profInfo=null,loadErr=false,slow=false,analyticsDone=false,authReady=false,statsN=null,feedLimit=18,unFeed=()=>{},unUser=()=>{},editId=null,rpId=null,platFilter='',mySaves=new Set(),unSaves=()=>{},savedPosts=null,savedMode=false,savesReady=false,avatarMap={},avReq=new Set(),challenge=null,chalEntries=[],lastWinner=null,leaders=[],unEnt=()=>{},profWins=0,profF='',profP='',lastGrid='',luckyPost=null,cardPost=null,reports=[],unRep=()=>{};
 
 const toast=(m,ms=2200)=>{const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)};
 // Turn a Firebase sign-in error into a message that says what to fix
@@ -402,10 +402,10 @@ async function firebaseStore(cfg){
     async topTactics(){const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.orderBy('likeCount','desc'),F.limit(60)));return s.docs.map(mapDoc)},
     async tacticsOf(h){const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where('handle','==',h),F.limit(30)));return s.docs.map(mapDoc)},
     async syncPhoto(u,mini){try{const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where('uid','==',u.uid),F.limit(100)));const b=F.writeBatch(fs);let n=0;s.docs.forEach(d=>{if(d.data().photo!==mini){b.update(d.ref,{photo:mini});n++}});if(n)await b.commit()}catch(e){console.error(e)}},
-    async getAvatars(hs){const out={};for(let i=0;i<hs.length;i+=30){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','in',hs.slice(i,i+30))));s.docs.forEach(d=>{const x=d.data();out[x.handle]=x.photo||''})}return out},
+    async getAvatars(hs){const out={};for(let i=0;i<hs.length;i+=30){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','in',hs.slice(i,i+30))));s.docs.forEach(d=>{const x=d.data();if(x.photo||!(x.handle in out))out[x.handle]=x.photo||''})}return out},   // if a handle has duplicate user docs, keep the one with a photo
     async getMany(ids){const out=[];for(let i=0;i<ids.length;i+=10){const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where(F.documentId(),'in',ids.slice(i,i+10))));s.docs.forEach(d=>out.push(mapDoc(d)))}return out},
     byHandle(h,f,err){return F.onSnapshot(F.query(F.collection(fs,'tactics'),F.where('handle','==',h),F.limit(60)),s=>f(s.docs.map(mapDoc).sort((a,b)=>b.at-a.at)),err)},
-    async profile(h){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','==',h),F.limit(1)));return s.empty?null:s.docs[0].data()},
+    async profile(h){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','==',h),F.limit(5)));if(s.empty)return null;return (s.docs.find(d=>d.data().photo)||s.docs[0]).data()},
     async fullImage(id){const s=await F.getDoc(F.doc(fs,'images',id));return s.exists()?s.data().data:null},
     async stats(){try{const [a,b]=await Promise.all([F.getCountFromServer(F.collection(fs,'tactics')),F.getCountFromServer(F.collection(fs,'handles'))]);return{t:a.data().count,c:b.data().count}}catch(e){return null}},
     subscribeVerified(f){F.onSnapshot(F.query(F.collection(fs,'handles'),F.where('isVerified','==',true)),s=>f(new Set(s.docs.map(d=>d.id))))},
@@ -481,13 +481,13 @@ function pitch(f){
   const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],w=/Narrow/.test(f)?.7:1,rows=[1,...base.split('-').map(Number)],d=[];
   rows.forEach((n,i)=>{const x=14+i*(132/(rows.length-1));for(let k=0;k<n;k++)d.push(`<circle cx="${x.toFixed(1)}" cy="${(50+((k+1)*100/(n+1)-50)*w).toFixed(1)}" r="4.5" fill="#34d399"/>`)});
   return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="100" fill="#0b1f14"/><g fill="none" stroke="#1fb27a" stroke-opacity=".4"><rect x="4" y="4" width="152" height="92"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="14"/></g>${d.join('')}</svg>`}
-function avOf(p){return me&&me.handle===p.handle?me.photo:(avatarMap[p.handle]!==undefined?avatarMap[p.handle]:p.photo)}
+function avOf(p){if(me&&me.handle===p.handle&&me.photo)return me.photo;return avatarMap[p.handle]||p.photo}   // empty result never overrides a photo we already have
 function ensureAvatars(l){if(!store||!store.getAvatars)return;const need=[...new Set(l.map(p=>p.handle))].filter(h=>!(h in avatarMap)&&!avReq.has(h));if(!need.length)return;need.forEach(h=>avReq.add(h));
   store.getAvatars(need).then(o=>{need.forEach(h=>{avatarMap[h]=o[h]||''});render()}).catch(()=>need.forEach(h=>avReq.delete(h)))}
 const byId=id=>[...posts,...(userPosts||[]),...(savedPosts||[]),...(luckyPost?[luckyPost]:[])].find(x=>x.id===id);
 function render(){
   const src=savedMode?savedPosts:view?userPosts:posts,q=$('q').value.trim().toLowerCase();
-  let l=(src||[]).filter(p=>view?(!profF||p.formation===profF):savedMode||((!fFilter||p.formation===fFilter)&&(!platFilter||p.platform===platFilter)));
+  let l=(src||[]).filter(p=>view?((!profF||p.formation===profF)&&(!profP||p.platform===profP)):savedMode||((!fFilter||p.formation===fFilter)&&(!platFilter||p.platform===platFilter)));
   if(q)l=l.filter(p=>q[0]==='@'?p.handle.includes(q.slice(1)):[p.formation.toLowerCase(),p.handle,(p.displayName||'').toLowerCase(),(p.code||'').toLowerCase(),(p.note||'').toLowerCase()].some(s=>s.includes(q)));
   const so=$('sort').value;if(so!=='new'){const k=so==='top'?'likeCount':'copyCount';l=[...l].sort((a,b)=>(b[k]||0)-(a[k]||0))}
   const cnt={};if(view&&!profF){l.forEach(p=>cnt[p.formation]=(cnt[p.formation]||0)+1);l=[...l].sort((a,b)=>cnt[b.formation]-cnt[a.formation]||a.formation.localeCompare(b.formation))}   // profile: grouped by formation
@@ -496,9 +496,10 @@ function render(){
   if(savedMode)renderSavedHeader();else if(view)renderProfile();
   renderFeat();
   if(src===null||(!view&&!savedMode&&!loaded)){
+    lastGrid='';
     $('grid').innerHTML=loadErr?`<div class="empty"><i class="fa-solid fa-ban"></i><b class="d">${t('eConn')}</b><span>${t('eConnSub')}</span><button class="btn neon" id="retry">${t('retry')}</button></div>`:'<div class="sk"></div>'.repeat(4)+(slow?`<p class="dn" style="grid-column:1/-1;text-align:center">${t('slow')}</p>`:'');return}
   const more=!view&&!savedMode&&posts.length>=feedLimit&&!q&&!fFilter&&!platFilter?`<div class="more"><button class="btn ghost" id="moreFeed">${t('loadMore')}</button></div>`:'';
-  $('grid').innerHTML=(l.length?l.map((p,i)=>((view&&!profF&&(i===0||l[i-1].formation!==p.formation))?`<h3 class="gh d" style="grid-column:1/-1">${esc(p.formation)} · ${cnt[p.formation]}</h3>`:'')+`<article class="card${anim?' up':''}" style="${anim?`animation-delay:${Math.min(i,8)*55}ms`:''}">
+  const gh=(l.length?l.map((p,i)=>((view&&!profF&&(i===0||l[i-1].formation!==p.formation))?`<h3 class="gh d" style="grid-column:1/-1">${esc(p.formation)} · ${cnt[p.formation]}</h3>`:'')+`<article class="card${anim?' up':''}" style="${anim?`animation-delay:${Math.min(i,8)*55}ms`:''}">
     <button class="shot" data-img="${esc(p.id)}" aria-label="View">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
     <button class="cardbtn" data-card="${esc(p.id)}" aria-label="Share card"><i class="fa-solid fa-share-nodes"></i></button>
     <div class="cb">
@@ -512,6 +513,7 @@ function render(){
         ${me&&p.uid===me.uid?`<button class="btn ghost" data-edit="${esc(p.id)}" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>`:''}${me&&p.uid!==me.uid?`<button class="btn ghost" data-report="${esc(p.id)}" aria-label="Report"><i class="fa-solid fa-flag"></i></button>`:''}${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}</div>
     </div></article>`).join('')
   :`<div class="empty"><i class="fa-solid fa-futbol"></i><b class="d">${t('none')}</b><span>${t(savedMode?'noSaved':view&&me&&me.handle===view?'noneMine':'noneSub')}</span></div>`)+more;
+  if(gh!==lastGrid){$('grid').innerHTML=gh;lastGrid=gh}
   ensureAvatars(l);anim=false;
 }
 function renderRail(){
@@ -545,6 +547,8 @@ function renderProfile(){
     soc=[['instagram','https://www.instagram.com/',i.ig,'Instagram'],['tiktok','https://www.tiktok.com/@',i.tt,'TikTok'],['youtube','https://www.youtube.com/@',i.yt,'YouTube']].filter(a=>a[2]),
     tags=[i.pref?PNAME[i.pref]:'',cn].filter(Boolean);
   const fc={};l.forEach(p=>fc[p.formation]=(fc[p.formation]||0)+1);
+  const pc={};l.forEach(p=>{if(p.platform)pc[p.platform]=(pc[p.platform]||0)+1});
+  const pchips=Object.keys(pc).length>1?`<div class="rail pfc"><button class="pill ${profP?'':'on'}" data-pp="">${t('allP')}</button>${Object.keys(pc).map(k=>`<button class="pill ${k===profP?'on':''}" data-pp="${k}">${PNAME[k]} · ${pc[k]}</button>`).join('')}</div>`:'';
   const chips=Object.keys(fc).length>1?`<div class="rail pfc"><button class="chip d ${profF?'':'on'}" data-pf="">${t('all')} · ${l.length}</button>${Object.keys(fc).sort((a,b)=>fc[b]-fc[a]).map(f=>`<button class="chip d ${f===profF?'on':''}" data-pf="${esc(f)}">${esc(f)} · ${fc[f]}</button>`).join('')}</div>`:'';
   $('profile').innerHTML=`<div class="pf"><button class="btn ghost sm" data-back><i class="fa-solid fa-xmark"></i> ${t('back')}</button>
    ${cv?`<div class="cover"><img src="${esc(i.cover)}" alt=""></div>`:''}
@@ -554,12 +558,13 @@ function renderProfile(){
    ${ids.length?`<div class="ids">${ids.map(a=>`<button class="idc" data-cid="${esc(a[1])}"><b>${a[0]}</b><span dir="ltr">${esc(a[1])}</span><i class="fa-regular fa-copy"></i></button>`).join('')}</div>`:''}
    ${soc.length?`<div class="socs">${soc.map(a=>`<a class="soc" href="${a[1]}${encodeURIComponent(a[2])}" target="_blank" rel="noopener noreferrer" aria-label="${a[3]}"><i class="fa-brands fa-${a[0]}"></i></a>`).join('')}</div>`:''}
    ${profWins?`<div class="tags"><span class="tag"><i class="fa-solid fa-trophy"></i> ${t('wins')} × ${profWins}</span></div>`:''}
+   ${pchips}
    ${chips}
    <div class="stats"><div class="stat"><b>${l.length}</b><span>${t('sTac')}</span></div><div class="stat"><b>${likes}</b><span>${t('likes')}</span></div></div>
    ${own?`<div class="ac"><button class="btn gold" id="editPf"><i class="fa-solid fa-pen"></i> ${t('edit')}</button><button class="btn ghost" data-out><i class="fa-solid fa-right-from-bracket"></i> ${t('signout')}</button></div>`:''}</div>`}
 function route(){
   const m=location.hash.match(/^#\/u\/([A-Za-z0-9_]{3,16})$/);view=m?m[1].toLowerCase():'';savedMode=location.hash==='#/saved';savedPosts=null;
-  unUser();unUser=()=>{};userPosts=null;profInfo=null;profWins=0;profF='';
+  unUser();unUser=()=>{};userPosts=null;profInfo=null;profWins=0;profF='';profP='';
   document.title=view?'@'+view+' · Tashkeelti':'Tashkeelti | تشكيلتي';
   const sp=!!(view||savedMode);$('hero').classList.toggle('hidden',sp);$('rail').classList.toggle('hidden',sp);$('plats').classList.toggle('hidden',sp);$('profile').classList.toggle('hidden',!sp);
   if(savedMode&&(me&&savesReady))loadSaved();else if(savedMode&&authReady&&!me)savedPosts=[];
@@ -679,6 +684,7 @@ document.addEventListener('click',async e=>{
   else if(b.dataset.wcopy!==undefined){copy(b.dataset.wcopy).then(()=>toast(t('copyDone')))}
   else if(b.dataset.card){cardPost=byId(b.dataset.card);if(cardPost){$('cardDlg').showModal();drawCard(cardPost)}}
   else if(b.dataset.pf!==undefined){profF=b.dataset.pf;anim=true;render()}
+  else if(b.dataset.pp!==undefined){profP=b.dataset.pp;anim=true;render()}
   else if(b.dataset.copy){const p=byId(b.dataset.copy),ok=await copy(p.code),old=b.innerHTML;b.textContent=ok?t('copied'):t('failed');setTimeout(()=>b.innerHTML=old,1500);if(ok){navigator.vibrate&&navigator.vibrate(18);toast(t('copyDone'));bump(p.id)}}
   else if(b.dataset.like){if(!me)return toast(t('loginLike'));const p=byId(b.dataset.like);try{await store.toggleLike(me,p,!myLikes.has(p.id))}catch(x){toast(t('failed'))}}
   else if(b.dataset.cid!==undefined){copy(b.dataset.cid).then(()=>toast(t('copiedId')))}
