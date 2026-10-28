@@ -72,9 +72,10 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 0 14px;color:var(--mute);font-size:14px}
 .sortb{display:flex;align-items:center;gap:8px}.sortb select{width:auto;min-width:130px;padding:.45rem .8rem}
 #grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));padding-bottom:120px}
-.card{border-radius:22px;background:linear-gradient(180deg,#101a16,#0a100e);border:1px solid var(--line);overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
-.card.up{animation:up .55s cubic-bezier(.2,.7,.2,1) both}
-.card:hover{transform:translateY(-3px);border-color:rgba(52,211,153,.4);box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.card{border-radius:22px;background:linear-gradient(180deg,#101a16,#0a100e);border:1px solid var(--line);overflow:hidden;transition:transform .18s ease-out,border-color .25s,box-shadow .25s}
+.card.up{animation:up .55s cubic-bezier(.2,.7,.2,1) backwards}
+.card::before{content:"";position:absolute;inset:0;z-index:4;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.17),rgba(185,243,217,.06) 35%,transparent 60%),linear-gradient(115deg,transparent 35%,rgba(255,255,255,.07) 48%,transparent 60%)}
+@media(hover:hover) and (pointer:fine){.card{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));will-change:transform}.card:hover{transform:perspective(1000px) translateY(-5px) scale(1.012) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));border-color:rgba(52,211,153,.5);box-shadow:0 24px 50px rgba(0,0,0,.55),0 0 40px rgba(52,211,153,.12)}.card:hover::before{opacity:1}}
 .shot{position:relative;display:block;width:100%;aspect-ratio:16/11;background:#07130d;border:0;padding:0;cursor:zoom-in;overflow:hidden}
 .shot>img,.shot>svg{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .5s}
 .card:hover .shot>img{transform:scale(1.04)}
@@ -94,7 +95,14 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .ac{display:flex;gap:8px}.ac .cp{flex:1}
 .empty{grid-column:1/-1;text-align:center;padding:56px 12px;border:1px dashed var(--line);border-radius:20px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:8px}
 .empty .ic{font-size:34px}.empty b{color:#fff;font-size:30px}
-.sk{height:330px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(100deg,#0d1311 30%,#16211c 50%,#0d1311 70%);background-size:200% 100%;animation:sh 1.3s linear infinite}
+.sk{border-radius:22px;border:1px solid var(--line);background:linear-gradient(180deg,#101a16,#0a100e);overflow:hidden;position:relative;display:flex;flex-direction:column;gap:12px;padding-bottom:16px}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(185,243,217,.07) 45%,rgba(255,255,255,.1) 50%,rgba(185,243,217,.07) 55%,transparent 70%);transform:translateX(-100%);animation:sweep 1.5s ease-in-out infinite}
+.ski{aspect-ratio:16/11;background:radial-gradient(circle at 50% 50%,rgba(52,211,153,.12),transparent 60%),#0b1a13;position:relative}
+.ski::before{content:"";position:absolute;inset:18% 12%;border:2px solid rgba(185,243,217,.1);border-radius:10px}
+.ski::after{content:"";position:absolute;left:50%;top:18%;bottom:18%;width:2px;background:rgba(185,243,217,.1)}
+.skb{display:flex;align-items:center;gap:10px;padding:0 16px}.ska{width:40px;height:40px;border-radius:50%;background:#16241d}.skl{height:12px;width:40%;border-radius:8px;background:#16241d}
+.skt{height:46px;margin:0 16px;border-radius:14px;background:#0f1a15;border:1px dashed #1d2d26}.skt.s{height:44px;border:0;background:#133324}
+@keyframes sweep{to{transform:translateX(100%)}}
 .fab{position:fixed;z-index:15;inset-inline-end:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;font-size:22px;color:#04170f;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 12px 30px rgba(31,178,122,.4);transition:transform .2s}
 .fab:hover{transform:scale(1.07)}.fab:active{transform:scale(.95)}
 #fDlg{width:min(720px,96vw)}
@@ -110,7 +118,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 @media(max-width:559px){.lb{display:none}}
 @media(max-width:759px){.hm{display:none}}
 @media(min-width:760px){.sr{order:1;flex:1 1 360px;max-width:520px;margin-inline:auto}.sp{display:none}.fab{display:none}}
-@media(prefers-reduced-motion:reduce){.card.up,.sk{animation:none}}
+@media(prefers-reduced-motion:reduce){.card.up,.sk,.sk::after{animation:none}.card{transform:none!important}.card::before{display:none}}
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
 .tab{border:0;background:none;color:var(--mute);padding:.65rem;border-radius:10px;font:700 1rem Cairo,sans-serif;cursor:pointer;transition:all .15s}
 .tab.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f}
@@ -155,12 +163,32 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 .spin{font-size:64px;text-align:center;color:var(--neon);padding:26px 0}
 .lres{display:grid;gap:12px;text-align:center}.lres .big{font-size:56px;color:var(--neon);line-height:1}.lres .tags{justify-content:center}
 .lk2{margin-top:14px;position:relative}
+::selection{background:rgba(52,211,153,.35);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:#27382f transparent}
+.btn:active,.pill:active,.chip:active{transform:scale(.97)}
+dialog[open]{animation:dlg .28s cubic-bezier(.2,.8,.2,1)}@keyframes dlg{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#toast{background:rgba(13,19,17,.94);color:#eef1f6;border:1px solid rgba(52,211,153,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 12px 36px rgba(0,0,0,.5)}
+.rail{-webkit-mask-image:linear-gradient(to right,transparent,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent,#000 14px,#000 calc(100% - 28px),transparent)}
+.brand{display:flex;align-items:center;gap:8px;order:0;text-decoration:none;color:inherit}
+.mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04170f;display:grid;place-items:center;font-size:24px;line-height:1;box-shadow:0 6px 18px rgba(31,178,122,.35);flex:none}
+@media(max-width:420px){.brand .mark{display:none}}
+.foot{border-top:1px solid var(--line);margin-top:26px;padding:26px 16px 110px;display:grid;gap:16px;justify-items:center;text-align:center}
+.fbrand{display:flex;align-items:center;gap:10px}.fsoc{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.fmail{color:var(--mute);font-size:14px;direction:ltr;text-decoration:none}.fmail:hover{color:var(--gold2)}
+.snd{background:var(--s2);border:1px solid var(--line);border-radius:12px;color:#eef1f6;padding:8px 14px;cursor:pointer;font-family:inherit;display:inline-flex;gap:8px;align-items:center}.snd:hover{border-color:var(--neon)}
+.btn.ok{background:linear-gradient(135deg,#fff3c4,#f5c542)!important;color:#3a2a00!important;box-shadow:0 0 28px rgba(245,197,66,.55)!important}
+.ckv{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;width:1.25em;height:1.25em;animation:spinIn .65s cubic-bezier(.2,.9,.25,1) both}
+.ckv path{stroke-dasharray:26;stroke-dashoffset:26;animation:draw .45s .2s ease-out forwards}
+@keyframes spinIn{from{transform:rotate(-300deg) scale(.1);opacity:0}to{transform:none;opacity:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.cvs{box-shadow:0 0 60px rgba(52,211,153,.22)}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
 
 <header class="topbar"><div class="wrap hd">
-  <div class="logo d">Tashkeelti</div><span class="sp"></span>
+  <a class="brand" href="#" aria-label="Tashkeelti"><span class="mark d">T</span><span class="logo d">Tashkeelti</span></a><span class="sp"></span>
   <button id="langBtn" class="btn ghost sm" aria-label="Language"></button>
   <span id="auth"></span>
   <label class="sr"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" class="f" data-ph="search" aria-label="Search"></label>
@@ -179,9 +207,10 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
   <section id="profile" class="hidden"></section>
   <nav id="plats" class="rail plats" aria-label="Platforms"></nav>
   <nav id="rail" class="rail" aria-label="Formations"></nav>
-  <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option><option value="copied" data-i="sCop"></option></select></label></div>
+  <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
 </main>
+<footer class="foot wrap"><div class="fbrand"><span class="mark d">T</span><b class="d logo">Tashkeelti</b></div><div class="fsoc" id="fsoc"></div><a class="fmail" href="mailto:tashkeelti@gmail.com">tashkeelti@gmail.com</a><button class="snd" id="sndBtn" aria-pressed="true"></button></footer>
 <button id="fab" class="fab" aria-label="Share tactics"><i class="fa-solid fa-plus"></i></button>
 
 <!-- Profile / first-time handle setup -->
@@ -273,14 +302,14 @@ const T={
  en:{h1:'Copy the tactics.',h2:'Win the match.',sub:'Tactic codes shared by real players. Pick a formation, copy the code, play.',search:'Search formation, @creator or code',all:'All',
   signin:'Sign in with Google',signout:'Sign out',share:'Share tactics',shareT:'Share your tactics',profile:'Your profile',handleLbl:'Your @username (cannot be changed)',nameLbl:'Display name',bioLbl:'Short bio',
   save:'Save',formation:'Formation',code:'Tactics share code',shot:'Tactics / instructions screenshot (upload)',orUrl:'…or paste an image URL',cancel:'Cancel',publish:'Publish',
-  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',totw:'Tactic of the Week',weekly:'Weekly challenge',ended:'Ended',dd:'d',hh:'h',noEntries:'No entries yet. Be the first!',enter:'Enter the challenge',enterChal:'Enter this week’s challenge',topC:'Top creators',chTitle:'Challenge title, e.g. Best attacking 3-5-2',chStart:'Start (7 days)',chClose:'Close & award winner',winnerIs:'Winner:',noWinner:'No entries. Challenge closed.',noChal:'No active challenge',lucky:'Try your luck',luckyNone:'No tactics yet.',spin:'Spin again',cardT:'Share card',dl:'Download',shareB:'Share',wins:'Tactic of the Week',close:'Close',profileB:'Profile',country:'Country',coverLbl:'Cover image',copiedId:'ID copied',photoLbl:'Profile photo',rmPhoto:'Remove photo',platform:'Platform',choose:'Choose…',allP:'All platforms',noteLbl:'Note (optional): play style or tip',saved:'Saved',noSaved:'You have not saved any tactics yet.',needPlat:'Choose a platform',slow:'Slow connection… still loading.',editT:'Edit your tactics',sCop:'Most copied',reportT:'Report this tactic',rWrong:'Wrong or fake code',rSpam:'Spam',rOff:'Offensive',rOther:'Other',send:'Send',reported:'Thanks, we will review it.',reports:'Reports',noRep:'No reports',delT:'Delete tactic',dismiss:'Dismiss',install:'Install app',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
+  copy:'Copy code',sNew:'Newest',sTop:'Most liked',loginLike:'Sign in to like',sndOn:'Sound on',sndOff:'Sound off',totw:'Tactic of the Week',weekly:'Weekly challenge',ended:'Ended',dd:'d',hh:'h',noEntries:'No entries yet. Be the first!',enter:'Enter the challenge',enterChal:'Enter this week’s challenge',topC:'Top creators',chTitle:'Challenge title, e.g. Best attacking 3-5-2',chStart:'Start (7 days)',chClose:'Close & award winner',winnerIs:'Winner:',noWinner:'No entries. Challenge closed.',noChal:'No active challenge',lucky:'Try your luck',luckyNone:'No tactics yet.',spin:'Spin again',cardT:'Share card',dl:'Download',shareB:'Share',wins:'Tactic of the Week',close:'Close',profileB:'Profile',country:'Country',coverLbl:'Cover image',copiedId:'ID copied',photoLbl:'Profile photo',rmPhoto:'Remove photo',platform:'Platform',choose:'Choose…',allP:'All platforms',noteLbl:'Note (optional): play style or tip',saved:'Saved',noSaved:'You have not saved any tactics yet.',needPlat:'Choose a platform',slow:'Slow connection… still loading.',editT:'Edit your tactics',sCop:'Most copied',reportT:'Report this tactic',rWrong:'Wrong or fake code',rSpam:'Spam',rOff:'Offensive',rOther:'Other',send:'Send',reported:'Thanks, we will review it.',reports:'Reports',noRep:'No reports',delT:'Delete tactic',dismiss:'Dismiss',install:'Install app',back:'Back',likes:'Likes',edit:'Edit profile',noneMine:'You have not shared any tactics yet.',loadMore:'Load more',retry:'Retry',eConn:'Could not load tactics',eConnSub:'Check your connection and try again.',offline:'You are offline',online:'Back online',wait:'Please wait a few seconds before posting again.',signup:'Sign up',userLbl:'Username',passLbl:'Password (6+ characters)',eCred:'Wrong username or password.',ePw:'Password must be at least 6 characters.',eMany:'Too many attempts. Try again in a few minutes.',noRecover:'There is no password recovery, so remember your password.',sTac:'Tactics',sCre:'Creators',sFor:'Formations',allF:'All formations',defs:'at the back',signinS:'Sign in',nTac:'tactics',eDomain:'This domain is not authorized in Firebase: Authentication → Settings → Authorized domains.',eOff:'Email/Password sign-in is not enabled: Firebase → Authentication → Sign-in method → Email/Password.',eKey:'The apiKey in FIREBASE_CONFIG is not valid.',eEnv:'Open the page from http://localhost or your hosted site, not directly as a file.',eClosed:'The sign-in window was closed.',ePerm:'Signed in, but Firestore blocked reading your profile. Publish firestore.rules.',copied:'Copied',copyDone:'Tactics code copied',none:'No tactics found',noneSub:'Try another formation or share the first one.',
   admin:'Admin panel',adminHint:'Type a handle to give or remove the blue verified badge.',grant:'Grant badge',revoke:'Revoke',done:'Updated',
   taken:'That handle is taken',nouser:'No user with that handle',bad:'Use 3–16 letters, numbers or _',needImg:'Add a screenshot or an https image URL',big:'Image too large, use a smaller one',
   failed:'Something went wrong',demo:'Demo mode: data stays in this browser. Add your Firebase config to go live. Tip: sign up as “maroo” to try the admin panel.',verified:'Verified creator',del:'Delete this post?',out:'Sign out?'},
  ar:{h1:'انسخ التكتيك.',h2:'اكسب المباراة.',sub:'أكواد تكتيكات من لاعبين حقيقيين. اختر الخطة وانسخ الكود والعب.',search:'ابحث بالخطة أو @اليوزر أو الكود',all:'الكل',
   signin:'الدخول بحساب Google',signout:'تسجيل الخروج',share:'شارك تكتيك',shareT:'شارك تكتيكك',profile:'ملفك الشخصي',handleLbl:'اسم المستخدم @ (لا يمكن تغييره لاحقاً)',nameLbl:'الاسم المعروض',bioLbl:'نبذة قصيرة',
   save:'حفظ',formation:'الخطة',code:'كود التكتيك',shot:'صورة التكتيك والتعليمات (رفع)',orUrl:'…أو الصق رابط الصورة',cancel:'إلغاء',publish:'نشر',
-  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',totw:'تكتيك الأسبوع',weekly:'تحدي الأسبوع',ended:'انتهى',dd:'ي',hh:'س',noEntries:'لسه مفيش مشاركات. كن أول واحد!',enter:'شارك في التحدي',enterChal:'شارك في تحدي الأسبوع',topC:'أفضل الصنّاع',chTitle:'عنوان التحدي، مثال: أفضل تكتيك هجومي لخطة 3-5-2',chStart:'ابدأ (7 أيام)',chClose:'اقفل وأعلن الفائز',winnerIs:'الفائز:',noWinner:'مفيش مشاركات. التحدي اتقفل.',noChal:'مفيش تحدي شغال',lucky:'جرّب حظك',luckyNone:'مفيش تكتيكات لسه.',spin:'لفّ تاني',cardT:'كارت المشاركة',dl:'تحميل',shareB:'مشاركة',wins:'تكتيك الأسبوع',close:'إغلاق',profileB:'الملف',country:'الدولة',coverLbl:'صورة الغلاف',copiedId:'تم نسخ الـ ID',photoLbl:'الصورة الشخصية',rmPhoto:'إزالة الصورة',platform:'المنصة',choose:'اختار…',allP:'كل المنصات',noteLbl:'ملاحظة (اختياري): أسلوب اللعب أو نصيحة',saved:'المحفوظات',noSaved:'لسه ما حفظتش أي تكتيك.',needPlat:'اختار المنصة',slow:'النت بطيء… لسه بيحمّل.',editT:'عدّل تكتيكك',sCop:'الأكثر نسخاً',reportT:'الإبلاغ عن التكتيك',rWrong:'كود غلط أو مزيّف',rSpam:'سبام',rOff:'محتوى مسيء',rOther:'سبب آخر',send:'إرسال',reported:'شكراً، هنراجعه.',reports:'البلاغات',noRep:'مفيش بلاغات',delT:'حذف التكتيك',dismiss:'تجاهل',install:'ثبّت التطبيق',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
+  copy:'نسخ الكود',sNew:'الأحدث',sTop:'الأكثر إعجاباً',loginLike:'سجّل الدخول للإعجاب',sndOn:'الصوت شغّال',sndOff:'الصوت مقفول',totw:'تكتيك الأسبوع',weekly:'تحدي الأسبوع',ended:'انتهى',dd:'ي',hh:'س',noEntries:'لسه مفيش مشاركات. كن أول واحد!',enter:'شارك في التحدي',enterChal:'شارك في تحدي الأسبوع',topC:'أفضل الصنّاع',chTitle:'عنوان التحدي، مثال: أفضل تكتيك هجومي لخطة 3-5-2',chStart:'ابدأ (7 أيام)',chClose:'اقفل وأعلن الفائز',winnerIs:'الفائز:',noWinner:'مفيش مشاركات. التحدي اتقفل.',noChal:'مفيش تحدي شغال',lucky:'جرّب حظك',luckyNone:'مفيش تكتيكات لسه.',spin:'لفّ تاني',cardT:'كارت المشاركة',dl:'تحميل',shareB:'مشاركة',wins:'تكتيك الأسبوع',close:'إغلاق',profileB:'الملف',country:'الدولة',coverLbl:'صورة الغلاف',copiedId:'تم نسخ الـ ID',photoLbl:'الصورة الشخصية',rmPhoto:'إزالة الصورة',platform:'المنصة',choose:'اختار…',allP:'كل المنصات',noteLbl:'ملاحظة (اختياري): أسلوب اللعب أو نصيحة',saved:'المحفوظات',noSaved:'لسه ما حفظتش أي تكتيك.',needPlat:'اختار المنصة',slow:'النت بطيء… لسه بيحمّل.',editT:'عدّل تكتيكك',sCop:'الأكثر نسخاً',reportT:'الإبلاغ عن التكتيك',rWrong:'كود غلط أو مزيّف',rSpam:'سبام',rOff:'محتوى مسيء',rOther:'سبب آخر',send:'إرسال',reported:'شكراً، هنراجعه.',reports:'البلاغات',noRep:'مفيش بلاغات',delT:'حذف التكتيك',dismiss:'تجاهل',install:'ثبّت التطبيق',back:'رجوع',likes:'إعجابات',edit:'تعديل الملف',noneMine:'لسه ما شاركتش أي تكتيك.',loadMore:'عرض المزيد',retry:'إعادة المحاولة',eConn:'تعذّر تحميل التكتيكات',eConnSub:'تأكد من الاتصال وحاول تاني.',offline:'انت أوفلاين',online:'رجع الاتصال',wait:'استنى ثواني قبل ما تنشر تاني.',signup:'إنشاء حساب',userLbl:'اسم المستخدم',passLbl:'كلمة المرور (6 أحرف أو أكثر)',eCred:'اسم المستخدم أو كلمة المرور غلط.',ePw:'كلمة المرور لازم تكون 6 أحرف على الأقل.',eMany:'محاولات كتير. جرّب بعد دقائق.',noRecover:'مفيش استرجاع لكلمة المرور، فاحفظها كويس.',sTac:'تكتيك',sCre:'صانع محتوى',sFor:'خطة',allF:'كل الخطط',defs:'مدافعين',signinS:'دخول',nTac:'تكتيك',eDomain:'الدومين ده مش مضاف في Firebase: Authentication ← Settings ← Authorized domains.',eOff:'تسجيل Email/Password مش مفعّل: Firebase ← Authentication ← Sign-in method ← Email/Password.',eKey:'الـ apiKey في FIREBASE_CONFIG غير صحيح.',eEnv:'افتح الصفحة من http://localhost أو من موقعك المستضاف، مش كملف مباشر.',eClosed:'نافذة تسجيل الدخول اتقفلت.',ePerm:'اتسجل الدخول لكن Firestore منع قراءة ملفك. انشر ملف firestore.rules.',copied:'تم النسخ',copyDone:'تم نسخ كود التكتيك',none:'مفيش تكتيكات',noneSub:'جرّب خطة تانية أو شارك أول تكتيك.',
   admin:'لوحة الأدمن',adminHint:'اكتب اليوزر لمنح أو سحب علامة التوثيق الزرقاء.',grant:'منح الشارة',revoke:'سحب الشارة',done:'تم التحديث',
   taken:'اسم المستخدم محجوز',nouser:'مفيش مستخدم بالاسم ده',bad:'من 3 إلى 16 حرف أو رقم أو _',needImg:'أضف صورة أو رابط صورة https',big:'الصورة كبيرة، استخدم صورة أصغر',
   failed:'حصل خطأ',demo:'وضع تجريبي: البيانات محفوظة في متصفحك فقط. أضف إعدادات Firebase للتشغيل الحقيقي. جرّب إنشاء حساب باسم maroo للوحة الأدمن.',verified:'صانع محتوى موثّق',del:'حذف المنشور؟',out:'تسجيل الخروج؟'}};
@@ -314,8 +343,8 @@ const ICONS={
  send:'<path d="m22 2-11 11M22 2l-7 20-4-9-9-4z"/>',ban:'<circle cx="12" cy="12" r="10"/><path d="m5 5 14 14"/>',
  sort:'<path d="M3 6h13M3 12h9M3 18h5M18 8v12m0 0-3-3m3 3 3-3"/>',layers:'<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',expand:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
- crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/>',dice:'<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1"/><circle cx="15.5" cy="8.5" r="1"/><circle cx="8.5" cy="15.5" r="1"/><circle cx="15.5" cy="15.5" r="1"/><circle cx="12" cy="12" r="1"/>',ig:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',yt:'<path d="M22 8.5a3 3 0 0 0-2-2C18 6 12 6 12 6s-6 0-8 .5a3 3 0 0 0-2 2C1.5 10.5 1.5 12 1.5 12s0 1.5.5 3.5a3 3 0 0 0 2 2C6 18 12 18 12 18s6 0 8-.5a3 3 0 0 0 2-2c.5-2 .5-3.5.5-3.5s0-1.5-.5-3.5z"/><path d="m10 9 5 3-5 3z"/>',tt:'<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.5 2.5 4 5 4"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
-const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown',flag:'flag',bookmark:'bookmark','share-nodes':'share',trophy:'trophy',dice:'dice',instagram:'ig',tiktok:'tt',youtube:'yt'};
+ crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',fb:'<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/>',xx:'<path d="M4 4l16 16M20 4 4 20"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',volume:'<path d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',mute:'<path d="M11 5 6 9H3v6h3l5 4zM22 9l-6 6M16 9l6 6"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/>',dice:'<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1"/><circle cx="15.5" cy="8.5" r="1"/><circle cx="8.5" cy="15.5" r="1"/><circle cx="15.5" cy="15.5" r="1"/><circle cx="12" cy="12" r="1"/>',ig:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',yt:'<path d="M22 8.5a3 3 0 0 0-2-2C18 6 12 6 12 6s-6 0-8 .5a3 3 0 0 0-2 2C1.5 10.5 1.5 12 1.5 12s0 1.5.5 3.5a3 3 0 0 0 2 2C6 18 12 18 12 18s6 0 8-.5a3 3 0 0 0 2-2c.5-2 .5-3.5.5-3.5s0-1.5-.5-3.5z"/><path d="m10 9 5 3-5 3z"/>',tt:'<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.5 2.5 4 5 4"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',google:'<path d="M21 12h-9"/><path d="M19 6.5A9 9 0 1 0 21 12"/>'};
+const ICON_OF={'magnifying-glass':'search',google:'google',plus:'plus',trash:'trash',copy:'copy',heart:'heart','circle-check':'badge','right-from-bracket':'logout',globe:'globe',at:'at','id-card':'user','user-pen':'user',pen:'pen','diagram-project':'grid',key:'key',image:'image',link:'link',futbol:'ball','floppy-disk':'save',xmark:'x','paper-plane':'send',ban:'ban','arrow-down-wide-short':'sort','layer-group':'layers',clock:'clock',expand:'expand',crown:'crown',flag:'flag',bookmark:'bookmark',facebook:'fb','x-twitter':'xx',envelope:'mail','volume-high':'volume','volume-xmark':'mute','share-nodes':'share',trophy:'trophy',dice:'dice',instagram:'ig',tiktok:'tt',youtube:'yt'};
 function swapIcon(el){
   const c=[...el.classList],key=c.map(x=>ICON_OF[x.slice(3)]).find(Boolean);if(!key)return;
   const v=document.createElementNS('http://www.w3.org/2000/svg','svg'),ti=el.getAttribute('title');
@@ -399,7 +428,7 @@ async function firebaseStore(cfg){
       await F.deleteDoc(r);return w?w.handle:null},
     async lastWinner(){const s=await F.getDocs(F.query(F.collection(fs,'winners'),F.orderBy('at','desc'),F.limit(1)));return s.empty?null:s.docs[0].data()},
     async winsOf(h){const s=await F.getDocs(F.query(F.collection(fs,'winners'),F.where('handle','==',h)));return s.size},
-    async topTactics(){const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.orderBy('likeCount','desc'),F.limit(60)));return s.docs.map(mapDoc)},
+    subscribeTop:f=>F.onSnapshot(F.query(F.collection(fs,'tactics'),F.orderBy('likeCount','desc'),F.limit(30)),s=>f(s.docs.map(mapDoc)),()=>f([])),   // live: updates the moment anyone likes
     async tacticsOf(h){const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where('handle','==',h),F.limit(30)));return s.docs.map(mapDoc)},
     async syncPhoto(u,mini){try{const s=await F.getDocs(F.query(F.collection(fs,'tactics'),F.where('uid','==',u.uid),F.limit(100)));const b=F.writeBatch(fs);let n=0;s.docs.forEach(d=>{if(d.data().photo!==mini){b.update(d.ref,{photo:mini});n++}});if(n)await b.commit()}catch(e){console.error(e)}},
     async getAvatars(hs){const out={};for(let i=0;i<hs.length;i+=30){const s=await F.getDocs(F.query(F.collection(fs,'users'),F.where('handle','in',hs.slice(i,i+30))));s.docs.forEach(d=>{const x=d.data();if(x.photo||!(x.handle in out))out[x.handle]=x.photo||''})}return out},   // if a handle has duplicate user docs, keep the one with a photo
@@ -431,12 +460,13 @@ function demoStore(){ // demo only: accounts and passwords live in this browser'
   const seed=[{id:'s1',uid:'x',handle:'proplayer',displayName:'Pro Player',formation:'4-2-3-1',code:'SAMPLE-4231',img:'',likeCount:24,at:Date.now()-36e5},
     {id:'s2',uid:'x',handle:'khaled_fc',displayName:'Khaled',formation:'4-3-3',code:'SAMPLE-433',img:'',likeCount:9,at:Date.now()-9e6},
     {id:'s3',uid:'x',handle:'proplayer',displayName:'Pro Player',formation:'3-5-2',code:'SAMPLE-352',img:'',likeCount:3,at:Date.now()-5e7}];
-  let cb=()=>{},sp=()=>{},sv=()=>{},lk=()=>{},uf=null,uh='',spn=18,ord='at',rf=()=>{},sf=()=>{},dflt={},cf=()=>{},ef=()=>{},ec='';
+  let cb=()=>{},sp=()=>{},sv=()=>{},lk=()=>{},uf=null,uh='',spn=18,ord='at',rf=()=>{},sf=()=>{},dflt={},cf=()=>{},ef=()=>{},ec='',tf=()=>{};
   const accts=()=>get('tk_accts',{}),mine=()=>new Set(get('tk_likes',[])),ver=()=>new Set(get('tk_ver',['proplayer']));
   const list=()=>[...get('tk_posts',[]),...seed].map(p=>({...p,likeCount:(p.likeCount||0)+(mine().has(p.id)?1:0),copyCount:(p.copyCount||0)+((get('tk_cc',{})[p.id])||0)})).sort((a,b)=>b.at-a.at);
   const sorted=()=>{let l=list().filter(p=>(!dflt.formation||p.formation===dflt.formation)&&(!dflt.platform||p.platform===dflt.platform));return ord==='at'?l:l.sort((a,b)=>(b[ord]||0)-(a[ord]||0))};
   const entries=cid=>list().filter(p=>p.challenge===cid).sort((a,b)=>(b.likeCount||0)-(a.likeCount||0));
-  const push=()=>{ec&&ef(entries(ec));sp(sorted().slice(0,spn));uf&&uf(list().filter(p=>p.handle===uh))};
+  const top=()=>[...list()].sort((a,b)=>(b.likeCount||0)-(a.likeCount||0)).slice(0,30);
+  const push=()=>{ec&&ef(entries(ec));tf(top());sp(sorted().slice(0,spn));uf&&uf(list().filter(p=>p.handle===uh))};
   const known=()=>new Set([...list().map(p=>p.handle),...Object.keys(accts())]);
   const mk=h=>{const a=accts()[h]||{};return{uid:'u_'+h,handle:h,displayName:a.displayName||h,bio:a.bio||'',photo:a.photo||null,x:(({pw,...r})=>r)(a),isAdmin:h===ADMIN_HANDLE}};
   return{demo:true,
@@ -458,7 +488,7 @@ function demoStore(){ // demo only: accounts and passwords live in this browser'
     async closeChallenge(){const c=get('tk_chal',null);if(!c)return null;const w=entries(c.id)[0];if(w){const ws=get('tk_win',[]);ws.unshift({cid:c.id,title:c.title,pid:w.id,handle:w.handle,formation:w.formation,platform:w.platform||'',code:w.code,likeCount:w.likeCount||0,at:Date.now()});set('tk_win',ws)}localStorage.removeItem('tk_chal');cf(null);return w?w.handle:null},
     async lastWinner(){return get('tk_win',[])[0]||null},
     async winsOf(h){return get('tk_win',[]).filter(w=>w.handle===h).length},
-    async topTactics(){return [...list()].sort((a,b)=>(b.likeCount||0)-(a.likeCount||0)).slice(0,60)},
+    subscribeTop(f){tf=f;f(top());return()=>{}},
     async tacticsOf(h){return list().filter(p=>p.handle===h)},
     async getAvatars(hs){const a=accts(),o={};hs.forEach(h=>{o[h]=(a[h]&&a[h].photo)||''});return o},
     async update(id,p){const {full,uid,...d}=p;set('tk_posts',get('tk_posts',[]).map(x=>x.id===id?{...x,...d}:x));push()},
@@ -497,7 +527,7 @@ function render(){
   renderFeat();
   if(src===null||(!view&&!savedMode&&!loaded)){
     lastGrid='';
-    $('grid').innerHTML=loadErr?`<div class="empty"><i class="fa-solid fa-ban"></i><b class="d">${t('eConn')}</b><span>${t('eConnSub')}</span><button class="btn neon" id="retry">${t('retry')}</button></div>`:'<div class="sk"></div>'.repeat(4)+(slow?`<p class="dn" style="grid-column:1/-1;text-align:center">${t('slow')}</p>`:'');return}
+    $('grid').innerHTML=loadErr?`<div class="empty"><i class="fa-solid fa-ban"></i><b class="d">${t('eConn')}</b><span>${t('eConnSub')}</span><button class="btn neon" id="retry">${t('retry')}</button></div>`:SKC.repeat(6)+(slow?`<p class="dn" style="grid-column:1/-1;text-align:center">${t('slow')}</p>`:'');return}
   const more=!view&&!savedMode&&posts.length>=feedLimit&&!q&&!fFilter&&!platFilter?`<div class="more"><button class="btn ghost" id="moreFeed">${t('loadMore')}</button></div>`:'';
   const gh=(l.length?l.map((p,i)=>((view&&!profF&&(i===0||l[i-1].formation!==p.formation))?`<h3 class="gh d" style="grid-column:1/-1">${esc(p.formation)} · ${cnt[p.formation]}</h3>`:'')+`<article class="card${anim?' up':''}" style="${anim?`animation-delay:${Math.min(i,8)*55}ms`:''}">
     <button class="shot" data-img="${esc(p.id)}" aria-label="View">${okImg(p.img)?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(p.img)}" alt="${esc(p.formation)}">`:pitch(p.formation)}<span class="fm d">${esc(p.formation)}</span><span class="zoom"><i class="fa-solid fa-expand"></i></span></button>
@@ -507,7 +537,7 @@ function render(){
         <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span></div>
       ${p.platform||p.note?`<div class="tags">${p.platform?`<span class="tag">${PNAME[p.platform]||''}</span>`:''}${p.note?`<span class="nt">${esc(p.note)}</span>`:''}</div>`:''}
       <div class="tk"><i class="fa-solid fa-key"></i><span>${esc(p.code)}</span></div>
-      <div class="ac"><button class="btn neon cp" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}${p.copyCount?` · ${p.copyCount}`:''}</button>
+      <div class="ac"><button class="btn neon cp" data-copy="${esc(p.id)}"><i class="fa-regular fa-copy"></i> ${t('copy')}</button>
         <button class="btn ghost lk ${myLikes.has(p.id)?'on':''}" data-like="${esc(p.id)}" aria-pressed="${myLikes.has(p.id)}" aria-label="Like"><i class="fa-${myLikes.has(p.id)?'solid':'regular'} fa-heart"></i> ${p.likeCount||0}</button>
         <button class="btn ghost sv ${mySaves.has(p.id)?'on':''}" data-save="${esc(p.id)}" aria-pressed="${mySaves.has(p.id)}" aria-label="Save"><i class="fa-${mySaves.has(p.id)?'solid':'regular'} fa-bookmark"></i></button>
         ${me&&p.uid===me.uid?`<button class="btn ghost" data-edit="${esc(p.id)}" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>`:''}${me&&p.uid!==me.uid?`<button class="btn ghost" data-report="${esc(p.id)}" aria-label="Report"><i class="fa-solid fa-flag"></i></button>`:''}${me&&(p.uid===me.uid||me.isAdmin)?`<button class="btn ghost" data-del="${esc(p.id)}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>`:''}</div>
@@ -612,25 +642,57 @@ function openPost(c){updateChalRow();$('pChal').checked=!!c&&!$('pChalRow').clas
 // ---- Tactic card: a shareable image drawn on a canvas ----
 function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function fitText(g,txt,font,max,w){let sz=max;for(;sz>20;sz-=4){g.font=font.replace('{s}',sz);if(g.measureText(txt).width<=w)break}return sz}
+const loadImg=src=>new Promise(ok=>{if(!okImg(src))return ok(null);const im=new Image();im.onload=()=>ok(im);im.onerror=()=>ok(null);im.src=src});
+function cardPath(g,x,y,w,h,k){g.beginPath();g.moveTo(x+k,y);g.lineTo(x+w-k,y);g.lineTo(x+w,y+k);g.lineTo(x+w,y+h-k);g.lineTo(x+w-k,y+h);g.lineTo(x+k,y+h);g.lineTo(x,y+h-k);g.lineTo(x,y+k);g.closePath()}
 async function drawCard(p){
-  const W=1080,H=1350,c=$('cardCv'),g=c.getContext('2d'),D='italic 800 {s}px "Barlow Condensed",Impact,sans-serif';c.width=W;c.height=H;
-  try{await document.fonts.load('italic 800 80px "Barlow Condensed"')}catch(e){}
-  const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#0c2218');bg.addColorStop(.55,'#070a09');bg.addColorStop(1,'#0b1d15');g.fillStyle=bg;g.fillRect(0,0,W,H);
-  g.strokeStyle='rgba(52,211,153,.55)';g.lineWidth=5;rr(g,34,34,W-68,H-68,52);g.stroke();
-  const lg=g.createLinearGradient(80,0,520,0);lg.addColorStop(0,'#b9f3d9');lg.addColorStop(1,'#1fb27a');g.fillStyle=lg;g.font=D.replace('{s}',74);g.textAlign='left';g.fillText('TASHKEELTI',84,142);
-  g.fillStyle='#84978d';g.font='600 32px Cairo,system-ui,sans-serif';g.textAlign='right';g.fillText(PNAME[p.platform]||'EA SPORTS FC',W-84,134);
-  g.textAlign='center';g.fillStyle='#34d399';const fs=fitText(g,p.formation.toUpperCase(),D,200,W-160);g.font=D.replace('{s}',fs);g.fillText(p.formation.toUpperCase(),W/2,150+fs);
-  const px=150,py=380,pw=780,ph=560;rr(g,px,py,pw,ph,36);g.fillStyle='#0d2b1e';g.fill();g.strokeStyle='rgba(31,178,122,.55)';g.lineWidth=4;g.stroke();
-  g.beginPath();g.moveTo(px,py+ph/2);g.lineTo(px+pw,py+ph/2);g.stroke();g.beginPath();g.arc(px+pw/2,py+ph/2,70,0,7);g.stroke();
-  g.strokeRect(px+pw/2-150,py,300,110);g.strokeRect(px+pw/2-150,py+ph-110,300,110);
-  const base=(p.formation.match(/^[\d-]+/)||['4-4-2'])[0],rows=[1,...base.split('-').map(Number)];
-  rows.forEach((n,i)=>{const y=py+ph-60-i*((ph-120)/(rows.length-1));for(let k=0;k<n;k++){const x=px+(k+1)*pw/(n+1);g.beginPath();g.arc(x,y,26,0,7);g.fillStyle='#34d399';g.fill();g.lineWidth=6;g.strokeStyle='#0d2b1e';g.stroke()}});
-  g.fillStyle='#84978d';g.font='600 30px Cairo,system-ui,sans-serif';g.textAlign='center';g.fillText('TACTICS CODE',W/2,1006);
-  rr(g,110,1026,W-220,150,34);g.fillStyle='#070b09';g.fill();g.setLineDash([14,12]);g.strokeStyle='#2f4a3f';g.lineWidth=4;g.stroke();g.setLineDash([]);
-  const M='600 {s}px ui-monospace,Menlo,Consolas,monospace',ms=fitText(g,p.code,M,76,W-300);g.font=M.replace('{s}',ms);g.fillStyle='#b9f3d9';g.fillText(p.code,W/2,1101+ms*.3);
-  g.font='700 54px Cairo,system-ui,sans-serif';g.fillStyle='#eef1f6';const hs='@'+p.handle,tw=g.measureText(hs).width,vx=W/2-tw/2-(verified.has(p.handle)?30:0);g.textAlign='left';g.fillText(hs,vx+(verified.has(p.handle)?60:0)-0,1262);
-  if(verified.has(p.handle)){g.beginPath();g.arc(vx+22,1244,22,0,7);g.fillStyle='#4aa3ff';g.fill();g.strokeStyle='#fff';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(vx+12,1244);g.lineTo(vx+20,1253);g.lineTo(vx+34,1236);g.stroke()}
-  g.textAlign='center';g.fillStyle='#84978d';g.font='500 28px Cairo,system-ui,sans-serif';g.fillText(location.host||'tashkeelti',W/2,1308)}
+  const W=1080,H=1350,c=$('cardCv'),g=c.getContext('2d'),D='italic 800 {s}px "Barlow Condensed",Impact,sans-serif',C='700 {s}px Cairo,system-ui,sans-serif';c.width=W;c.height=H;
+  try{await Promise.all([document.fonts.load('italic 800 80px "Barlow Condensed"'),document.fonts.load('700 40px Cairo')])}catch(e){}
+  const av=await loadImg(avOf({handle:p.handle})),ver=verified.has(p.handle),X=70,Y=70,CW=940,CH=1210,K=96;
+  g.textBaseline='alphabetic';g.lineJoin='round';
+  // stage: deep green vignette, light rays, fine dot grid
+  const bg=g.createRadialGradient(W/2,H*.4,40,W/2,H*.5,H*.85);bg.addColorStop(0,'#10402c');bg.addColorStop(.55,'#06120d');bg.addColorStop(1,'#020605');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  g.save();g.globalAlpha=.07;g.fillStyle='#b9f3d9';for(let i=0;i<7;i++){const cx=W/2+(i-3)*250;g.beginPath();g.moveTo(W/2,-80);g.lineTo(cx-60,H);g.lineTo(cx+60,H);g.closePath();g.fill()}g.restore();
+  g.fillStyle='rgba(185,243,217,.05)';for(let x=30;x<W;x+=34)for(let y=30;y<H;y+=34)g.fillRect(x,y,2,2);
+  // card body with glow, cut corners like an Ultimate Team card
+  g.save();g.shadowColor='rgba(52,211,153,.55)';g.shadowBlur=70;cardPath(g,X,Y,CW,CH,K);g.fillStyle='#07130d';g.fill();g.restore();
+  const fill=g.createLinearGradient(X,Y,X+CW,Y+CH);fill.addColorStop(0,'#14472f');fill.addColorStop(.45,'#0b2418');fill.addColorStop(1,'#06140d');cardPath(g,X,Y,CW,CH,K);g.fillStyle=fill;g.fill();
+  g.save();cardPath(g,X,Y,CW,CH,K);g.clip();
+  g.strokeStyle='rgba(185,243,217,.07)';g.lineWidth=4;g.beginPath();g.arc(W/2,Y+CH*.55,230,0,7);g.stroke();g.beginPath();g.moveTo(X,Y+CH*.55);g.lineTo(X+CW,Y+CH*.55);g.stroke();
+  const sh=g.createLinearGradient(X,Y+260,X+CW,Y+760);sh.addColorStop(0,'rgba(255,255,255,0)');sh.addColorStop(.5,'rgba(255,255,255,.13)');sh.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=sh;g.fillRect(X,Y,CW,CH);
+  const gl=g.createRadialGradient(X+200,Y+40,10,X+200,Y+40,520);gl.addColorStop(0,'rgba(185,243,217,.28)');gl.addColorStop(1,'rgba(185,243,217,0)');g.fillStyle=gl;g.fillRect(X,Y,CW,CH);g.restore();
+  const fr=g.createLinearGradient(X,Y,X+CW,Y+CH);fr.addColorStop(0,'#d9fff0');fr.addColorStop(.35,'#1fb27a');fr.addColorStop(.7,'#0d5a3c');fr.addColorStop(1,'#9af0cc');
+  cardPath(g,X,Y,CW,CH,K);g.strokeStyle=fr;g.lineWidth=10;g.stroke();cardPath(g,X+24,Y+24,CW-48,CH-48,K-14);g.strokeStyle='rgba(185,243,217,.28)';g.lineWidth=2;g.stroke();
+  // header: platform pill + wordmark
+  const pl=(PNAME[p.platform]||'EA FC').toUpperCase();g.font=C.replace('{s}',30);const pw=g.measureText(pl).width+56;
+  rr(g,140,140,pw,58,29);g.fillStyle='rgba(52,211,153,.16)';g.fill();g.strokeStyle='rgba(52,211,153,.7)';g.lineWidth=2;g.stroke();g.fillStyle='#b9f3d9';g.textAlign='left';g.fillText(pl,168,180);
+  const wg=g.createLinearGradient(X+CW-340,0,X+CW-70,0);wg.addColorStop(0,'#b9f3d9');wg.addColorStop(1,'#1fb27a');g.fillStyle=wg;g.textAlign='right';g.font=D.replace('{s}',54);if('letterSpacing' in g)g.letterSpacing='4px';g.fillText('TASHKEELTI',X+CW-70,190);if('letterSpacing' in g)g.letterSpacing='0px';
+  // formation, big
+  g.textAlign='left';g.fillStyle='#84978d';g.font='600 26px Cairo,system-ui,sans-serif';g.fillText('FORMATION',140,246);
+  const fm=p.formation.toUpperCase(),fs=fitText(g,fm,D,190,800),fg=g.createLinearGradient(0,250,0,430);fg.addColorStop(0,'#eafff5');fg.addColorStop(1,'#34d399');
+  g.fillStyle=fg;g.font=D.replace('{s}',fs);g.fillText(fm,136,266+fs*.8);
+  const dv=g.createLinearGradient(X+70,0,X+CW-70,0);dv.addColorStop(0,'rgba(185,243,217,0)');dv.addColorStop(.5,'rgba(185,243,217,.5)');dv.addColorStop(1,'rgba(185,243,217,0)');g.fillStyle=dv;g.fillRect(X+70,440,CW-140,3);
+  // pitch panel with glowing players
+  const PX=170,PY=470,PW=740,PH=420;rr(g,PX,PY,PW,PH,34);const pg=g.createLinearGradient(PX,PY,PX,PY+PH);pg.addColorStop(0,'#10382a');pg.addColorStop(1,'#0a2218');g.fillStyle=pg;g.fill();g.strokeStyle='rgba(185,243,217,.35)';g.lineWidth=3;g.stroke();
+  g.save();rr(g,PX,PY,PW,PH,34);g.clip();g.fillStyle='rgba(255,255,255,.025)';for(let i=0;i<8;i+=2)g.fillRect(PX,PY+i*PH/8,PW,PH/8);
+  g.strokeStyle='rgba(185,243,217,.22)';g.lineWidth=3;g.beginPath();g.moveTo(PX,PY+PH/2);g.lineTo(PX+PW,PY+PH/2);g.stroke();g.beginPath();g.arc(PX+PW/2,PY+PH/2,56,0,7);g.stroke();
+  g.strokeRect(PX+PW/2-130,PY,260,86);g.strokeRect(PX+PW/2-130,PY+PH-86,260,86);g.restore();
+  const base=(p.formation.match(/^[\d-]+/)||['4-4-2'])[0],rows=[1,...base.split('-').map(Number)],nar=/Narrow/.test(p.formation)?.72:1;
+  g.save();g.shadowColor='#34d399';g.shadowBlur=22;
+  rows.forEach((n,i)=>{const y=PY+PH-52-i*((PH-104)/(rows.length-1));for(let k=0;k<n;k++){const x=PX+PW/2+((k+1)/(n+1)-.5)*PW*.9*nar;g.beginPath();g.arc(x,y,22,0,7);g.fillStyle=i===0?'#b9f3d9':'#34d399';g.fill()}});g.restore();
+  // creator: avatar ring + name + verified badge
+  const hs='@'+p.handle.toUpperCase(),AVR=58,gap=26,hsz=fitText(g,hs,D,84,540);g.font=D.replace('{s}',hsz);const tw=g.measureText(hs).width,total=AVR*2+gap+tw+(ver?60:0),sx=W/2-total/2,ax=sx+AVR,ay=980;
+  g.save();g.beginPath();g.arc(ax,ay,AVR,0,7);g.clip();
+  if(av){const m=Math.min(av.width,av.height);g.drawImage(av,(av.width-m)/2,(av.height-m)/2,m,m,ax-AVR,ay-AVR,AVR*2,AVR*2)}
+  else{const ag=g.createLinearGradient(ax-AVR,ay-AVR,ax+AVR,ay+AVR);ag.addColorStop(0,'#b9f3d9');ag.addColorStop(1,'#1fb27a');g.fillStyle=ag;g.fillRect(ax-AVR,ay-AVR,AVR*2,AVR*2);g.fillStyle='#04170f';g.font=D.replace('{s}',72);g.textAlign='center';g.fillText(p.handle[0].toUpperCase(),ax,ay+24)}
+  g.restore();g.beginPath();g.arc(ax,ay,AVR+5,0,7);g.strokeStyle='#34d399';g.lineWidth=5;g.stroke();
+  const nx=sx+AVR*2+gap,ng=g.createLinearGradient(nx,0,nx+tw,0);ng.addColorStop(0,'#ffffff');ng.addColorStop(1,'#b9f3d9');g.textAlign='left';g.fillStyle=ng;g.font=D.replace('{s}',hsz);g.fillText(hs,nx,ay+hsz*.3);
+  if(ver){const bx=nx+tw+34,by=ay-4;g.beginPath();g.arc(bx,by,24,0,7);g.fillStyle='#4aa3ff';g.fill();g.strokeStyle='#fff';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(bx-11,by);g.lineTo(bx-3,by+9);g.lineTo(bx+12,by-8);g.stroke()}
+  // code plate
+  rr(g,130,1070,W-260,160,30);const cg=g.createLinearGradient(0,1070,0,1230);cg.addColorStop(0,'#0f2c20');cg.addColorStop(1,'#06120c');g.fillStyle=cg;g.fill();
+  g.lineCap='butt';g.setLineDash([16,12]);g.strokeStyle='rgba(185,243,217,.55)';g.lineWidth=3;g.stroke();g.setLineDash([]);
+  g.textAlign='center';g.fillStyle='#84978d';g.font='600 26px Cairo,system-ui,sans-serif';g.fillText('TACTICS CODE',W/2,1112);
+  const M='600 {s}px ui-monospace,Menlo,Consolas,monospace',ms=fitText(g,p.code,M,72,W-340);g.font=M.replace('{s}',ms);
+  g.save();g.shadowColor='rgba(52,211,153,.6)';g.shadowBlur=14;g.fillStyle='#d9fff0';g.fillText(p.code,W/2,1190);g.restore()}
 const cardBlob=()=>new Promise(r=>$('cardCv').toBlob(r,'image/png'));
 // ---- Lucky tactic: random pick from verified creators ----
 async function lucky(){
@@ -653,14 +715,14 @@ function applyLang(){ // swap text + flip page direction (RTL for Arabic)
   document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
   $('langBtn').innerHTML='<i class="fa-solid fa-globe"></i> '+(lang==='ar'?'EN':'عربي');
   if(store&&store.demo){$('banner').textContent=t('demo')}
-  setMode(authMode);renderAuth();renderRail();renderPlats();fillCountries();render()}
+  setMode(authMode);renderAuth();renderRail();renderPlats();fillCountries();renderFoot();render()}
 
 /* ---------------- Events ---------------- */
 const openProfile=()=>{$('prH').value=me.handle||'';$('prH').disabled=!!me.handle;$('prH').required=!me.handle;$('prN').value=me.displayName;$('prB').value=me.bio;$('prE').textContent='';prPhoto=me.photo||null;$('prPh').value='';renderPrAv();
   const x=me.x||{};fillCountries();$('prPref').value=x.pref||'';$('prCountry').value=x.country||'';$('prPsn').value=x.psn||'';$('prXbox').value=x.xbox||'';$('prEa').value=x.ea||'';$('prIg').value=x.ig||'';$('prTt').value=x.tt||'';$('prYt').value=x.yt||'';prCover=x.cover||null;$('prCv').value='';renderPrCv();
   $('prDlg').showModal()};
 document.addEventListener('click',async e=>{
-  const b=e.target.closest('button');if(!b)return;if(!store&&b.id!=='langBtn'&&b.id!=='retry'&&b.dataset.copy===undefined&&b.dataset.img===undefined)return;
+  const b=e.target.closest('button');if(!b)return;if(!store&&b.id!=='langBtn'&&b.id!=='retry'&&b.dataset.copy===undefined&&b.dataset.img===undefined)return;warmAudio();
   if(b.id==='langBtn'){lang=lang==='ar'?'en':'ar';applyLang()}
   else if(b.id==='inBtn')openAuth('in');
   else if(b.dataset.mode)setMode(b.dataset.mode);
@@ -681,11 +743,12 @@ document.addEventListener('click',async e=>{
   else if(b.dataset.user){$('luckyDlg').close();location.hash='#/u/'+b.dataset.user}
   else if(b.id==='luckyBtn'||b.id==='luckyAgain')lucky();
   else if(b.id==='chEnter'){if(!me)return openAuth('in');if(me.handle)openPost(true)}
-  else if(b.dataset.wcopy!==undefined){copy(b.dataset.wcopy).then(()=>toast(t('copyDone')))}
+  else if(b.dataset.wcopy!==undefined){copy(b.dataset.wcopy).then(ok=>flashCopy(b,ok))}
+  else if(b.id==='sndBtn'){snd=!snd;try{localStorage.setItem('tk_snd',snd?'1':'0')}catch(e){}renderFoot();if(snd){warmAudio();clickSound()}}
   else if(b.dataset.card){cardPost=byId(b.dataset.card);if(cardPost){$('cardDlg').showModal();drawCard(cardPost)}}
   else if(b.dataset.pf!==undefined){profF=b.dataset.pf;anim=true;render()}
   else if(b.dataset.pp!==undefined){profP=b.dataset.pp;anim=true;render()}
-  else if(b.dataset.copy){const p=byId(b.dataset.copy),ok=await copy(p.code),old=b.innerHTML;b.textContent=ok?t('copied'):t('failed');setTimeout(()=>b.innerHTML=old,1500);if(ok){navigator.vibrate&&navigator.vibrate(18);toast(t('copyDone'));bump(p.id)}}
+  else if(b.dataset.copy){const p=byId(b.dataset.copy),ok=await copy(p.code);flashCopy(b,ok);if(ok&&navigator.vibrate)navigator.vibrate(18)}
   else if(b.dataset.like){if(!me)return toast(t('loginLike'));const p=byId(b.dataset.like);try{await store.toggleLike(me,p,!myLikes.has(p.id))}catch(x){toast(t('failed'))}}
   else if(b.dataset.cid!==undefined){copy(b.dataset.cid).then(()=>toast(t('copiedId')))}
   else if(b.dataset.save){if(!me)return openAuth('in');const p=byId(b.dataset.save);if(p)store.toggleSave(me,p,!mySaves.has(p.id)).catch(()=>toast(t('failed')))}
@@ -716,7 +779,7 @@ $('prCvRm').onclick=()=>{prCover=null;$('prCv').value='';renderPrCv()};
 $('luckyX').onclick=()=>$('luckyDlg').close();$('cardX').onclick=()=>$('cardDlg').close();
 $('cardDl').onclick=async()=>{const b=await cardBlob(),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='tashkeelti-'+(cardPost?cardPost.formation.replace(/\s+/g,'-'):'card')+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
 $('cardSh').onclick=async()=>{const b=await cardBlob(),f=new File([b],'tashkeelti.png',{type:'image/png'});
-  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Tashkeelti',text:(cardPost?cardPost.formation:'')+' · '+location.href.split('#')[0]})}catch(e){}}else $('cardDl').click()};
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Tashkeelti',text:cardPost?cardPost.formation:''})}catch(e){}}else $('cardDl').click()};
 $('chStart').onclick=async()=>{const v=$('adCT').value.trim();if(!v)return;try{await store.startChallenge(v);$('adCT').value='';toast(t('done'))}catch(x){$('adE').textContent=t('failed')}};
 $('chClose').onclick=async()=>{try{const w=await store.closeChallenge();toast(w?t('winnerIs')+' @'+w:t('noWinner'));store.lastWinner().then(x=>{lastWinner=x;renderFeat()})}catch(x){console.error(x);$('adE').textContent=t('failed')}};
 $('pCancel').onclick=()=>$('pDlg').close();
@@ -761,6 +824,29 @@ const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(ne
 addEventListener('hashchange',route);
 addEventListener('offline',()=>toast(t('offline'),4000));addEventListener('online',()=>toast(t('online')));
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+// ---- Premium touches: loading card, footer, copy feedback with a soft click, 3D card tilt ----
+const SKC='<div class="sk"><div class="ski"></div><div class="skb"><span class="ska"></span><span class="skl"></span></div><div class="skt"></div><div class="skt s"></div></div>';
+const SOCIAL=[['instagram','https://www.instagram.com/tashkeelti','Instagram'],['facebook','https://www.facebook.com/tashkeelti','Facebook'],['tiktok','https://www.tiktok.com/@tashkeelti1','TikTok'],['x-twitter','https://x.com/tashkeelti','X'],['envelope','mailto:tashkeelti@gmail.com','Email']];
+let AC=null,snd=localStorage.getItem('tk_snd')!=='0';
+function warmAudio(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}}
+function clickSound(){ // tiny synthesized "click" (no audio file); very quiet
+  if(!snd||!AC)return;try{const t0=AC.currentTime,o=AC.createOscillator(),o2=AC.createOscillator(),g=AC.createGain();o.type='sine';o2.type='triangle';
+    o.frequency.setValueAtTime(1900,t0);o.frequency.exponentialRampToValueAtTime(900,t0+.05);o2.frequency.setValueAtTime(3800,t0);o2.frequency.exponentialRampToValueAtTime(1800,t0+.04);
+    g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(.05,t0+.004);g.gain.exponentialRampToValueAtTime(.0001,t0+.08);
+    o.connect(g);o2.connect(g);g.connect(AC.destination);o.start(t0);o2.start(t0);o.stop(t0+.09);o2.stop(t0+.09)}catch(e){}}
+function flashCopy(b,ok){ // check mark spins in and the button turns gold
+  if(b._old===undefined)b._old=b.innerHTML;
+  if(ok){b.classList.add('ok');b.innerHTML=`<svg class="ckv" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg> ${t('copied')}`;clickSound()}else b.textContent=t('failed');
+  clearTimeout(b._t);b._t=setTimeout(()=>{b.classList.remove('ok');b.innerHTML=b._old;b._old=undefined},1800)}
+function renderFoot(){
+  $('fsoc').innerHTML=SOCIAL.map(a=>`<a class="soc" href="${a[1]}" ${a[1].startsWith('http')?'target="_blank" rel="noopener noreferrer"':''} aria-label="${a[2]}"><i class="fa-brands fa-${a[0]}"></i></a>`).join('');
+  $('sndBtn').innerHTML=`<i class="fa-solid fa-${snd?'volume-high':'volume-xmark'}"></i> ${t(snd?'sndOn':'sndOff')}`;$('sndBtn').setAttribute('aria-pressed',snd)}
+if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+  let raf=0;const G=$('grid'),reset=c=>['--rx','--ry','--mx','--my'].forEach(k=>c.style.removeProperty(k));
+  G.addEventListener('pointermove',e=>{const c=e.target.closest('.card');if(!c)return;const x0=e.clientX,y0=e.clientY;cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(()=>{const r=c.getBoundingClientRect(),x=(x0-r.left)/r.width,y=(y0-r.top)/r.height;
+      c.style.setProperty('--ry',((x-.5)*14).toFixed(2)+'deg');c.style.setProperty('--rx',((.5-y)*11).toFixed(2)+'deg');c.style.setProperty('--mx',(x*100).toFixed(1)+'%');c.style.setProperty('--my',(y*100).toFixed(1)+'%')})});
+  G.addEventListener('pointerout',e=>{const c=e.target.closest('.card');if(c&&!c.contains(e.relatedTarget))reset(c)})}
 try{const c=JSON.parse(localStorage.getItem('tk_feed')||'null');if(c&&c.posts&&c.posts.length){posts=c.posts;loaded=true}}catch(e){}   // show the last feed instantly, refresh in the background
 route();applyLang();   // paint the page immediately — never wait for the network
 (async()=>{
@@ -777,7 +863,7 @@ route();applyLang();   // paint the page immediately — never wait for the netw
   startFeed();store.subscribeVerified(s=>{verified=s;render()});route();
   store.subscribeChallenge(c=>{challenge=c;unEnt();unEnt=()=>{};chalEntries=[];if(c)unEnt=store.subscribeEntries(c.id,l=>{chalEntries=l;renderFeat()})||(()=>{});updateChalRow();renderFeat()});
   store.lastWinner().then(w=>{lastWinner=w;renderFeat()}).catch(()=>{});
-  store.topTactics().then(l=>{leaders=buildLeaders(l);renderFeat();ensureAvatars(leaders)}).catch(()=>{});
+  store.subscribeTop(l=>{leaders=buildLeaders(l);renderFeat();ensureAvatars(leaders)});
   setTimeout(()=>{if(!loaded){slow=true;render()}},6000);
   setTimeout(()=>{if(!loaded){loadErr=true;render()}},25000);
   setTimeout(()=>{if(!authReady){authReady=true;renderAuth()}},4000);   // never leave the header spinning
