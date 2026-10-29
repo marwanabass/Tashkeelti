@@ -223,6 +223,7 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .ring{position:absolute;left:50%;top:50%;width:22px;height:22px;margin:-11px;border-radius:50%;border:2px solid var(--neon);pointer-events:none;animation:ringp .75s ease-out forwards}
 .ring::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid rgba(61,230,161,.6);animation:ringp .75s .12s ease-out forwards;opacity:0}
 @keyframes ringp{from{transform:scale(.4);opacity:1}to{transform:scale(5.5);opacity:0}}
+.pprev{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line)}.pprev svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
@@ -277,6 +278,7 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 <dialog id="pDlg"><form id="pForm">
   <h2 class="d x3 cg"><i class="fa-solid fa-futbol"></i> <span id="pTitle" data-i="shareT"></span></h2>
   <div><label class="l" for="pF"><i class="fa-solid fa-diagram-project"></i> <span data-i="formation"></span></label><select id="pF" class="f" dir="ltr" required></select></div>
+  <div class="pprev" id="pPrev" aria-hidden="true"></div>
   <div><label class="l" for="pP"><i class="fa-solid fa-globe"></i> <span data-i="platQ"></span></label><select id="pP" class="f" required><option value="" data-i="choose"></option><option value="pc">PC</option><option value="ps">PlayStation</option><option value="xbox">Xbox</option></select></div>
   <div><label class="l" for="pC"><i class="fa-solid fa-key"></i> <span data-i="code"></span></label><input id="pC" class="f" dir="ltr" required maxlength="40" placeholder="e8%&amp;M#k9P" autocomplete="off"></div>
   <div><label class="l" for="pN"><i class="fa-solid fa-pen"></i> <span data-i="noteLbl"></span></label><input id="pN" class="f" maxlength="120"></div>
@@ -548,16 +550,19 @@ function demoStore(){ // demo only: accounts and passwords live in this browser'
 
 /* ---------------- Rendering ---------------- */
 // Mini pitch drawn from the formation string (fallback image + formation sheet tiles)
-function pitch(f){
-  const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],w=/Narrow/.test(f)?.7:1,rows=[1,...base.split('-').map(Number)],d=[];
-  rows.forEach((n,i)=>{const x=(16+i*(128/(rows.length-1))).toFixed(1);for(let k=0;k<n;k++){const y=(50+((k+1)*100/(n+1)-50)*w).toFixed(1);d.push(`<circle cx="${x}" cy="${y}" r="7.5" fill="#3de6a1" opacity=".22"/><circle cx="${x}" cy="${y}" r="4.2" fill="${i===0?'#d9fff0':'#3de6a1'}"/>`)}});
-  let st='';for(let i=0;i<8;i+=2)st+=`<rect x="${i*20}" y="0" width="20" height="100" fill="#fff" opacity=".035"/>`;
-  return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14573f"/><stop offset="1" stop-color="#0b2f27"/></linearGradient></defs><rect width="160" height="100" fill="url(#pg)"/>${st}<g fill="none" stroke="#a8f5d3" stroke-opacity=".35" stroke-width=".8"><rect x="4" y="4" width="152" height="92" rx="2"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="13"/><rect x="4" y="30" width="20" height="40"/><rect x="136" y="30" width="20" height="40"/></g>${d.join('')}</svg>`}
+const PGRAD={pc:['#1d6fb5','#08172e'],ps:['#7b3aa8','#240a33'],xbox:['#23995a','#07261a'],d:['#1b5f7a','#08202b']};   // pitch colour follows the device
+function pitch(f,plat){
+  // "4-2-3-1" -> goalkeeper + 4 + 2 + 3 + 1 players, one column per line, spread evenly (Wide / Narrow change the spread)
+  const base=(f.match(/^[\d-]+/)||['4-4-2'])[0],wide=/Wide/.test(f)?1:/Narrow/.test(f)?.8:.88,rows=[1,...base.split('-').map(Number)],g=PGRAD[plat]||PGRAD.d,id='g'+(PGRAD[plat]?plat:'d'),d=[];
+  rows.forEach((n,i)=>{const x=(15+i*(130/(rows.length-1))).toFixed(1);for(let k=0;k<n;k++){const y=(50+((k+1)/(n+1)-.5)*100*wide).toFixed(1),c=i===0?'#3de6a1':'#f4f7fb';
+    d.push(`<circle cx="${x}" cy="${y}" r="8.4" fill="${c}" opacity=".16"/><circle cx="${x}" cy="${y}" r="4.9" fill="${c}"/>`)}});
+  let st='';for(let i=0;i<8;i+=2)st+=`<rect x="${i*20}" y="0" width="20" height="100" fill="#fff" opacity=".03"/>`;
+  return`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="${g[0]}"/><stop offset="1" stop-color="${g[1]}"/></linearGradient><radialGradient id="${id}r" cx=".3" cy=".1" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="160" height="100" fill="url(#${id})"/><rect width="160" height="100" fill="url(#${id}r)"/>${st}<g fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".9"><rect x="4" y="4" width="152" height="92" rx="1.5"/><line x1="80" y1="4" x2="80" y2="96"/><circle cx="80" cy="50" r="13"/><rect x="4" y="29" width="21" height="42"/><rect x="135" y="29" width="21" height="42"/><rect x="4" y="40" width="8" height="20"/><rect x="148" y="40" width="8" height="20"/></g><circle cx="80" cy="50" r="1.2" fill="#fff" fill-opacity=".5"/>${d.join('')}</svg>`}
 const META_LIKES=10;   // a tactic with this many likes gets the META tag
 function cardHTML(p,i){
   const pro=verified.has(p.handle),meta=(p.likeCount||0)>=META_LIKES,a=avOf(p);
   return`<article class="card${pro?' pro':''}${anim?' up':''}" style="${anim?`animation-delay:${Math.min(i,8)*55}ms`:''}">
-    <div class="cv">${pitch(p.formation)}${p.platform?`<span class="pl">${PNAME[p.platform]||''}</span>`:''}${pro?'<span class="tg pr">PRO</span>':meta?'<span class="tg mt">META</span>':''}
+    <div class="cv">${pitch(p.formation,p.platform)}${p.platform?`<span class="pl">${PNAME[p.platform]||''}</span>`:''}${pro?'<span class="tg pr">PRO</span>':meta?'<span class="tg mt">META</span>':''}
       <h3 class="ct d">${esc(p.formation)}</h3><button class="cardbtn" data-card="${esc(p.id)}" aria-label="Share card"><i class="fa-solid fa-share-nodes"></i></button></div>
     <div class="cb">
       <div class="ur"><button class="u" data-user="${esc(p.handle)}"><span class="av">${okImg(a)?`<img src="${esc(a)}" alt="">`:esc(p.handle[0].toUpperCase())}</span><span class="ui"><span class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
@@ -667,7 +672,7 @@ function bump(id){ // +1 copy per person per tactic per day (signed-in users onl
 function setPTitle(){$('pTitle').dataset.i=editId?'editT':'shareT';$('pTitle').textContent=t(editId?'editT':'shareT');$('pBtnT').dataset.i=editId?'save':'publish';$('pBtnT').textContent=t(editId?'save':'publish')}
 function openEdit(id){const p=byId(id);if(!p)return;editId=id;
   if(![...$('pF').options].some(o=>o.value===p.formation))$('pF').add(new Option(p.formation,p.formation));
-  $('pF').value=p.formation;$('pC').value=p.code;$('pP').value=p.platform||'';$('pN').value=p.note||'';setPTitle();$('pChalRow').classList.add('hidden');$('pDlg').showModal()}
+  $('pF').value=p.formation;$('pC').value=p.code;$('pP').value=p.platform||'';$('pN').value=p.note||'';setPTitle();updatePrev();$('pChalRow').classList.add('hidden');$('pDlg').showModal()}
 function openReport(id){if(!me)return openAuth('in');rpId=id;$('rpE').textContent='';$('rpDlg').showModal()}
 function renderReports(){const el=$('rpList');if(!el)return;
   el.innerHTML=reports.length?reports.map(r=>`<div class="rp"><div><b dir="ltr">@${esc(r.handle)}</b> · ${esc(r.formation)} · <span dir="ltr">${esc(r.code)}</span><br><span class="dn">${esc(r.reason)}</span></div><div class="ac"><button class="btn ghost sm" data-rdel="${esc(r.id)}" data-pid="${esc(r.pid)}"><i class="fa-solid fa-trash"></i> ${t('delT')}</button><button class="btn ghost sm" data-rdis="${esc(r.id)}"><i class="fa-solid fa-xmark"></i> ${t('dismiss')}</button></div></div>`).join(''):`<p class="dn">${t('noRep')}</p>`}
@@ -687,7 +692,8 @@ function renderFeat(){
     ${left>0?`<button class="btn gold" id="chEnter"><i class="fa-solid fa-trophy"></i> ${t('enter')}</button>`:''}</div>`}
   el.innerHTML=h;el.classList.toggle('hidden',!h)}
 function updateChalRow(){const on=!!challenge&&!editId&&(challenge.endAt>Date.now());$('pChalRow').classList.toggle('hidden',!on);if(on)$('pChalT').textContent=t('enterChal')+': '+challenge.title;$('chSt').textContent=challenge?challenge.title:t('noChal')}
-function openPost(c){updateChalRow();$('pChal').checked=!!c&&!$('pChalRow').classList.contains('hidden');$('pDlg').showModal()}
+function updatePrev(){$('pPrev').innerHTML=pitch($('pF').value||'4-4-2',$('pP').value)}
+function openPost(c){updatePrev();updateChalRow();$('pChal').checked=!!c&&!$('pChalRow').classList.contains('hidden');$('pDlg').showModal()}
 // ---- Tactic card: a shareable image drawn on a canvas ----
 function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function fitText(g,txt,font,max,w){let sz=max;for(;sz>20;sz-=4){g.font=font.replace('{s}',sz);if(g.measureText(txt).width<=w)break}return sz}
@@ -819,6 +825,7 @@ $('big').onclick=()=>$('big').close();$('fDlg').addEventListener('click',e=>{if(
   catch(x){console.error(x);$('aE').textContent=authMsg(x)}
   g.disabled=false};
 $('pDlg').addEventListener('close',()=>{editId=null;$('pForm').reset();setPTitle()});
+$('pF').addEventListener('change',updatePrev);$('pP').addEventListener('change',updatePrev);
 $('rpCancel').onclick=()=>$('rpDlg').close();
 $('rpForm').onsubmit=async e=>{e.preventDefault();const p=byId(rpId);if(!p||!me)return;
   try{await store.report(me,p,$('rpR').value);$('rpDlg').close();toast(t('reported'))}catch(x){console.error(x);$('rpE').textContent=t('failed')}};
