@@ -224,6 +224,8 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .ring::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid rgba(61,230,161,.6);animation:ringp .75s .12s ease-out forwards;opacity:0}
 @keyframes ringp{from{transform:scale(.4);opacity:1}to{transform:scale(5.5);opacity:0}}
 .pprev{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line)}.pprev svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cv::after{display:none!important}.cv{background:#0b1524}
+.ttl{font-size:36px;line-height:1;color:#fff;margin:0}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
@@ -563,8 +565,9 @@ function cardHTML(p,i){
   const pro=verified.has(p.handle),meta=(p.likeCount||0)>=META_LIKES,a=avOf(p);
   return`<article class="card${pro?' pro':''}${anim?' up':''}" style="${anim?`animation-delay:${Math.min(i,8)*55}ms`:''}">
     <div class="cv">${pitch(p.formation,p.platform)}${p.platform?`<span class="pl">${PNAME[p.platform]||''}</span>`:''}${pro?'<span class="tg pr">PRO</span>':meta?'<span class="tg mt">META</span>':''}
-      <h3 class="ct d">${esc(p.formation)}</h3><button class="cardbtn" data-card="${esc(p.id)}" aria-label="Share card"><i class="fa-solid fa-share-nodes"></i></button></div>
+      <button class="cardbtn" data-card="${esc(p.id)}" aria-label="Share card"><i class="fa-solid fa-share-nodes"></i></button></div>
     <div class="cb">
+      <h3 class="ttl d">${esc(p.formation)}</h3>
       <div class="ur"><button class="u" data-user="${esc(p.handle)}"><span class="av">${okImg(a)?`<img src="${esc(a)}" alt="">`:esc(p.handle[0].toUpperCase())}</span><span class="ui"><span class="un">@${esc(p.handle)}${verified.has(p.handle)?`<i class="fa-solid fa-circle-check vb" title="${t('verified')}"></i>`:''}</span>${p.displayName?`<span class="dn">${esc(p.displayName)}</span>`:''}</span></button>
         <span class="ag"><i class="fa-regular fa-clock"></i> ${ago(p.at)}</span></div>
       ${p.note?`<p class="nt">${esc(p.note)}</p>`:''}
