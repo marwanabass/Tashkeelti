@@ -211,12 +211,12 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .chp{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid #2a3a52;border-radius:12px;padding:7px 14px;color:#dbe6f5;font:600 14px Cairo,sans-serif;cursor:pointer;min-height:38px;transition:border-color .15s,color .15s}
 .chp:hover{border-color:var(--neon)}.chp.lk.on{color:#ff7a93;border-color:#ff7a93}.chp.sv.on{color:var(--gold2);border-color:var(--gold2)}
 .pill{background:transparent;border-color:#2a3a52}.pill.on{background:var(--neon);color:#04170f;border-color:var(--neon)}
-.pill.pro{display:inline-flex;align-items:center;gap:6px;border-color:rgba(135,145,255,.7);color:#c9ceff}.pill.pro.on{background:linear-gradient(135deg,#8791ff,#4f5bd5);color:#fff;border-color:transparent}
+.pill.prof{display:inline-flex;align-items:center;gap:6px;border-color:rgba(135,145,255,.7);color:#c9ceff}.pill.prof.on{background:linear-gradient(135deg,#8791ff,#4f5bd5);color:#fff;border-color:transparent}
 .chip{background:transparent;border-color:#2a3a52}
 .pros{margin-top:20px}.sech{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:26px}
 .prow{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x proximity;scrollbar-width:none}.prow::-webkit-scrollbar{display:none}
-.pro{flex:none;scroll-snap-align:start;display:flex;align-items:center;gap:12px;background:#111a29;border:1px solid rgba(61,230,161,.45);border-radius:16px;padding:10px 18px 10px 12px;color:inherit;font-family:inherit;cursor:pointer;text-align:start;box-shadow:0 0 24px rgba(61,230,161,.10);transition:border-color .15s,transform .15s}
-.pro:hover{border-color:var(--neon);transform:translateY(-2px)}.pro .av{width:46px;height:46px;font-size:18px;box-shadow:0 0 0 2px #111a29,0 0 0 3.5px var(--neon)}
+.prochip{flex:none;scroll-snap-align:start;display:flex;align-items:center;gap:12px;background:#111a29;border:1px solid rgba(61,230,161,.45);border-radius:16px;padding:10px 18px 10px 12px;color:inherit;font-family:inherit;cursor:pointer;text-align:start;box-shadow:0 0 24px rgba(61,230,161,.10);transition:border-color .15s,transform .15s}
+.prochip:hover{border-color:var(--neon);transform:translateY(-2px)}.prochip .av{width:46px;height:46px;font-size:18px;box-shadow:0 0 0 2px #111a29,0 0 0 3.5px var(--neon)}
 .ski{aspect-ratio:16/10}
 #toast{background:#111a29;border:1px solid var(--neon);box-shadow:0 0 30px rgba(61,230,161,.25)}
 .btn{position:relative}
@@ -227,6 +227,9 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .cv{aspect-ratio:160/112;background:#0b1524}
 .cv::after{content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(rgba(17,26,41,0),#111a29);pointer-events:none}
 .pl{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(10,15,24,.82)!important}
+.ct{margin:0}
+.cv .cardbtn{top:auto;bottom:12px;inset-inline-end:12px}
+@media(max-width:480px){.logo2{font-size:27px}.hd{gap:8px}#langBtn{padding:.45rem .75rem}}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
@@ -591,7 +594,7 @@ function patchGrid(parts){
 function ensurePros(){const hs=[...verified].filter(h=>!(h in proInfo)).slice(0,30);if(!hs.length||!store||!store.getUsers)return;hs.forEach(h=>proInfo[h]=null);
   store.getUsers(hs).then(o=>{hs.forEach(h=>{proInfo[h]=o[h]||{};if(o[h]&&o[h].photo)avatarMap[h]=o[h].photo});render()}).catch(()=>hs.forEach(h=>delete proInfo[h]))}
 function renderPros(){const el=$('pros');if(!el)return;if(view||savedMode||!verified.size){el.classList.add('hidden');return}
-  el.innerHTML=`<div class="sech"><span class="tg pr">PRO</span><b class="d">${t('pros')}</b></div><div class="prow">${[...verified].slice(0,16).map(h=>{const i=proInfo[h]||{};return`<button class="pro" data-user="${esc(h)}">${avBox(h)}<span class="ui"><span class="un">@${esc(h)}${vbadge(h)}</span><span class="dn">${i.pref?PNAME[i.pref]:''}${i.displayName&&i.displayName!==h?(i.pref?' · ':'')+esc(i.displayName):''}</span></span></button>`}).join('')}</div>`;el.classList.remove('hidden')}
+  el.innerHTML=`<div class="sech"><span class="tg pr">PRO</span><b class="d">${t('pros')}</b></div><div class="prow">${[...verified].slice(0,16).map(h=>{const i=proInfo[h]||{};return`<button class="prochip" data-user="${esc(h)}">${avBox(h)}<span class="ui"><span class="un">@${esc(h)}${vbadge(h)}</span><span class="dn">${i.pref?PNAME[i.pref]:''}${i.displayName&&i.displayName!==h?(i.pref?' · ':'')+esc(i.displayName):''}</span></span></button>`}).join('')}</div>`;el.classList.remove('hidden')}
 function avOf(p){if(me&&me.handle===p.handle&&me.photo)return me.photo;return avatarMap[p.handle]||p.photo}   // empty result never overrides a photo we already have
 function ensureAvatars(l){if(!store||!store.getAvatars)return;const need=[...new Set(l.map(p=>p.handle))].filter(h=>!(h in avatarMap)&&!avReq.has(h));if(!need.length)return;need.forEach(h=>avReq.add(h));
   store.getAvatars(need).then(o=>{need.forEach(h=>{avatarMap[h]=o[h]||''});render()}).catch(()=>need.forEach(h=>avReq.delete(h)))}
@@ -680,7 +683,7 @@ function cacheFeed(l){if($('sort').value!=='new'||feedLimit>18||fFilter||platFil
 function renderSavedHeader(){$('profile').innerHTML=`<div class="pf"><button class="btn ghost sm" data-back><i class="fa-solid fa-xmark"></i> ${t('back')}</button><div class="pfn d"><i class="fa-solid fa-bookmark"></i>&nbsp;${t('saved')}</div></div>`}
 async function loadSaved(){if(!savedMode||!store)return;const ids=[...mySaves];
   try{const l=ids.length?await store.getMany(ids):[];if(savedMode){savedPosts=l.sort((a,b)=>b.at-a.at);render()}}catch(e){console.error(e);if(savedMode){savedPosts=[];render()}}}
-function renderPlats(){$('plats').innerHTML=['','pc','ps','xbox'].map(k=>`<button class="pill ${k===platFilter?'on':''}" data-p="${k}">${k?PNAME[k]:t('allP')}</button>`).join('')+`<button class="pill pro ${proOnly?'on':''}" data-pro><i class="fa-solid fa-crown"></i> PRO</button>`}
+function renderPlats(){$('plats').innerHTML=['','pc','ps','xbox'].map(k=>`<button class="pill ${k===platFilter?'on':''}" data-p="${k}">${k?PNAME[k]:t('allP')}</button>`).join('')+`<button class="pill prof ${proOnly?'on':''}" data-pro><i class="fa-solid fa-crown"></i> PRO</button>`}
 function startFeed(r){unFeed();if(r){loaded=false;render()}unFeed=store.subscribe(l=>{posts=l;loaded=true;loadErr=false;slow=false;cacheFeed(l);render();if(!analyticsDone&&store.analytics){analyticsDone=true;setTimeout(()=>store.analytics(),3000)}},feedLimit,e=>{console.error(e);loadErr=true;render()},ORD[$('sort').value]||'at',{formation:fFilter,platform:platFilter,pro:proOnly?[...verified].slice(0,30):null})||(()=>{})}
 async function refreshStats(){try{statsN=await store.stats();render()}catch(e){}}
 function bump(id){ // +1 copy per person per tactic per day (signed-in users only)
