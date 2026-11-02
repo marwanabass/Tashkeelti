@@ -238,12 +238,16 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 @media(max-width:480px){.logo2{font-size:25px}.hd{gap:8px}#langBtn{padding:.45rem .75rem}}
 @media(max-width:480px){#langBtn svg{display:none}.logo2{padding-right:13px}.logo2::before{width:10px;height:4px}}
 @media(max-width:380px){.logo2{font-size:22px;padding-right:12px}.logo2::before{width:9px}.logo2::after{width:30px}.hd{gap:6px}#auth .btn{padding:.4rem .65rem}#langBtn{padding:.4rem .55rem}}
+.logo2{padding-right:0!important}
+.logo2::before{display:none!important}
+.logo2 .ti{position:relative}
+.logo2 .ti::before{content:"";position:absolute;right:-.19em;top:.04em;width:.63em;height:.17em;background:var(--neon);transform:skewX(-35deg);border-radius:2px}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
 
 <header class="topbar"><div class="wrap hd">
-  <a class="brand" href="#" aria-label="Tashkeelti"><span class="logo2">TASH<b>KEELTI</b></span></a><span class="sp"></span>
+  <a class="brand" href="#" aria-label="Tashkeelti"><span class="logo2">TASH<b>KEEL<span class="ti">TI</span></b></span></a><span class="sp"></span>
   <button id="langBtn" class="btn ghost sm" aria-label="Language"></button>
   <span id="auth"></span>
   <label class="sr"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" class="f" data-ph="search" aria-label="Search"></label>
@@ -266,7 +270,7 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
   <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
 </main>
-<footer class="foot wrap"><div class="fbrand"><span class="logo2">TASH<b>KEELTI</b></span></div><div class="fsoc" id="fsoc"></div><a class="fmail" href="mailto:tashkeelti@gmail.com">tashkeelti@gmail.com</a></footer>
+<footer class="foot wrap"><div class="fbrand"><span class="logo2">TASH<b>KEEL<span class="ti">TI</span></b></span></div><div class="fsoc" id="fsoc"></div><a class="fmail" href="mailto:tashkeelti@gmail.com">tashkeelti@gmail.com</a></footer>
 <button id="fab" class="fab" aria-label="Share tactics"><i class="fa-solid fa-plus"></i></button>
 
 <!-- Profile / first-time handle setup -->
@@ -743,7 +747,7 @@ async function drawCard(p){
   g.textAlign='left';g.font=D.replace('{s}',78);const wT=g.measureText('TASH').width,wK=g.measureText('KEELTI').width,lx=90,ly=170;
   g.fillStyle='#fff';g.fillText('TASH',lx,ly);g.fillStyle='#3de6a1';g.fillText('KEELTI',lx+wT,ly);
   const slash=(cx,cy,w,h)=>{g.save();g.translate(cx,cy);g.transform(1,0,-.7,1,0,0);g.fillRect(-w/2,-h/2,w,h);g.restore()};
-  slash(lx+48,ly+22,96,12);slash(lx+wT+wK+26,ly-70,38,11);
+  slash(lx+48,ly+22,96,12);slash(lx+wT+wK-9,ly-67,49,13);
   // the card
   const X=90,Y=230,CW=900,CH=1020,PH=CW*112/160,R=44;
   g.save();if(pro){g.shadowColor='rgba(61,230,161,.4)';g.shadowBlur=70}rr(g,X,Y,CW,CH,R);g.fillStyle='#111a29';g.fill();g.restore();
