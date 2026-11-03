@@ -52,7 +52,7 @@ label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:.2rem}
 
 /* ===== v3: mobile-first layout, calm luxury cards ===== */
 .hidden{display:none!important}
-.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.wrap{max-width:1760px;margin:0 auto;padding:0 clamp(16px,3.2vw,56px)}
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(10,15,24,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .hd{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0}
 .logo{order:0;font-size:30px;line-height:1;background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -239,15 +239,15 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 @media(max-width:480px){#langBtn svg{display:none}.logo2{padding-right:13px}.logo2::before{width:10px;height:4px}}
 @media(max-width:380px){.logo2{font-size:22px;padding-right:12px}.logo2::before{width:9px}.logo2::after{width:30px}.hd{gap:6px}#auth .btn{padding:.4rem .65rem}#langBtn{padding:.4rem .55rem}}
 .logo2{padding-right:0!important}
-.logo2::before{display:none!important}
-.logo2 .ti{position:relative}
-.logo2 .ti::before{content:"";position:absolute;right:-.19em;top:.04em;width:.63em;height:.17em;background:var(--neon);transform:skewX(-35deg);border-radius:2px}
+.logo2::before{display:block!important;content:"";position:absolute;right:-.19em!important;top:-.06em!important;width:.63em!important;height:.17em!important;background:var(--neon);transform:skewX(-35deg);border-radius:2px}
+@media(min-width:900px){.hd{padding-inline:clamp(16px,3.2vw,56px)}}   /* header lines up with the page content on wide screens */
+.hero .sub{margin-top:20px}
 </style>
 </head>
 <body style="padding-top:env(safe-area-inset-top,0px)">
 
 <header class="topbar"><div class="wrap hd">
-  <a class="brand" href="#" aria-label="Tashkeelti"><span class="logo2">TASH<b>KEEL<span class="ti">TI</span></b></span></a><span class="sp"></span>
+  <a class="brand" href="#" aria-label="Tashkeelti"><span class="logo2">TASH<b>KEELTI</b></span></a><span class="sp"></span>
   <button id="langBtn" class="btn ghost sm" aria-label="Language"></button>
   <span id="auth"></span>
   <label class="sr"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" class="f" data-ph="search" aria-label="Search"></label>
@@ -270,7 +270,7 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
   <div class="meta"><span id="count"></span><label class="sortb"><i class="fa-solid fa-arrow-down-wide-short"></i><select id="sort" class="f" aria-label="Sort"><option value="new" data-i="sNew"></option><option value="top" data-i="sTop"></option></select></label></div>
   <section id="grid" aria-live="polite"></section>
 </main>
-<footer class="foot wrap"><div class="fbrand"><span class="logo2">TASH<b>KEEL<span class="ti">TI</span></b></span></div><div class="fsoc" id="fsoc"></div><a class="fmail" href="mailto:tashkeelti@gmail.com">tashkeelti@gmail.com</a></footer>
+<footer class="foot wrap"><div class="fbrand"><span class="logo2">TASH<b>KEELTI</b></span></div><div class="fsoc" id="fsoc"></div><a class="fmail" href="mailto:tashkeelti@gmail.com">tashkeelti@gmail.com</a></footer>
 <button id="fab" class="fab" aria-label="Share tactics"><i class="fa-solid fa-plus"></i></button>
 
 <!-- Profile / first-time handle setup -->
